@@ -1,0 +1,12 @@
+{
+  "name": "Sigma.io",
+  "description": "Realtime web app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "*",
+    "jade": "*",
+    "mongoose": "*",
+    "socket.io": "*"
+  }
+}
