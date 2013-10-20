@@ -1,9 +1,7 @@
-/*
- * Sigma.io
- * (c) 2013 Davy Duperron
- *
- * Client side
- */
+//  Sigma.io
+
+//  (c) 2013 Davy Duperron
+//  Client side
 
 //  Main app
 (function () {
@@ -104,7 +102,7 @@
         newArticle.appendChild(newContent);
       }
     };
-    // Add content
+    //  Add content
     insert();
   };
 
@@ -426,42 +424,37 @@
       Sigma.socket.emit(Sigma.getChannelId, { action: 'delete', mongoId: mongoId });
     },
     addTools : function (event) {
+      //  Create tools panel
+      var toolsPanel = document.createElement('div'),
+          close = document.createElement('a'),
+          erase = document.createElement('a'),
+          article = Sigma.contentEditing.setArticle(event.target);
+      toolsPanel.setAttribute('class', 'tools');
+      close.setAttribute('class', 'close');
+      close.setAttribute('href', '#');
+      close.setAttribute('data-tooltip', 'close');
+      erase.setAttribute('class', 'erase');
+      erase.setAttribute('href', '#');
+      erase.setAttribute('data-tooltip', 'erase');
+      article.appendChild(toolsPanel);
+      toolsPanel.appendChild(close);
+      toolsPanel.appendChild(erase);
+      //  Attach eventListeners
+      close.addEventListener('click', function (event) {
+        Sigma.contentEditing.removeTools();
+      }, false);
+      erase.addEventListener('click', Sigma.contentEditing.eraseIt, false);
+      //  Store target as former target for further use
+      Sigma.contentEditing.formerTarget = event.target.parentNode;
+    },
+    manageTools : function (event) {
+      //  Find tools
       var tools = document.querySelector('.tools');
       if (tools === null) {
-        //  Create tools panel
-        var toolsPanel = document.createElement('div'),
-            close = document.createElement('a'),
-            erase = document.createElement('a');
-        //  Set article considering the fact that the browser can add divs in contenteditable elements
-        if (event.target.parentNode.dataset.structure !== 'article') {
-          var article = event.target.parentNode.parentNode;
-        } else {
-          var article = event.target.parentNode;
-        }
-        toolsPanel.setAttribute('class', 'tools');
-        close.setAttribute('class', 'close');
-        close.setAttribute('href', '#');
-        close.setAttribute('data-tooltip', 'close');
-        erase.setAttribute('class', 'erase');
-        erase.setAttribute('href', '#');
-        erase.setAttribute('data-tooltip', 'erase');
-        article.appendChild(toolsPanel);
-        toolsPanel.appendChild(close);
-        toolsPanel.appendChild(erase);
-        //  Attach eventListeners
-        close.addEventListener('click', function (event) {
-          Sigma.contentEditing.removeTools();
-        }, false);
-        erase.addEventListener('click', Sigma.contentEditing.eraseIt, false);
-        //  Store target as former target for further use
-        Sigma.contentEditing.formerTarget = event.target.parentNode;
+        Sigma.contentEditing.addTools(event);
       } else {
         //  Locate the article in which tools are visible
-        if (tools.parentNode.dataset.structure !== 'article') {
-          var article = tools.parentNode.parentNode;
-        } else {
-          var article = tools.parentNode;
-        }
+        var article = Sigma.contentEditing.setArticle(tools);
         //  Then check if it's the same target
         if (Sigma.contentEditing.target.current === article) {
           console.log('same');
@@ -469,10 +462,7 @@
           //Sigma.contentEditing.target.add = 
           console.log('to remove');
           tools.parentNode.removeChild(tools);
-
         }
-        
-
         //  Remove then add eventListener to the new target
         var erase = document.querySelector('.erase');
         erase.removeEventListener('click', Sigma.contentEditing.eraseIt, false);
@@ -482,6 +472,15 @@
     removeTools : function () {
       var tools = document.querySelector('.tools');
       tools.parentNode.removeChild(tools);
+    },
+    setArticle : function (element) {
+      //  Set article considering the fact that the browser can add divs in contenteditable elements
+      if (element.parentNode.dataset.structure !== 'article') {
+        var article = element.parentNode.parentNode;
+      } else {
+        var article = element.parentNode;
+      }
+      return article;
     },
     editMode : function (event) {
       var target = event.target.parentNode;
@@ -503,7 +502,7 @@
       target.addEventListener('focus', this.editMode, true);
       target.addEventListener('blur', this.viewMode, true);
       //  Add click event
-      target.addEventListener('click', this.addTools, false);
+      target.addEventListener('click', this.manageTools, false);
     },
     target : {
       //  Targets are managed as an array, with current and former values
@@ -637,7 +636,7 @@
       } else {
         //  Populate main div with DOM content sent by the server
         data.documents.forEach(function (document) {
-          Sigma.addContent(document.data.html, document.data._id);
+          Sigma.addContent(document.html, document._id);
         });
       }
       Sigma.makeReadonly();

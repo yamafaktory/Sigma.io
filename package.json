@@ -6,7 +6,7 @@
   "dependencies": {
     "express": "*",
     "jade": "*",
-    "mongoose": "*",
+    "mongodb": "*",
     "socket.io": "*"
   }
 }
