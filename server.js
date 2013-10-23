@@ -9,12 +9,16 @@
 var Sigma = {},
     express = require('express');
 
-//	Dependencies
+//	Main dependencies
 Sigma.app = express();
 Sigma.server = require('http').createServer(Sigma.app);
 Sigma.io = require('socket.io').listen(Sigma.server);
 Sigma.mongo = require('mongodb').MongoClient;
 Sigma.crypto = require('crypto');
+
+//  Internal dependencies
+Sigma.routes = require('./modules/routes.js');
+Sigma.database = require('./modules/database.js');
 
 //  Set teplate engine to jade and set public folder
 Sigma.app.set('view engine', 'jade');
@@ -28,48 +32,23 @@ Sigma.io.enable('browser client minification');
 //Sigma.io.enable('browser client gzip');
 Sigma.io.set('log level', 1);
 
-//  Create an empty route during app init
-Sigma.id = "";
-
-//  Mongo connection
-Sigma.mongo.connect('mongodb://xxxxxxxxxxxxxxx', function(error, database) {
-  if (error) {
-    throw error;
-  } else {
-    Sigma.database = database;
-    Sigma.objectId = require('mongodb').ObjectID;
-  }
-});
-
-//  Routes
-//    Channels
-Sigma.app.get('/:id', function (req, res) {
-  Sigma.id = req.params.id;
-  res.render('index', { id: Sigma.id });
-});
-//    Images
-Sigma.app.get('/data/:id', function (req, res) {
-  //  Find image source
-  Sigma.database.collection('images').findOne(
-    { '_id': new Sigma.objectId(req.params.id)},
-    function (error, document) {
-    if (error || document == null) {
-      res.sendfile(__dirname + '/public/img/404.svg');
-    } else {
-      res.set('Content-Type', 'image/png');
-      res.send(new Buffer(document.source, 'base64'));
-    }
-  });
-});
-
-//  Set listening port
-Sigma.server.listen(1337);
-
 //  Utils
 Sigma.getHash = function(data) {
   var hash = Sigma.crypto.createHash('md5').update(data).digest('hex');
   return hash;
 };
+
+//  Create an empty channel during app init
+Sigma.id = "";
+
+//  Init routes
+Sigma.routes.init(Sigma);
+
+//  Init database connection
+Sigma.database.init(Sigma);
+
+//  Set listening port
+Sigma.server.listen(1337);
 
 //  Socket.io
 Sigma.io.sockets.on('connection', function (socket) {
@@ -89,7 +68,6 @@ Sigma.io.sockets.on('connection', function (socket) {
         if (documents.length === 0) {
           socket.emit('history', { empty: true });
         } else {
-          console.log(documents);
           socket.emit('history', { empty: false, documents: documents });
         }
       }
