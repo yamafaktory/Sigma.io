@@ -9,7 +9,7 @@
 var Sigma = {},
     express = require('express');
 
-//	Main dependencies
+//  Main dependencies
 Sigma.app = express();
 Sigma.server = require('http').createServer(Sigma.app);
 Sigma.io = require('socket.io').listen(Sigma.server);
