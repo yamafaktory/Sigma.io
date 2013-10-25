@@ -24,35 +24,11 @@
 }
 
 /*  font */
-@font-face {
-  font-family: 'NotoSerif-Regular';
-  font-weight: normal;
-  src: url('/public/font/NotoSerif-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'NotoSerif-Italic';
-  font-weight: normal;
-  font-style: italic;
-  src: url('/public/font/NotoSerif-Italic.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'NotoSerif-Bold';
-  font-weight: bold;
-  src: url('/public/font/NotoSerif-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'NotoSerif-BoldItalic';
-  font-weight: bold;
-  font-style: italic;
-  src: url('/public/font/NotoSerif-BoldItalic.ttf') format('truetype');
-}
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700,300);
 
 /*  Main elements */
 html {
-  font: normal 100% 'NotoSerif-Regular';
+  font-family: 'Roboto Slab', serif;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -99,24 +75,17 @@ h1 {
 
 h2 {
   color: rgba(0, 0, 0, .4);
-  font-family: 'NotoSerif-BoldItalic';
   font-style: italic;
-}
-
-h1, h1 > div {
-  font-family: 'NotoSerif-Bold';
 }
 
 h2::before {
   content: 'written by ';
-  font-family: 'NotoSerif-BoldItalic';
   font-style: italic;
   color: rgba(0, 0, 0, .3);
 }
 
 time {
   color: rgba(0, 0, 0, .5);
-  font-family: 'NotoSerif-Italic';
   font-style: italic;
 }
 
@@ -480,11 +449,11 @@ button:hover {
   box-shadow: 0 .1rem .1rem rgba(0, 0, 0, .1);
   cursor: pointer;
    z-index: 1;
-  -webkit-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -o-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: .3s;
+  -moz-animation-duration: .3s;
+  -ms-animation-duration: .3s;
+  -o-animation-duration: .3s;
+  animation-duration: .3s;
   -webkit-animation-timing-function: ease-out;
   -moz-animation-timing-function: ease-out;
   -ms-animation-timing-function: ease-out;
@@ -516,11 +485,11 @@ button:hover {
 }
 
 .removeMessage {
-  -webkit-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -o-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: .3s;
+  -moz-animation-duration: .3s;
+  -ms-animation-duration: .3s;
+  -o-animation-duration: .3s;
+  animation-duration: .3s;
   -webkit-animation-timing-function: ease-out;
   -moz-animation-timing-function: ease-out;
   -ms-animation-timing-function: ease-out;

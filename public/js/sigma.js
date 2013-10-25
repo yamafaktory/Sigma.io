@@ -45,15 +45,21 @@
   Sigma.date = {
     //  Formated date
     now : function () {
-      var currentDate = new Date();
-      if (currentDate.getHours() < 12) {
-        var hour = currentDate.getHours(),
-            meridiem = 'AM';
+      var currentDate = new Date(),
+          hours = currentDate.getHours(),
+          minutes = currentDate.getMinutes();
+      //  Set meridiem and hours format
+      if (hours < 12) {
+        var meridiem = 'AM';
       } else {
-        var hour = currentDate.getHours() - 12,
-            meridiem = 'PM';
+        var meridiem = 'PM';
+        hours -= 12;
       }
-      var displayDate = 'today ' + hour + ':' + currentDate.getMinutes() + ' ' + meridiem;
+      //  Fix minutes format
+      if (minutes < 10) {
+          minutes = '0' + minutes;
+      }
+      var displayDate = 'today ' + hours + ':' + minutes + ' ' + meridiem;
       return displayDate;
     },
     html : function () {
