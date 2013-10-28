@@ -829,8 +829,13 @@
     init : (function () {
       //  Receive save state
       Sigma.socket.on('saveState', function (data) {
-        console.log(data.tempId+'/'+data.id+'/'+data.state);
-        Sigma.saveManager.toggleState(data.id, data.state);
+        if (data.tempId !== undefined) {
+          Sigma.saveManager.toggleState(data.tempId, data.state);
+        } else {
+          if (data.id !== undefined) {
+            Sigma.saveManager.toggleState(data.id, data.state);
+          }
+        }
       });
     })(),
     add : function (id, state) {
@@ -848,6 +853,9 @@
           index = this.pool.map(selectIds).indexOf(id);
       return index !== -1 ? index : null;
     },
+    showSaveState : function () {
+      console.log('S A V E D !!!');
+    },
     toggleId : function (tempId, id) {
       //  Replace temporary id with new mongoDB id in pool
       var index = this.find(tempId);
@@ -860,6 +868,7 @@
       var index = this.find(id);
       if (index !== null) {
         this.pool[index][1] = state;
+        this.showSaveState();
       }
     }
   };
