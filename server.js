@@ -59,7 +59,7 @@ Sigma.io.sockets.on('connection', function (socket) {
   //  Find articles for that channel
   Sigma.database.collection('articles')
     .find({ 'channel': Sigma.id })
-    .sort('_id')
+    .sort('date')
     .limit(9)
     .toArray(function (error, documents) {
       if (error) {
@@ -92,6 +92,8 @@ Sigma.io.sockets.on('connection', function (socket) {
               socket.broadcast.to(Sigma.id).emit('broadcast', { action: 'create', html: data.html, id: document[0]._id });
               //  Send new content id's to client
               socket.emit('mongoId', { tempId: data.mongoId, id: document[0]._id, type: 'article' });
+              //  Send save state
+              socket.emit('saveState', { tempId: data.mongoId, id: document[0]._id, state: true });
             }
           });
         break;
@@ -107,6 +109,9 @@ Sigma.io.sockets.on('connection', function (socket) {
           function (error) {
             if (error) {
               socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+            } else {
+              //  Send save state
+              socket.emit('saveState', { id: data.mongoId, state: true });
             }
           });
         break;

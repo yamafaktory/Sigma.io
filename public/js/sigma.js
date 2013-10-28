@@ -201,7 +201,7 @@
           image.onload = function () {
             //  Create new image in DOM
             var source = resize(image),
-                mongoId = Sigma.getTemp.id;
+                mongoId = Sigma.getTempId();
             newImage.dataset.image = 'dropped';
             newImage.dataset.idType = 'tmp';
             newImage.dataset.mongoId = mongoId;
@@ -408,15 +408,20 @@
           Sigma.socket.emit(Sigma.getChannelId, { action: 'update', mongoId: mongoId, html: articleHTML, owner: Sigma.username });
         } else {
           //  Id is a temporary one
+
+          //  !!!!!!!!!!!!!!!!!!!!
+
           console.log('berp');
         }
       } else {
-        //  => create new content
+        //  Create new content
         article.dataset.idType = 'tmp';
-        var mongoId = Sigma.getTemp.id;
+        var mongoId = Sigma.getTempId();
         article.dataset.mongoId = mongoId;
         Sigma.socket.emit(Sigma.getChannelId, { action: 'create', mongoId: mongoId, html: articleHTML, owner: Sigma.username });
       }
+      //  Add save state for the article
+      Sigma.saveManager.add(mongoId, false);
     }
   };
 
@@ -462,12 +467,9 @@
         //  Locate the article in which tools are visible
         var article = Sigma.contentEditing.setArticle(tools);
         //  Then check if it's the same target
-        if (Sigma.contentEditing.target.current === article) {
-          console.log('same');
-        } else {
-          //Sigma.contentEditing.target.add = 
-          console.log('to remove');
+        if (Sigma.contentEditing.target.current !== article) {
           tools.parentNode.removeChild(tools);
+          Sigma.contentEditing.addTools(event);
         }
         //  Remove then add eventListener to the new target
         var erase = document.querySelector('.erase');
@@ -533,16 +535,6 @@
     }
   };
 
-  Sigma.hideNavigation = function () {
-    //  Hide navigation element in DOM 
-    var footer = document.querySelector('footer'),
-        hideNav = function (event) {
-          console.log(footer.getBoundingClientRect());
-        };
-    //  Attach event listener for scroll
-    document.addEventListener('scroll', hideNav, false);
-  };
-
   //  Collect channel id's
   Sigma.getChannelId = function () {
     Sigma.socket.on('id', function (data) {
@@ -552,7 +544,7 @@
     });
   };
 
-  //  Get mongoDB id of new content
+  //  Get mongoDB's id of new content
   Sigma.getMongoId = function () {
     Sigma.socket.on('mongoId', function (data) {
       Sigma.changeId(data.tempId, data.id, data.type);
@@ -579,7 +571,7 @@
   };
 
   //  Assign a temporary id to manage new content
-  Sigma.getTemp = function () {
+  Sigma.getTempId = function () {
     var crypto = window.crypto.getRandomValues(new Uint32Array(8)),
         id = '';
     for (var i = 0; i < crypto.length; ++i) {
@@ -669,6 +661,7 @@
         Sigma.isConnected();
       }
     } else {
+      // !!!!!!!!!!!!!
     }
   };
 
@@ -756,7 +749,6 @@
     }
   };
 
-
   //  Manage user connection
   Sigma.isConnected = function () {
     Sigma.socket.on('isConnected', function (data) {
@@ -831,6 +823,47 @@
     });
   };
 
+  //  Manage save state of articles
+  Sigma.saveManager = {
+    pool : [],
+    init : (function () {
+      //  Receive save state
+      Sigma.socket.on('saveState', function (data) {
+        console.log(data.tempId+'/'+data.id+'/'+data.state);
+        Sigma.saveManager.toggleState(data.id, data.state);
+      });
+    })(),
+    add : function (id, state) {
+      var index = this.find(id);
+      if (index === null) {
+        this.pool.push([id, state]);
+      } else {
+        this.pool[index][1] = state;
+      }
+    },
+    find : function (id) {
+      var selectIds = function (row) {
+        return row[0];
+      },
+          index = this.pool.map(selectIds).indexOf(id);
+      return index !== -1 ? index : null;
+    },
+    toggleId : function (tempId, id) {
+      //  Replace temporary id with new mongoDB id in pool
+      var index = this.find(tempId);
+      if (index !== null) {
+        this.pool[index][0] = id;
+      }
+    },
+    toggleState : function (id, state) {
+      //  Change state
+      var index = this.find(id);
+      if (index !== null) {
+        this.pool[index][1] = state;
+      }
+    }
+  };
+
   //  Load components of the app when DOM is ready
   Sigma.ready = (function () {
     var componentsToLoad = function () {
@@ -839,10 +872,10 @@
       Sigma.getHistory();
       Sigma.setObservers();
       Sigma.getSocketMessage();
+      Sigma.saveManager;
       Sigma.tryLocalStorage();
       Sigma.preventPasting();
       Sigma.dragAndDrop();
-      //Sigma.hideNavigation();
     };
     document.addEventListener('DOMContentLoaded', componentsToLoad, false );
   })();
