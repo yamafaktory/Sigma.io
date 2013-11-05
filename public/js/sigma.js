@@ -538,7 +538,7 @@
   //  Collect channel id's
   Sigma.getChannelId = function () {
     Sigma.socket.on('id', function (data) {
-      Sigma.getChannelId = data.data;
+      Sigma.getChannelId = data.id;
       //  Then create a listener
       Sigma.listen();
     });

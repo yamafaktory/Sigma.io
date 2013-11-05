@@ -2,12 +2,32 @@
 
 //  Routes module
 exports.init = function (Sigma) {
-  //    Channels
-  Sigma.app.get('/:id', function (req, res) {
-    Sigma.id = req.params.id;
-    res.render('index', { id: Sigma.id });
+
+  //  Channels API
+
+  //  Only name
+  Sigma.app.get('/:channel', function (req, res) {
+    Sigma.channel.name = req.params.channel;
+    Sigma.channel.results = 10;
+    res.render('index', { id: Sigma.channel.name });
+    console.log('!!!');
   });
-  //    Images
+
+  //  Name & number of results to render
+  Sigma.app.get('/:channel/results/:results?', function (req, res) {
+    Sigma.channel.name = req.params.channel;
+    var results = parseInt(req.params.results, 10);
+    //  Check if integer from 0 - 100
+    if (!isNaN(results) && (Math.round(results) == results)) {
+      if (results > 0 && results <= 100) {
+        //  Then define it as number of results
+        Sigma.channel.results = results;
+      }
+    }
+    res.render('index', { id: Sigma.channel.name });
+  });
+
+  //    Images API
   Sigma.app.get('/data/:id', function (req, res) {
     //  Find image source
     Sigma.database.collection('images').findOne(
@@ -21,4 +41,5 @@ exports.init = function (Sigma) {
       }
     });
   });
+
 };

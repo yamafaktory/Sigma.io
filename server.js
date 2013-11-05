@@ -39,13 +39,16 @@ Sigma.getHash = function(data) {
 };
 
 //  Create an empty channel during app init
-Sigma.id = "";
-
-//  Init routes
-Sigma.routes.init(Sigma);
+Sigma.channel = {
+  name : '',
+  results : 10
+};
 
 //  Init database connection
 Sigma.database.init(Sigma);
+
+//  Init routes
+Sigma.routes.init(Sigma);
 
 //  Set listening port
 Sigma.server.listen(1337);
@@ -54,13 +57,13 @@ Sigma.server.listen(1337);
 Sigma.io.sockets.on('connection', function (socket) {
 
   //  Join route as room
-  socket.join(Sigma.id);
+  socket.join(Sigma.channel.name);
 
   //  Find articles for that channel
   Sigma.database.collection('articles')
-    .find({ 'channel': Sigma.id })
+    .find({ 'channel': Sigma.channel.name })
     .sort('date')
-    .limit(9)
+    .limit(Sigma.channel.results)
     .toArray(function (error, documents) {
       if (error) {
         socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
@@ -73,23 +76,23 @@ Sigma.io.sockets.on('connection', function (socket) {
       }
     });
 
-  //  Send current id to client
-  socket.emit('id', { data: Sigma.id });
+  //  Send current channel name to client
+  socket.emit('id', { id: Sigma.channel.name });
 
   //  If client is sending data
-  socket.on(Sigma.id, function (data) {
+  socket.on(Sigma.channel.name, function (data) {
     switch (data.action) {
       //  Create new content
       case 'create':
         Sigma.database.collection('articles').insert(
-          { 'html': data.html, 'owner': data.owner, 'channel': Sigma.id, 'date': new Date()},
+          { 'html': data.html, 'owner': data.owner, 'channel': Sigma.channel.name, 'date': new Date()},
           { safe: true},
           function (error, document) {
             if (error) {
               socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
             } else {
               //  Broadcast changes to channel
-              socket.broadcast.to(Sigma.id).emit('broadcast', { action: 'create', html: data.html, id: document[0]._id });
+              socket.broadcast.to(Sigma.channel.name).emit('broadcast', { action: 'create', html: data.html, id: document[0]._id });
               //  Send new content id's to client
               socket.emit('mongoId', { tempId: data.mongoId, id: document[0]._id, type: 'article' });
               //  Send save state
@@ -100,7 +103,7 @@ Sigma.io.sockets.on('connection', function (socket) {
       //  Update content
       case 'update':
         //  Broadcast changes to channel
-        socket.broadcast.to(Sigma.id).emit('broadcast', { action: 'update', html: data.html, id: data.mongoId });
+        socket.broadcast.to(Sigma.channel.name).emit('broadcast', { action: 'update', html: data.html, id: data.mongoId });
         //  Update content
         Sigma.database.collection('articles').update(
           { '_id': new Sigma.objectId(data.mongoId)},
@@ -124,7 +127,7 @@ Sigma.io.sockets.on('connection', function (socket) {
               socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
             } else {
               //  Broadcast changes to channel
-              socket.broadcast.to(Sigma.id).emit('broadcast', { action: 'delete', id: data.mongoId });
+              socket.broadcast.to(Sigma.channel.name).emit('broadcast', { action: 'delete', id: data.mongoId });
             }
           });
         break;
