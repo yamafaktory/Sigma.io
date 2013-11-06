@@ -147,6 +147,10 @@ footer span {
   animation-name: fadeIn;
 }
 
+.isYours {
+  color: rgba(234, 121, 255, 1);
+}
+
 /*  Contenteditable */
 [contenteditable='true'] {
   outline: none;

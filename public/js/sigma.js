@@ -23,7 +23,7 @@
   Sigma.socket = io.connect(Sigma.host);
 
   //  Create new content
-  Sigma.create = function () {
+  Sigma.addCreateButton = function () {
     var header = document.querySelector('header'),
         create = document.createElement('a'),
         createSpan = document.createElement('span');
@@ -114,8 +114,8 @@
 
   //  Update content
   Sigma.updateContent = function (html, id) {
-    var selector = '[data-mongo-id="' + id + '"]';
-    var node = document.querySelector(selector);
+    var selector = '[data-mongo-id="' + id + '"]',
+        node = document.querySelector(selector);
     //  If id exists on the client
     if (node !== null) {
       node.innerHTML = html;
@@ -638,6 +638,7 @@
         });
       }
       Sigma.makeReadonly();
+      Sigma.highlightUserArticles();
       Sigma.setObservers();
     });
   };
@@ -650,7 +651,7 @@
         //  Save username into the app
         Sigma.username = username;
         //  Add create button
-        Sigma.create();
+        Sigma.addCreateButton();
         //  Welcome user
         Sigma.manageMessage(true, 'Hi '+Sigma.username+'! Nice to see you there!', true);
       } else {
@@ -658,7 +659,7 @@
         Sigma.signIn.init();
         Sigma.signUp.init();
         //  And enable user connection
-        Sigma.isConnected();
+        Sigma.userIsConnected();
       }
     } else {
       // !!!!!!!!!!!!!
@@ -750,7 +751,7 @@
   };
 
   //  Manage user connection
-  Sigma.isConnected = function () {
+  Sigma.userIsConnected = function () {
     Sigma.socket.on('isConnected', function (data) {
       //  Remove form
       var form = document.querySelector('.signIn');
@@ -763,10 +764,23 @@
         localStorage.setItem('username', Sigma.username);
       }
       //  Add create button
-      Sigma.create();
+      Sigma.addCreateButton();
+      //  Highlight user's articles
+      Sigma.highlightUserArticles();
       //  Then welcome user
       Sigma.manageMessage(true, 'Hi '+Sigma.username+'! Nice to see you there!', true);
     });
+  };
+
+  Sigma.highlightUserArticles = function () {
+    var selector = '[data-owner="' + Sigma.username + '"]',
+        articles = document.querySelectorAll(selector),
+        highlight = function (i) {
+          articles[i].setAttribute('class', 'isYours');
+        };
+    for (var i = 0; i < articles.length; ++i) {
+      highlight(i);
+    }
   };
 
   //  Hide or show a message on top header
