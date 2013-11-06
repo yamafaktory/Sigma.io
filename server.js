@@ -62,7 +62,7 @@ Sigma.io.sockets.on('connection', function (socket) {
   //  Find articles for that channel
   Sigma.database.collection('articles')
     .find({ 'channel': Sigma.channel.name })
-    .sort('date')
+    .sort({'date': -1})
     .limit(Sigma.channel.results)
     .toArray(function (error, documents) {
       if (error) {
@@ -71,7 +71,7 @@ Sigma.io.sockets.on('connection', function (socket) {
         if (documents.length === 0) {
           socket.emit('history', { empty: true });
         } else {
-          socket.emit('history', { empty: false, documents: documents });
+          socket.emit('history', { empty: false, documents: documents.reverse() });
         }
       }
     });
@@ -107,7 +107,7 @@ Sigma.io.sockets.on('connection', function (socket) {
         //  Update content
         Sigma.database.collection('articles').update(
           { '_id': new Sigma.objectId(data.mongoId)},
-          { $set: { 'html': data.html}},
+          { $set: { 'html': data.html, 'date': new Date()}},
           { safe: true},
           function (error) {
             if (error) {
