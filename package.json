@@ -1,12 +1,12 @@
 {
-  "name": "Sigma.io",
+  "name": "sigma.io",
   "description": "Realtime web app",
   "version": "0.0.1",
   "private": true,
-  "dependencies": {
-    "express": "*",
-    "jade": "*",
-    "mongodb": "*",
-    "socket.io": "*"
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-jshint": "*"
   }
 }

@@ -3,7 +3,7 @@
 //  Database module
 exports.init = function (Sigma) {
   //  Mongo connection
-  Sigma.mongo.connect('mongodb://xxx', function(error, database) {
+  Sigma.mongo.connect('mongodb://yamafaktory:c0un3tt3@dharma.mongohq.com:10076/Sigma', function(error, database) {
     if (error) {
       throw error;
     } else {

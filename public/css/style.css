@@ -39,7 +39,7 @@ body {
   background: rgba(255, 255, 255, 1);
 }
 
-.main {
+main {
   background: rgba(0, 0, 0, .05);
   padding-top: 7rem;
   position: relative;
@@ -47,9 +47,14 @@ body {
 }
 
 .grid {
+  display: -webkit-box;
   display: -webkit-flex;
+  display: -moz-box;
   display: -moz-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   align-items: flex-start;
   -webkit-justify-content: center;
@@ -58,7 +63,8 @@ body {
 }
 
 .cell {
-  width: 20rem;
+  min-width: 20rem;
+  flex: 0;
 }
 
 nav > .cell {
@@ -147,7 +153,7 @@ footer span {
   animation-name: fadeIn;
 }
 
-.isYours {
+[data-structure='article'].isYours > h2 {
   color: rgba(234, 121, 255, 1);
 }
 

@@ -47,12 +47,13 @@
     now : function () {
       var currentDate = new Date(),
           hours = currentDate.getHours(),
-          minutes = currentDate.getMinutes();
+          minutes = currentDate.getMinutes(),
+          meridiem;
       //  Set meridiem and hours format
       if (hours < 12) {
-        var meridiem = 'AM';
+        meridiem = 'AM';
       } else {
-        var meridiem = 'PM';
+        meridiem = 'PM';
         hours -= 12;
       }
       //  Fix minutes format
@@ -63,13 +64,13 @@
       return displayDate;
     },
     html : function () {
-      return new Date().toISOString()
+      return new Date().toISOString();
     }
   };
 
   //  New content generator
   Sigma.addContent = function (html, id, title, content, owner) {
-    var main = document.querySelector('.main'),
+    var main = document.querySelector('main'),
         newArticle = document.createElement('article');
     newArticle.setAttribute('data-structure', 'article');
     newArticle.setAttribute('class', 'cell');
@@ -98,7 +99,7 @@
       newArticle.dataset.mongoId = id;
     }
     var insert = function () {
-      main.insertBefore(newArticle,main.firstChild);
+      main.insertBefore(newArticle, main.firstChild);
       if (html) {
         newArticle.innerHTML = html;
       } else {
@@ -148,21 +149,25 @@
           renderedCanvas = document.createElement('canvas'),
           templateCanvas = document.createElement('canvas'),
           renderedContext = renderedCanvas.getContext('2d'),
-          templateContext = templateCanvas.getContext('2d');
+          templateContext = templateCanvas.getContext('2d'),
+          sourceX,
+          sourceY,
+          sourceWidth,
+          sourceHeight;
       if (image.width > image.height) {
-        var sourceX = (image.width - image.height) / 2,
-            sourceY = 0,
-            sourceWidth = image.height,
-            sourceHeight = sourceWidth;
+        sourceX = (image.width - image.height) / 2;
+        sourceY = 0;
+        sourceWidth = image.height;
+        sourceHeight = sourceWidth;
       } else {
         if (image.height > image.width) {
-          var sourceX = 0,
-              sourceY = (image.height - image.width) / 2,
-              sourceWidth = image.width,
-              sourceHeight = sourceWidth;
+          sourceX = 0;
+          sourceY = (image.height - image.width) / 2;
+          sourceWidth = image.width;
+          sourceHeight = sourceWidth;
         } else {
-          var sourceX = sourceY = 0,
-              sourceWidth = sourceHeight = image.width;
+          sourceX = sourceY = 0;
+          sourceWidth = sourceHeight = image.width;
         }
       }
       renderedCanvas.width = renderedCanvas.height = circleDiameter;
@@ -176,9 +181,9 @@
       //  Create gradient
       var gradient = renderedContext.createLinearGradient(0, 0, 0, 150);
       gradient.addColorStop(0, 'rgba(229, 86, 109, .7)');
-      gradient.addColorStop(.25, 'rgba(225, 98, 158, .7)');
-      gradient.addColorStop(.5, 'rgba(195, 104, 213, .7)');
-      gradient.addColorStop(.75, 'rgba(146, 94, 202, .7)');
+      gradient.addColorStop(0.25, 'rgba(225, 98, 158, .7)');
+      gradient.addColorStop(0.5, 'rgba(195, 104, 213, .7)');
+      gradient.addColorStop(0.75, 'rgba(146, 94, 202, .7)');
       gradient.addColorStop(1, 'rgba(108, 83, 181, .7)');
       renderedContext.lineWidth = 2;
       renderedContext.strokeStyle = gradient;
@@ -279,7 +284,9 @@
     
   //  Set observers
   Sigma.setObservers = function () {
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
+    var MutationObserver = window.MutationObserver ||
+                           window.WebKitMutationObserver ||
+                           window.MozMutationObserver,
         observers = [],
         data = document.querySelectorAll('[data-sigma]'),
         //  Attach observers on selected nodes
@@ -390,7 +397,8 @@
     var article = document.activeElement.parentNode,
         articleClone = article.cloneNode(true),
         articleFragment = document.createDocumentFragment(),
-        preventWholeHtmlInjection = article.nodeName !== 'HTML';
+        preventWholeHtmlInjection = article.nodeName !== 'HTML',
+        mongoId;
     //  Inject article into empty clone
     articleFragment.appendChild(articleClone);
     //  Select tools into the clone
@@ -404,7 +412,7 @@
       if (article.hasAttribute('data-mongo-id')) {
         if (article.dataset.idType === 'const') {
           //  Id is from mongo
-          var mongoId = article.dataset.mongoId;
+          mongoId = article.dataset.mongoId;
           Sigma.socket.emit(Sigma.getChannelId, { action: 'update', mongoId: mongoId, html: articleHTML, owner: Sigma.username });
         } else {
           //  Id is a temporary one
@@ -416,7 +424,7 @@
       } else {
         //  Create new content
         article.dataset.idType = 'tmp';
-        var mongoId = Sigma.getTempId();
+        mongoId = Sigma.getTempId();
         article.dataset.mongoId = mongoId;
         Sigma.socket.emit(Sigma.getChannelId, { action: 'create', mongoId: mongoId, html: articleHTML, owner: Sigma.username });
       }
@@ -483,10 +491,11 @@
     },
     setArticle : function (element) {
       //  Set article considering the fact that the browser can add divs in contenteditable elements
+      var article;
       if (element.parentNode.dataset.structure !== 'article') {
-        var article = element.parentNode.parentNode;
+        article = element.parentNode.parentNode;
       } else {
-        var article = element.parentNode;
+        article = element.parentNode;
       }
       return article;
     },
@@ -647,7 +656,7 @@
   Sigma.tryLocalStorage = function () {
     if ('localStorage' in window) {
       var username = localStorage.getItem('username');
-      if (username != null) {
+      if (username !== null) {
         //  Save username into the app
         Sigma.username = username;
         //  Add create button
@@ -776,7 +785,7 @@
     var selector = '[data-owner="' + Sigma.username + '"]',
         articles = document.querySelectorAll(selector),
         highlight = function (i) {
-          articles[i].setAttribute('class', 'isYours');
+          articles[i].parentNode.classList.add('isYours');
         };
     for (var i = 0; i < articles.length; ++i) {
       highlight(i);
@@ -840,7 +849,7 @@
   //  Manage save state of articles
   Sigma.saveManager = {
     pool : [],
-    init : (function () {
+    init : function () {
       //  Receive save state
       Sigma.socket.on('saveState', function (data) {
         if (data.tempId !== undefined) {
@@ -851,7 +860,7 @@
           }
         }
       });
-    })(),
+    },
     add : function (id, state) {
       var index = this.find(id);
       if (index === null) {
@@ -887,20 +896,77 @@
     }
   };
 
+  Sigma.simulatedMultilineFlexbox = function () {
+    var resizeIsFired = false,
+        drawing = false,
+        cell = 20,
+        requestAnimationFrame = window.requestAnimationFrame ||
+                                window.mozRequestAnimationFrame ||
+                                window.webkitRequestAnimationFrame ||
+                                window.oRequestAnimationFrame ||
+                                window.msRequestAnimationFrame,
+         throttleResize = Sigma.simulatedMultilineFlexbox.throttleResize = function () {
+          // Set resizedFired to true and execute drawResize if it's not already running
+          if (drawing === false) {
+            resizeIsFired = true;
+            drawResize();
+          } 
+        },
+        adjustDOM = function () {
+          //  Computed sizes are in rem with 1 rem = 16 px
+          var width = document.querySelector('main').getBoundingClientRect().width / 16,
+              cellsPerLine = Math.floor(width / 20),
+              adjustedCellsPerLine = Math.floor((width - ((cellsPerLine + 1))) / 20),
+              numberOfArticles = document.querySelectorAll('[data-structure="article"]').length,
+              numberOfLines = Math.floor(numberOfArticles / adjustedCellsPerLine),
+              main = document.querySelector('main'),
+              divs = document.querySelectorAll('div.grid');
+          //  First remove all grid divs added from previous state
+          for (var i = 0; i < divs.length; ++i) {
+            divs[i].parentNode.removeChild(divs[i]);
+          }
+          //  Then populate main with empty divs for each line
+          for (var j = 0; j < numberOfLines; ++j) {
+            var newDiv = document.createElement('div');
+            newDiv.setAttribute('class', 'grid');
+            main.insertBefore(newDiv, main.firstChild);
+          }
+          //  Then
+
+          console.log('cellsPerLine');
+        },
+        drawResize = function () {
+          // Render resize loop
+          if (resizeIsFired === true) {
+            resizeIsFired = false;
+            drawing = true;
+            adjustDOM();
+            requestAnimationFrame(drawResize);
+          } else {
+            drawing = false;
+          }
+        };
+    //  Add eventListener
+    window.addEventListener('resize', throttleResize, false);
+    //  Invoke for first loading
+    throttleResize();
+  };
+
   //  Load components of the app when DOM is ready
   Sigma.ready = (function () {
     var componentsToLoad = function () {
+      Sigma.simulatedMultilineFlexbox();
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();
       Sigma.setObservers();
       Sigma.getSocketMessage();
-      Sigma.saveManager;
+      Sigma.saveManager.init();
       Sigma.tryLocalStorage();
       Sigma.preventPasting();
       Sigma.dragAndDrop();
     };
     document.addEventListener('DOMContentLoaded', componentsToLoad, false );
-  })();
+  }());
 
 }).call(this);
