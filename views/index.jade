@@ -14,17 +14,17 @@ html(lang='en')
       script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
   body
     header
-      nav.grid
-        .cell
+      nav.row
+        .fixedCell
           a.logo(href='#')
-        .cell
+        .fixedCell
           a.channel(href='/#{id}')
             span #{id}
-        .cell
+        .fixedCell
     main
-    footer.grid
-      .cell
+    footer.row
+      .fixedCell
         span &copy; Sigma.io
-      .cell
+      .fixedCell
         span about
     script(src='/public/js/sigma.io.min.js')

@@ -24,7 +24,6 @@ module.exports = function(grunt) {
     jshint: {
       files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
       options: {
-        // options here to override JSHint defaults
         globals: {
           jQuery: false,
           console: true,
@@ -40,7 +39,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.registerTask('test', ['jshint']);
-
   grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
 
 };

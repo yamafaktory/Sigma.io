@@ -34,7 +34,7 @@
     createSpan.appendChild(document.createTextNode('create'));
     create.addEventListener('click', function (event) {
       var title = 'An editable title!',
-          content = 'Here goes the content of your lovely article.';
+          content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
       Sigma.disconnectObservers();
       Sigma.addContent(false, undefined, title, content, Sigma.username);
       Sigma.setObservers();
@@ -71,9 +71,12 @@
   //  New content generator
   Sigma.addContent = function (html, id, title, content, owner) {
     var main = document.querySelector('main'),
+        firstRow = main.querySelector('.row:first-child'),
+        cellsInFirstRow = firstRow !== null ? firstRow.children.length : 0,
         newArticle = document.createElement('article');
     newArticle.setAttribute('data-structure', 'article');
     newArticle.setAttribute('class', 'cell');
+    //  Create article from scratch or inject content from database
     if (!html) {
       //  Create new h1 for title
       var newTitle = document.createElement('h1');
@@ -93,24 +96,29 @@
       newContent.setAttribute('data-sigma', 'content');
       newContent.setAttribute('contenteditable', 'true');
       newContent.appendChild(document.createTextNode(content));
+      //  Append childs in article
+      newArticle.appendChild(newTitle);
+      newArticle.appendChild(newOwner);
+      newArticle.appendChild(newDate);
+      newArticle.appendChild(newContent);
     } else {
       //  Assign id
       newArticle.dataset.idType = 'const';
       newArticle.dataset.mongoId = id;
+      //  Inject content
+      newArticle.innerHTML = html;
     }
-    var insert = function () {
-      main.insertBefore(newArticle, main.firstChild);
-      if (html) {
-        newArticle.innerHTML = html;
-      } else {
-        newArticle.appendChild(newTitle);
-        newArticle.appendChild(newOwner);
-        newArticle.appendChild(newDate);
-        newArticle.appendChild(newContent);
-      }
-    };
-    //  Add content
-    insert();
+    //  Add article to a new row or to the first one
+    if (cellsInFirstRow === 0 || cellsInFirstRow === 3) {
+      //  Add new row
+      var newRow = document.createElement('div');
+      newRow.setAttribute('class', 'row');
+      main.insertBefore(newRow, main.firstChild);
+      //  Then add new article
+      newRow.appendChild(newArticle);
+    } else {
+      firstRow.insertBefore(newArticle, firstRow.firstChild);
+    }
   };
 
   //  Update content
@@ -531,10 +539,11 @@
           this.history.shift();
         }
       },
-      get current() {
+      get add () {},
+      get current () {
         return this.history[this.history.length - 1];
       },
-      get former() {
+      get former () {
         if (this.history.length === 2) {
           return this.history[0];
         } else {
@@ -896,66 +905,9 @@
     }
   };
 
-  Sigma.simulatedMultilineFlexbox = function () {
-    var resizeIsFired = false,
-        drawing = false,
-        cell = 20,
-        requestAnimationFrame = window.requestAnimationFrame ||
-                                window.mozRequestAnimationFrame ||
-                                window.webkitRequestAnimationFrame ||
-                                window.oRequestAnimationFrame ||
-                                window.msRequestAnimationFrame,
-         throttleResize = Sigma.simulatedMultilineFlexbox.throttleResize = function () {
-          // Set resizedFired to true and execute drawResize if it's not already running
-          if (drawing === false) {
-            resizeIsFired = true;
-            drawResize();
-          } 
-        },
-        adjustDOM = function () {
-          //  Computed sizes are in rem with 1 rem = 16 px
-          var width = document.querySelector('main').getBoundingClientRect().width / 16,
-              cellsPerLine = Math.floor(width / 20),
-              adjustedCellsPerLine = Math.floor((width - ((cellsPerLine + 1))) / 20),
-              numberOfArticles = document.querySelectorAll('[data-structure="article"]').length,
-              numberOfLines = Math.floor(numberOfArticles / adjustedCellsPerLine),
-              main = document.querySelector('main'),
-              divs = document.querySelectorAll('div.grid');
-          //  First remove all grid divs added from previous state
-          for (var i = 0; i < divs.length; ++i) {
-            divs[i].parentNode.removeChild(divs[i]);
-          }
-          //  Then populate main with empty divs for each line
-          for (var j = 0; j < numberOfLines; ++j) {
-            var newDiv = document.createElement('div');
-            newDiv.setAttribute('class', 'grid');
-            main.insertBefore(newDiv, main.firstChild);
-          }
-          //  Then
-
-          console.log('cellsPerLine');
-        },
-        drawResize = function () {
-          // Render resize loop
-          if (resizeIsFired === true) {
-            resizeIsFired = false;
-            drawing = true;
-            adjustDOM();
-            requestAnimationFrame(drawResize);
-          } else {
-            drawing = false;
-          }
-        };
-    //  Add eventListener
-    window.addEventListener('resize', throttleResize, false);
-    //  Invoke for first loading
-    throttleResize();
-  };
-
   //  Load components of the app when DOM is ready
   Sigma.ready = (function () {
     var componentsToLoad = function () {
-      Sigma.simulatedMultilineFlexbox();
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();
