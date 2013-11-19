@@ -34,17 +34,25 @@ exports.init = function (Sigma) {
   });
 
   //  Images API
-  Sigma.app.get('/data/:id', function (req, res) {
+  Sigma.app.get('/data/:id/:size?', function (req, res) {
     //  Find image source
     Sigma.database.collection('images').findOne(
       { '_id': new Sigma.objectId(req.params.id)},
       function (error, document) {
-      if (error || document == null) {
-        res.sendfile(__dirname + '/public/img/404.svg');
-      } else {
-        res.set('Content-Type', 'image/png');
-        res.send(new Buffer(document.source, 'base64'));
-      }
+        var imageSource;
+        if (error || document == null) {
+          res.sendfile('./public/img/404.svg');
+        } else {
+          if (req.params.size === 'large') {
+            imageSource = document.large;
+            res.set('Content-Type', 'image/jpeg');
+            res.send(new Buffer(imageSource, 'base64'));
+          } else {
+            imageSource = document.small;
+            res.set('Content-Type', 'image/png');
+            res.send(new Buffer(imageSource, 'base64'));
+          }
+        }
     });
   });
 

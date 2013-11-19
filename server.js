@@ -16,13 +16,13 @@ Sigma.io = require('socket.io').listen(Sigma.server);
 Sigma.mongo = require('mongodb').MongoClient;
 Sigma.crypto = require('crypto');
 
-//  Internal dependencies
-Sigma.routes = require('./modules/routes.js');
-Sigma.database = require('./modules/database.js');
-
 //  Set teplate engine to jade and set public folder
 Sigma.app.set('view engine', 'jade');
 Sigma.app.use('/public', express.static('public'));
+
+//  Internal dependencies
+Sigma.routes = require('./modules/routes.js');
+Sigma.database = require('./modules/database.js');
 
 //  Use Gzip in express
 Sigma.app.use(express.compress());
@@ -176,10 +176,13 @@ Sigma.io.sockets.on('connection', function (socket) {
   //  If a client want to store an image
   socket.on('storeImage', function (data) {
     //  Slice and decode dataURL
-    var dataURL = new Buffer(data.src),
-        source = dataURL.toString('utf8', 22);
+    var getSource = function (source) {
+      var dataURL = new Buffer(source);
+      source = dataURL.toString('utf8', 22);
+      return source;
+    };
     Sigma.database.collection('images').insert(
-      { 'source': source},
+      { 'small': getSource(data.smallImage), 'large': getSource(data.largeImage)},
       { safe: true},
       function (error, document) {
         if (error) {

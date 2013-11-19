@@ -150,9 +150,12 @@ footer span {
   padding: 1rem;
 }
 
+var {
+  visibility: hidden;
+}
+
 [data-sigma='title'], [data-sigma='content'] {
   padding: 1rem;
-  
   margin-bottom: 1rem;
 }
 
@@ -221,6 +224,24 @@ footer span {
   margin: 1rem auto 1rem auto;
 }
 
+/*  App width trick*/
+[data-app-width] {
+  -webkit-animation-duration: .1s;
+  -moz-animation-duration: .1s;
+  -ms-animation-duration: .1s;
+  -o-animation-duration: .1s;
+  animation-duration: .1s;
+  -webkit-animation-name: fakeIn;
+  -moz-animation-name: fakeIn;
+  -ms-animation-name: fakeIn;
+  -o-animation-name: fakeIn;
+  animation-name: fakeIn;
+}
+
+[data-app-width]::after {
+  content: 'small';
+}
+
 /*  Tools panel & editing*/
 .editMode {
   -webkit-transition: all .1s ease-out;
@@ -230,7 +251,7 @@ footer span {
   transition: all .1s ease-out;
 }
 
-.editMode:after {
+.editMode::after {
   content: url('../img/edit.svg');
   width: 4rem;
   height: 4rem;
@@ -542,6 +563,23 @@ button:hover {
     font-size: 1rem;
   }
 
+  [data-app-width] {
+    -webkit-animation-duration: .1s;
+    -moz-animation-duration: .1s;
+    -ms-animation-duration: .1s;
+    -o-animation-duration: .1s;
+    animation-duration: .1s;
+    -webkit-animation-name: fakeOut;
+    -moz-animation-name: fakeOut;
+    -ms-animation-name: fakeOut;
+    -o-animation-name: fakeOut;
+    animation-name: fakeOut;
+  }
+
+  [data-app-width]::after {
+    content: 'large';
+  }
+
   main > .row {
     border-bottom: 1px solid rgba(0, 0, 0, .2);
   }
@@ -688,4 +726,56 @@ button:hover {
   100% { transform: scaleY(0.98); }
   80% { transform: scaleY(1.01); }
   100% { transform: scaleY(1); }
+}
+
+/*  fakeIn */
+@-webkit-keyframes fakeIn {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@-moz-keyframes fakeIn {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@-ms-keyframes fakeIn {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@-o-keyframes fakeIn {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes fakeIn {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/*  fakeOut */
+@-webkit-keyframes fakeOut {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@-moz-keyframes fakeOut {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@-ms-keyframes fakeOut {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@-o-keyframes fakeOut {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes fakeOut {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
 }

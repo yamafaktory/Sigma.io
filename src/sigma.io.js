@@ -152,51 +152,76 @@
   //  Drag & drop events
   Sigma.dragAndDrop = function () {
     //  Image resizing
-    var resize = function (image) {
-      var circleDiameter = 120,
-          renderedCanvas = document.createElement('canvas'),
-          templateCanvas = document.createElement('canvas'),
+    var resize = function (image, small) {
+      var renderedCanvas = document.createElement('canvas'),
           renderedContext = renderedCanvas.getContext('2d'),
-          templateContext = templateCanvas.getContext('2d'),
-          sourceX,
-          sourceY,
-          sourceWidth,
-          sourceHeight;
-      if (image.width > image.height) {
-        sourceX = (image.width - image.height) / 2;
-        sourceY = 0;
-        sourceWidth = image.height;
-        sourceHeight = sourceWidth;
-      } else {
-        if (image.height > image.width) {
-          sourceX = 0;
-          sourceY = (image.height - image.width) / 2;
-          sourceWidth = image.width;
+          data;
+      if (small) {
+        var circleDiameter = 120,
+            templateCanvas = document.createElement('canvas'),
+            templateContext = templateCanvas.getContext('2d'),
+            sourceX,
+            sourceY,
+            sourceWidth,
+            sourceHeight;
+        //  Manage it as a square
+        if (image.width > image.height) {
+          sourceX = (image.width - image.height) / 2;
+          sourceY = 0;
+          sourceWidth = image.height;
           sourceHeight = sourceWidth;
         } else {
-          sourceX = sourceY = 0;
-          sourceWidth = sourceHeight = image.width;
+          if (image.height > image.width) {
+            sourceX = 0;
+            sourceY = (image.height - image.width) / 2;
+            sourceWidth = image.width;
+            sourceHeight = sourceWidth;
+          } else {
+            sourceX = sourceY = 0;
+            sourceWidth = sourceHeight = image.width;
+          }
         }
+        renderedCanvas.width = renderedCanvas.height = circleDiameter;
+        templateCanvas.width = templateCanvas.height = circleDiameter;
+        templateContext.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, circleDiameter, circleDiameter);
+        renderedContext.clearRect(0, 0, circleDiameter, circleDiameter);
+        renderedContext.beginPath();
+        renderedContext.arc(circleDiameter/2, circleDiameter/2, (circleDiameter/2)-2, 0, Math.PI*2, true);
+        renderedContext.fillStyle = renderedContext.createPattern(templateCanvas,'no-repeat');
+        renderedContext.fill();
+        //  Create gradient
+        var gradient = renderedContext.createLinearGradient(0, 0, 0, 150);
+        gradient.addColorStop(0, 'rgba(229, 86, 109, .7)');
+        gradient.addColorStop(0.25, 'rgba(225, 98, 158, .7)');
+        gradient.addColorStop(0.5, 'rgba(195, 104, 213, .7)');
+        gradient.addColorStop(0.75, 'rgba(146, 94, 202, .7)');
+        gradient.addColorStop(1, 'rgba(108, 83, 181, .7)');
+        renderedContext.lineWidth = 2;
+        renderedContext.strokeStyle = gradient;
+        renderedContext.stroke();
+        //  Data to return in png format
+        data = renderedCanvas.toDataURL('image/png');
+      } else {
+        //  Large image
+        var maxHeight = 400,
+            maxWidth = 800;
+        if (image.width > maxWidth) {
+          image.height *= (maxWidth / image.width);
+          image.width = maxWidth;
+        }
+        if (image.height > maxHeight) {
+          image.width *= (maxHeight / image.height);
+          image.height = maxHeight;
+        }
+        renderedCanvas.width = image.width;
+        renderedCanvas.height = image.height;
+        renderedContext.clearRect(0, 0, renderedCanvas.width, renderedCanvas.height);
+        renderedContext.drawImage(image, 0, 0, image.width, image.height);
+        //  Data to return in jpg format
+        data = renderedCanvas.toDataURL('image/jpeg', 0.7);
       }
-      renderedCanvas.width = renderedCanvas.height = circleDiameter;
-      templateCanvas.width = templateCanvas.height = circleDiameter;
-      templateContext.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, circleDiameter, circleDiameter);
-      renderedContext.clearRect(0, 0, circleDiameter, circleDiameter);
-      renderedContext.beginPath();
-      renderedContext.arc(circleDiameter/2, circleDiameter/2, (circleDiameter/2)-2, 0, Math.PI*2, true);
-      renderedContext.fillStyle = renderedContext.createPattern(templateCanvas,'no-repeat');
-      renderedContext.fill();
-      //  Create gradient
-      var gradient = renderedContext.createLinearGradient(0, 0, 0, 150);
-      gradient.addColorStop(0, 'rgba(229, 86, 109, .7)');
-      gradient.addColorStop(0.25, 'rgba(225, 98, 158, .7)');
-      gradient.addColorStop(0.5, 'rgba(195, 104, 213, .7)');
-      gradient.addColorStop(0.75, 'rgba(146, 94, 202, .7)');
-      gradient.addColorStop(1, 'rgba(108, 83, 181, .7)');
-      renderedContext.lineWidth = 2;
-      renderedContext.strokeStyle = gradient;
-      renderedContext.stroke();
-      return renderedCanvas.toDataURL('image/png');
+      //  Then return generated data
+      return data;
     };
     //  Handle image on drop event
     var appendImage = function (file, event) {
@@ -213,13 +238,23 @@
           image.src = blobURL;
           image.onload = function () {
             //  Create new image in DOM
-            var source = resize(image),
-                mongoId = Sigma.getTempId();
+            var mongoId = Sigma.getTempId(),
+                appWidth = document.querySelector('[data-app-width]').dataset.appWidth,
+                source,
+                smallImage = resize(image, true),
+                largeImage = resize(image, false);
             newImage.dataset.image = 'dropped';
             newImage.dataset.idType = 'tmp';
             newImage.dataset.mongoId = mongoId;
+            if (appWidth === 'small') {
+              source = smallImage;
+              newImage.dataset.imageWidth = 'small';
+            } else {
+              source = largeImage;
+              newImage.dataset.imageWidth = 'large';
+            }
             //  Save new image source
-            Sigma.storeImage(mongoId, source);
+            Sigma.storeImage(mongoId, smallImage, largeImage);
           };
         };
       }
@@ -271,8 +306,8 @@
   };
 
   //  Store image in mongoDB
-  Sigma.storeImage = function (tempId, data) {
-    Sigma.socket.emit('storeImage', { tempId: tempId, src: data });
+  Sigma.storeImage = function (tempId, smallImage, largeImage) {
+    Sigma.socket.emit('storeImage', { tempId: tempId, smallImage: smallImage, largeImage: largeImage });
   };
 
   //  Manage contenteditable state
@@ -288,6 +323,24 @@
     for (var i = 0; i < data.length; ++i) {
       makeReadonly(i);
     }
+  };
+
+  //  Simulate width observer with animationStart event for responsive image
+  Sigma.observeWidth = function () {
+    var width = document.querySelector('[data-app-width]'),
+        animationsStart = ['animationstart', 'webkitAnimationStart', 'MSAnimationStart', 'oAnimationStart'],
+        getWidth = function () {
+          //  Retrieve content from var::after and set it as [data-app-width]
+          var content = window.getComputedStyle(width, ':after').getPropertyValue('content');
+          //  Little hack for Firefox which adds double quotes
+          width.dataset.appWidth = content.replace(/\"/g, "");
+        };
+    //  Cross-browser event listeners
+    animationsStart.forEach(function (animationStart) {
+      width.addEventListener(animationStart, getWidth, false);
+    });
+    //  First init
+    getWidth();
   };
     
   //  Set observers
@@ -911,6 +964,7 @@
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();
+      Sigma.observeWidth();
       Sigma.setObservers();
       Sigma.getSocketMessage();
       Sigma.saveManager.init();
