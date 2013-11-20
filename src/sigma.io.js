@@ -247,10 +247,10 @@
             newImage.dataset.idType = 'tmp';
             newImage.dataset.mongoId = mongoId;
             if (appWidth === 'small') {
-              source = smallImage;
+              //source = smallImage;
               newImage.dataset.imageWidth = 'small';
             } else {
-              source = largeImage;
+              //source = largeImage;
               newImage.dataset.imageWidth = 'large';
             }
             //  Save new image source
@@ -327,17 +327,30 @@
 
   //  Simulate width observer with animationStart event for responsive image
   Sigma.observeWidth = function () {
-    var width = document.querySelector('[data-app-width]'),
+    var appWidth = document.querySelector('[data-app-width]'),
         animationsStart = ['animationstart', 'webkitAnimationStart', 'MSAnimationStart', 'oAnimationStart'],
+        responsiveImages,
+        changeWidth = function (i) {
+          //  Change data attribute
+          responsiveImages[i].dataset.imageWidth = appWidth.dataset.appWidth;
+          //  And inject source
+          var source = Sigma.host+':'+Sigma.port+'/data/'+responsiveImages[i].dataset.mongoId+'/'+appWidth.dataset.appWidth;
+          responsiveImages[i].setAttribute('src', source);
+        },
         getWidth = function () {
           //  Retrieve content from var::after and set it as [data-app-width]
-          var content = window.getComputedStyle(width, ':after').getPropertyValue('content');
+          var content = window.getComputedStyle(appWidth, ':after').getPropertyValue('content');
           //  Little hack for Firefox which adds double quotes
-          width.dataset.appWidth = content.replace(/\"/g, "");
+          appWidth.dataset.appWidth = content.replace(/\"/g, "");
+          //  Adapt responsive images to screen
+          responsiveImages = document.querySelectorAll('[data-image-width]');
+          for (var i = 0; i < responsiveImages.length; ++i) {
+            changeWidth(i);
+          }
         };
     //  Cross-browser event listeners
     animationsStart.forEach(function (animationStart) {
-      width.addEventListener(animationStart, getWidth, false);
+      appWidth.addEventListener(animationStart, getWidth, false);
     });
     //  First init
     getWidth();
@@ -459,15 +472,31 @@
         articleClone = article.cloneNode(true),
         articleFragment = document.createDocumentFragment(),
         preventWholeHtmlInjection = article.nodeName !== 'HTML',
-        mongoId;
+        mongoId,
+        tools,
+        articleHTML,
+        images,
+        makeNeutral = function (i) {
+          //  Reset image's source
+          images[i].removeAttribute('src');
+          //  Remove responsive data
+          images[i].removeAttribute('[data-image-width]');
+        };
     //  Inject article into empty clone
     articleFragment.appendChild(articleClone);
     //  Select tools into the clone
-    var tools = articleFragment.querySelector('.tools');
-    //  Then remove it
-    tools.parentNode.removeChild(tools);
+    tools = articleFragment.querySelector('.tools');
+    //  Then remove it if present
+    if ( tools !== null) {
+      tools.parentNode.removeChild(tools);
+    }
     //  Convert it
-    var articleHTML = articleFragment.querySelector('[data-structure="article"]').innerHTML;
+    articleHTML = articleFragment.querySelector('[data-structure="article"]').innerHTML;
+    //  Make responsives images neutral
+    images = articleFragment.querySelectorAll('[data-image-width]');
+    for (var i = 0; i < images.length; ++i) {
+      makeNeutral(i);
+    }
     if (document.hasFocus() && preventWholeHtmlInjection) {
       //  Check if div has a mongo id attribute => update content
       if (article.hasAttribute('data-mongo-id')) {

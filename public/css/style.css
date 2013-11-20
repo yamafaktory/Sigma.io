@@ -219,7 +219,7 @@ var {
 }
 
 /*  Images */
-[data-image='dropped'] {
+[data-image] {
   display: block;
   margin: 1rem auto 1rem auto;
 }
@@ -578,6 +578,12 @@ button:hover {
 
   [data-app-width]::after {
     content: 'large';
+  }
+
+  [data-image] {
+    display: block;
+    margin: 1rem 0 1rem 0;
+    width: 100%;
   }
 
   main > .row {
