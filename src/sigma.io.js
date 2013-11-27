@@ -740,6 +740,7 @@
       Sigma.makeReadonly();
       Sigma.highlightUserArticles();
       Sigma.setObservers();
+      Sigma.observeWidth();
     });
   };
 
@@ -756,8 +757,9 @@
         Sigma.manageMessage(true, 'Hi '+Sigma.username+'! Nice to see you there!', true);
       } else {
         //  Provide a form to sign in and to sign up
-        Sigma.signIn.init();
-        Sigma.signUp.init();
+        Sigma.addIdentificationButton();
+        //Sigma.signIn.init();
+        //Sigma.signUp.init();
         //  And enable user connection
         Sigma.userIsConnected();
       }
@@ -766,15 +768,37 @@
     }
   };
 
+  Sigma.addIdentificationButton = function () {
+    var header = document.querySelector('header'),
+        identification = document.createElement('a'),
+        identificationSpan = document.createElement('span');
+    identification.setAttribute('href', '#');
+    identification.setAttribute('class', 'identification');
+    header.firstChild.lastChild.appendChild(identification);
+    identification.appendChild(identificationSpan);
+    identificationSpan.appendChild(document.createTextNode('sign'));
+    identification.addEventListener('click', function (event) {
+      //
+    }, false);
+  };
+
   //  Manage a form to handle user sign-in process
   Sigma.signIn = {
     addForm : function () {
       //  Create the form
       var header = document.querySelector('header'),
           form = document.createElement('form'),
+          usernameDiv = document.createElement('div'),
+          passwordDiv = document.createElement('div'),
+          usernameLabel = document.createElement('label'),
+          passwordLabel = document.createElement('label'),
           usernameInput = document.createElement('input'),
           passwordInput = document.createElement('input');
       form.setAttribute('class', 'signIn');
+      usernameDiv.setAttribute('class', 'uberInput');
+      passwordDiv.setAttribute('class', 'uberInput');
+      usernameLabel.appendChild(document.createTextNode('Username'));
+      passwordLabel.appendChild(document.createTextNode('Password'));
       usernameInput.setAttribute('class', 'username');
       usernameInput.setAttribute('type', 'text');
       usernameInput.setAttribute('placeholder', 'username');
@@ -782,8 +806,12 @@
       passwordInput.setAttribute('type', 'password');
       passwordInput.setAttribute('placeholder', 'password');
       header.firstChild.lastChild.appendChild(form);
-      form.appendChild(usernameInput);
-      form.appendChild(passwordInput);
+      form.appendChild(usernameDiv);
+      form.appendChild(passwordDiv);
+      usernameDiv.appendChild(usernameLabel);
+      usernameDiv.appendChild(usernameInput);
+      passwordDiv.appendChild(passwordLabel);
+      passwordDiv.appendChild(passwordInput);
       //  Append it to the main objet
       Sigma.signIn.form = form;
     },
@@ -993,8 +1021,6 @@
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();
-      Sigma.observeWidth();
-      Sigma.setObservers();
       Sigma.getSocketMessage();
       Sigma.saveManager.init();
       Sigma.tryLocalStorage();
