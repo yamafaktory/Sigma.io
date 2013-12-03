@@ -38,6 +38,9 @@ Sigma.getHash = function(data) {
   return hash;
 };
 
+//  Basic error message
+Sigma.errorMessage = 'Something went wrong server-side!';
+
 //  Create an empty channel during app init
 Sigma.channel = {
   name : '',
@@ -66,7 +69,7 @@ Sigma.io.sockets.on('connection', function (socket) {
     .limit(Sigma.channel.results)
     .toArray(function (error, documents) {
       if (error) {
-        socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+        socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
       } else {
         if (documents.length === 0) {
           socket.emit('history', { empty: true });
@@ -89,7 +92,7 @@ Sigma.io.sockets.on('connection', function (socket) {
           { safe: true},
           function (error, document) {
             if (error) {
-              socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+              socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
             } else {
               //  Broadcast changes to channel
               socket.broadcast.to(Sigma.channel.name).emit('broadcast', { action: 'create', html: data.html, id: document[0]._id });
@@ -111,7 +114,7 @@ Sigma.io.sockets.on('connection', function (socket) {
           { safe: true},
           function (error) {
             if (error) {
-              socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+              socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
             } else {
               //  Send save state
               socket.emit('saveState', { id: data.mongoId, state: true });
@@ -124,7 +127,7 @@ Sigma.io.sockets.on('connection', function (socket) {
           { '_id': new Sigma.objectId(data.mongoId)},
           function (error) {
             if (error) {
-              socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+              socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
             } else {
               //  Broadcast changes to channel
               socket.broadcast.to(Sigma.channel.name).emit('broadcast', { action: 'delete', id: data.mongoId });
@@ -140,7 +143,7 @@ Sigma.io.sockets.on('connection', function (socket) {
       { 'username': data.username },
       function (error, document) {
       if (error) {
-        socket.emit('socketMessage', { message: 'Something is going wrong with your connection!', type: false });
+        socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
       } else {
         if (document) {
           if (document.password === data.password) {
@@ -165,7 +168,7 @@ Sigma.io.sockets.on('connection', function (socket) {
       { safe: true},
       function (error) {
         if (error) {
-          socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+          socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
         } else {
           //  Then connect user
           socket.emit('isConnected', { username: data.username });
@@ -186,7 +189,7 @@ Sigma.io.sockets.on('connection', function (socket) {
       { safe: true},
       function (error, document) {
         if (error) {
-          socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+          socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
         } else {
           //  Send new content id's to client
           socket.emit('mongoId', { tempId: data.tempId, id: document[0]._id, type: 'image' });
@@ -203,7 +206,7 @@ Sigma.io.sockets.on('connection', function (socket) {
             { '_id': new Sigma.objectId(id)},
             function (error) {
               if (error) {
-                socket.emit('socketMessage', { message: 'Something goes wrong server-side!', type: false });
+                socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
               } else {
                 //  Remove id from the array to be sent to the client
                 returnIds.splice(returnIds.indexOf(id), 1);

@@ -237,7 +237,7 @@
               image = new Image();
           image.src = blobURL;
           image.onload = function () {
-            //  Create new image in DOM
+            //  Create new image into the DOM
             var mongoId = Sigma.getTempId(),
                 appWidth = document.querySelector('[data-app-width]').dataset.appWidth,
                 source,
@@ -366,7 +366,7 @@
         //  Attach observers on selected nodes
         attachObserver = function (i) {
           observers[i] = new MutationObserver(function (mutations) {
-            //  For each mutation on DOM, sync content server-side
+            //  For each mutation into the DOM, sync content server-side
             mutations.forEach(function (mutation) {
               Sigma.synchronize();
               Sigma.droppedImages.lookAtMutations(mutation);
@@ -732,7 +732,7 @@
         }
         Sigma.addContent(false, undefined, title, content, Sigma.username || 'Sigma');
       } else {
-        //  Populate main div with DOM content sent by the server
+        //  Populate main div with the DOM content sent by the server
         data.documents.forEach(function (document) {
           Sigma.addContent(document.html, document._id);
         });
@@ -758,8 +758,6 @@
       } else {
         //  Provide a form to sign in and to sign up
         Sigma.addIdentificationButton();
-        //Sigma.signIn.init();
-        //Sigma.signUp.init();
         //  And enable user connection
         Sigma.userIsConnected();
       }
@@ -776,9 +774,10 @@
     identification.setAttribute('class', 'identification');
     header.firstChild.lastChild.appendChild(identification);
     identification.appendChild(identificationSpan);
-    identificationSpan.appendChild(document.createTextNode('sign'));
+    identificationSpan.appendChild(document.createTextNode('connect'));
     identification.addEventListener('click', function (event) {
-      //
+      //  Add aside element with form into the DOM
+      Sigma.signIn.init();
     }, false);
   };
 
@@ -787,31 +786,39 @@
     addForm : function () {
       //  Create the form
       var header = document.querySelector('header'),
+          body = document.querySelector('body'),
+          aside = document.createElement('aside'),
           form = document.createElement('form'),
           usernameDiv = document.createElement('div'),
           passwordDiv = document.createElement('div'),
           usernameLabel = document.createElement('label'),
           passwordLabel = document.createElement('label'),
           usernameInput = document.createElement('input'),
-          passwordInput = document.createElement('input');
+          passwordInput = document.createElement('input'),
+          usernameSpan = document.createElement('span'),
+          passwordSpan = document.createElement('span');
       form.setAttribute('class', 'signIn');
-      usernameDiv.setAttribute('class', 'uberInput');
-      passwordDiv.setAttribute('class', 'uberInput');
-      usernameLabel.appendChild(document.createTextNode('Username'));
-      passwordLabel.appendChild(document.createTextNode('Password'));
+      usernameDiv.setAttribute('class', 'usernameUberInput');
+      passwordDiv.setAttribute('class', 'passwordUberInput');
       usernameInput.setAttribute('class', 'username');
       usernameInput.setAttribute('type', 'text');
       usernameInput.setAttribute('placeholder', 'username');
       passwordInput.setAttribute('class', 'password');
       passwordInput.setAttribute('type', 'password');
       passwordInput.setAttribute('placeholder', 'password');
-      header.firstChild.lastChild.appendChild(form);
+      //  Remove scrolling
+      body.classList.toggle('noScroll');
+      //  Append it to the DOM
+      body.insertBefore(aside, body.firstChild);
+      aside.appendChild(form);
       form.appendChild(usernameDiv);
       form.appendChild(passwordDiv);
       usernameDiv.appendChild(usernameLabel);
       usernameDiv.appendChild(usernameInput);
+      usernameDiv.appendChild(usernameSpan);
       passwordDiv.appendChild(passwordLabel);
       passwordDiv.appendChild(passwordInput);
+      passwordDiv.appendChild(passwordSpan);
       //  Append it to the main objet
       Sigma.signIn.form = form;
     },
@@ -846,7 +853,7 @@
         Sigma.manageMessage(false);
       } else {
         toggleSubmitButtonVisibilityTo(false);
-        Sigma.manageMessage(true, 'Username & password must be 5 characters long!', false);
+        //Sigma.manageMessage(true, 'Username & password must be 5 characters long!', false);
       }
     },
     submit : function (event) {
@@ -929,8 +936,8 @@
             //  Create new message
             var newMessage = document.createElement('span');
             newMessage.setAttribute('class', messageClass);
-            newMessage.appendChild(document.createTextNode(message));
-            //  Push changes to DOM
+            newMessage.innerHTML = message;
+            //  Push changes to the DOM
             var header = document.querySelector('header');
             header.appendChild(newMessage);
             //  Add click event to remove it
@@ -1015,7 +1022,7 @@
     }
   };
 
-  //  Load components of the app when DOM is ready
+  //  Load components of the app when the DOM is ready
   Sigma.ready = (function () {
     var componentsToLoad = function () {
       Sigma.getChannelId();
