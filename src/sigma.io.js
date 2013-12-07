@@ -806,6 +806,8 @@
       passwordInput.setAttribute('class', 'password');
       passwordInput.setAttribute('type', 'password');
       passwordInput.setAttribute('placeholder', 'password');
+      usernameSpan.setAttribute('id', 'usernameInputState');
+      passwordSpan.setAttribute('id', 'passwordInputState');
       //  Remove scrolling
       body.classList.toggle('noScroll');
       //  Append it to the DOM
@@ -824,10 +826,16 @@
     },
     keyUp : function (event) {
       var username = document.querySelector('.username').value,
-          usernameLength = username.length,
           password = document.querySelector('.password').value,
-          passwordLength = password.length,
-          credentialsAreOk = (usernameLength >= 5 && passwordLength >= 5),
+          usernameSpan = document.querySelector('#usernameInputState'),
+          passwordSpan = document.querySelector('#passwordInputState'),
+          //  Username regex with length > 6 and no white space
+          usernameRegex = new RegExp('^\\S{6,}$'),
+          usernameIsOk = usernameRegex.test(username),
+          //  Password regex with length > 6, no white space and at least one digit
+          passwordRegex = new RegExp('^(?=.*\\d)\\S{6,}$'),
+          passwordIsOk = passwordRegex.test(password),
+          credentialsAreOk = usernameIsOk && passwordIsOk,
           toggleSubmitButtonVisibilityTo = function (state) {
             var buttonToRemove = document.querySelector('button[type=submit]');
             if (state) {
@@ -847,17 +855,21 @@
         //  Append username & password to the main objet
         Sigma.signIn.username = username;
         Sigma.signIn.password = password;
+        //  Show that inputs are valid
+        usernameSpan.className = passwordSpan.className = 'isOk';
         //  Add submit button
         toggleSubmitButtonVisibilityTo(true);
-        //  Remove message
-        Sigma.manageMessage(false);
       } else {
+        //  Show inputs validity
+        usernameSpan.className = username !== '' ? (usernameIsOk ? 'isOk' : 'isErroneous') : '';
+        passwordSpan.className = password !== '' ? (passwordIsOk ? 'isOk' : 'isErroneous') : '';
+        //  Remove submit button
         toggleSubmitButtonVisibilityTo(false);
-        //Sigma.manageMessage(true, 'Username & password must be 5 characters long!', false);
       }
     },
     submit : function (event) {
       event.preventDefault();
+      console.log('submit');
       Sigma.socket.emit('signIn', { username: Sigma.signIn.username, password: Sigma.signIn.password });
     },
     init : function () {

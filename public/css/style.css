@@ -367,6 +367,19 @@ var {
   transition: all .2s ease-out;
 }
 
+.create:hover, .channel:hover, .identification:hover {
+  -webkit-animation-duration: .3s;
+  -moz-animation-duration: .3s;
+  -ms-animation-duration: .3s;
+  -o-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-name: BounceUp;
+  -moz-animation-name: BounceUp;
+  -ms-animation-name: BounceUp;
+  -o-animation-name: BounceUp;
+  animation-name: BounceUp;
+}
+
 .create {
   background: url('../img/create.svg');
 }
@@ -473,6 +486,16 @@ label::after {
   height: 3rem;
   background: rgba(130, 130, 130, 1);
   border-radius: 0 .2rem .2rem 0;
+  background-size: 100%;
+  display: inline-block;
+}
+
+#usernameInputState.isOk::after, #passwordInputState.isOk::after {
+  content: url('../img/isOk.svg');
+}
+
+#usernameInputState.isErroneous::after, #passwordInputState.isErroneous::after {
+  content: url('../img/isErroneous.svg');
 }
 
 button {
@@ -719,14 +742,6 @@ button:hover {
     height: 4rem;
   }
 
-  .create:hover, .channel:hover, .identification:hover {
-    -webkit-transform: translate3d(0, -.33rem, 0);
-    -moz-transform: translate3d(0, -.33rem, 0);
-    -ms-transform: translate3d(0, -.33rem, 0);
-    -o-transform: translate3d(0, -.33rem, 0);
-    transform: translate3d(0, -.33rem, 0);
-  }
-
   .alertMessage, .confirmationMessage {
     top: 6rem;
   }
@@ -861,6 +876,42 @@ button:hover {
   100% { transform: scaleY(0.98); }
   80% { transform: scaleY(1.01); }
   100% { transform: scaleY(1); }
+}
+
+/*  BounceUp */
+@-webkit-keyframes BounceUp {
+  0% { -webkit-transform: translateY(0) scale(1); -webkit-animation-timing-function: ease-out; }
+  33% { -webkit-transform: translateY(-.3rem) scale(1.05); -webkit-animation-timing-function: ease-out; }
+  66% { -webkit-transform: translateY(.03rem) scale(0.95); -webkit-animation-timing-function: ease-out; }
+  100% { -webkit-transform: translateY(0) scale(1); -webkit-animation-timing-function: ease-out; }
+}
+
+@-moz-keyframes BounceUp {
+  0% { -moz-transform: translateY(0) scale(1); -moz-animation-timing-function: ease-out; }
+  33% { -moz-transform: translateY(-.3rem) scale(1.05); -moz-animation-timing-function: ease-out; }
+  66% { -moz-transform: translateY(.03rem) scale(0.95); -moz-animation-timing-function: ease-out; }
+  100% { -moz-transform: translateY(0) scale(1); -moz-animation-timing-function: ease-out; }
+}
+
+@-ms-keyframes BounceUp {
+  0% { -ms-transform: translateY(0) scale(1); -ms-animation-timing-function: ease-out; }
+  33% { -ms-transform: translateY(-.3rem) scale(1.05); -ms-animation-timing-function: ease-out; }
+  66% { -ms-transform: translateY(.03rem) scale(0.95); -ms-animation-timing-function: ease-out; }
+  100% { -ms-transform: translateY(0) scale(1); -ms-animation-timing-function: ease-out; }
+}
+
+@-o-keyframes BounceUp {
+  0% { -o-transform: translateY(0) scale(1); -o-animation-timing-function: ease-out; }
+  33% { -o-transform: translateY(-.3rem) scale(1.05); -o-animation-timing-function: ease-out; }
+  66% { -o-transform: translateY(.03rem) scale(0.95); -o-animation-timing-function: ease-out; }
+  100% { -o-transform: translateY(0) scale(1); -o-animation-timing-function: ease-out; }
+}
+
+@keyframes BounceUp {
+  0% { transform: translateY(0) scale(1); animation-timing-function: ease-out; }
+  33% { transform: translateY(-.3rem) scale(1.05); animation-timing-function: ease-out; }
+  66% { transform: translateY(.03rem) scale(0.95); animation-timing-function: ease-out; }
+  100% { transform: translateY(0) scale(1); animation-timing-function: ease-out; }
 }
 
 /*  fakeIn */
