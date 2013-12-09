@@ -55,11 +55,11 @@ aside {
   -moz-justify-content: center;
   justify-content: center;
   align-items: center;
-  -webkit-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -o-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: .3s;
+  -moz-animation-duration: .3s;
+  -ms-animation-duration: .3s;
+  -o-animation-duration: .3s;
+  animation-duration: .3s;
   -webkit-animation-name: fadeIn;
   -moz-animation-name: fadeIn;
   -ms-animation-name: fadeIn;
@@ -408,7 +408,11 @@ var {
 form {
   padding: 2rem;
   margin: 1rem;
-  background: rgba(0, 0, 0, .3);
+  background: rgba(0, 0, 0, .1);
+}
+
+form > h1 {
+  margin-bottom: 1rem;
 }
 
 .usernameUberInput, .passwordUberInput {
@@ -487,16 +491,30 @@ label::after {
   background: rgba(130, 130, 130, 1);
   border-radius: 0 .2rem .2rem 0;
   background-size: 100%;
-  display: inline-block;
 }
 
-#usernameInputState.isOk::after, #passwordInputState.isOk::after {
+#usernameInputState.isOk::before, #passwordInputState.isOk::before {
   content: url('../img/isOk.svg');
 }
 
-#usernameInputState.isErroneous::after, #passwordInputState.isErroneous::after {
+#usernameInputState.isErroneous::before, #passwordInputState.isErroneous::before {
   content: url('../img/isErroneous.svg');
 }
+
+#usernameInputState.isErroneous::after, #passwordInputState.isErroneous::after {
+  content: attr(data-validation);
+  background: rgba(100, 100, 100, 1);
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding: .5rem;
+  color: rgba(255, 255, 255, 1);
+  display: inline-block;
+}
+
+
 
 button {
   border: 0;

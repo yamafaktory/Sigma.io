@@ -788,6 +788,7 @@
       var header = document.querySelector('header'),
           body = document.querySelector('body'),
           aside = document.createElement('aside'),
+          title = document.createElement('h1'),
           form = document.createElement('form'),
           usernameDiv = document.createElement('div'),
           passwordDiv = document.createElement('div'),
@@ -797,22 +798,27 @@
           passwordInput = document.createElement('input'),
           usernameSpan = document.createElement('span'),
           passwordSpan = document.createElement('span');
+      title.appendChild(document.createTextNode('Get Started'));
       form.setAttribute('class', 'signIn');
       usernameDiv.setAttribute('class', 'usernameUberInput');
       passwordDiv.setAttribute('class', 'passwordUberInput');
       usernameInput.setAttribute('class', 'username');
       usernameInput.setAttribute('type', 'text');
-      usernameInput.setAttribute('placeholder', 'username');
+      usernameInput.setAttribute('placeholder', 'Username');
+      usernameInput.setAttribute('autofocus', '');
       passwordInput.setAttribute('class', 'password');
       passwordInput.setAttribute('type', 'password');
-      passwordInput.setAttribute('placeholder', 'password');
+      passwordInput.setAttribute('placeholder', 'Password');
       usernameSpan.setAttribute('id', 'usernameInputState');
+      usernameSpan.setAttribute('data-validation', 'Must be 6 characters long and with no white space!');
       passwordSpan.setAttribute('id', 'passwordInputState');
+      passwordSpan.setAttribute('data-validation', 'Must be 6 characters long with 1 digit and with no white space!');
       //  Remove scrolling
       body.classList.toggle('noScroll');
       //  Append it to the DOM
       body.insertBefore(aside, body.firstChild);
       aside.appendChild(form);
+      form.appendChild(title);
       form.appendChild(usernameDiv);
       form.appendChild(passwordDiv);
       usernameDiv.appendChild(usernameLabel);
