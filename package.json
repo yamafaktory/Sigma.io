@@ -1,13 +1,14 @@
 {
   "name": "sigma.io",
   "description": "Create and share data in true real-time",
-  "version": "0.0.1",
+  "version": "0.1",
   "private": true,
   "devDependencies": {
     "grunt": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-svgmin": "*"
+    "grunt-svgmin": "*",
+    "grunt-nodemon": "*"
   }
 }

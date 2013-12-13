@@ -32,7 +32,6 @@ html {
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
-  background-color: rgba(0, 240, 255, 1);
 }
 
 body {
@@ -41,7 +40,7 @@ body {
 }
 
 header {
-  margin-bottom: 3rem;
+  height: 3rem;
 }
 
 aside {
@@ -59,7 +58,7 @@ aside {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   -webkit-animation-duration: .3s;
   -moz-animation-duration: .3s;
   -ms-animation-duration: .3s;
@@ -106,8 +105,7 @@ main > .row {
 
 nav {
   position: fixed;
-  top: 0;
-  background: rgba(80, 80, 80, .5);
+  background: rgba(80, 80, 80, 1);
   box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
   width: 100%;
   z-index: 2;
@@ -246,6 +244,23 @@ var {
   background-color: rgba(0, 240, 255, 1);
   background-size: contain;
   height: 10rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.hero > h1 {
+  color: rgba(232, 124, 122, 1);
+  background: rgba(255, 255, 255, .8);
+  padding: .3333rem;
+  font-size: 1.3333rem;
 }
 
 /*  Tooltips */
@@ -420,12 +435,8 @@ var {
 /*  Form */
 form {
   padding: 2rem;
-  margin: 1rem;
-  background: rgba(0, 0, 0, .1);
-}
-
-form > h1 {
-  margin-bottom: 1rem;
+  width: 100%;
+  background: rgba(0, 0, 0, .5);
 }
 
 .usernameUberInput, .passwordUberInput {
@@ -668,8 +679,12 @@ button:hover {
 /*  Media Queries for large screen*/
 @media screen and (min-width: 48em) {
 
+  aside {
+    align-items: center;
+  }
+
   header {
-    margin-bottom: 6rem;
+    height: 6rem;
   }
 
   nav {
@@ -777,6 +792,16 @@ button:hover {
 
   .hero {
     height: 20rem;
+    align-items: flex-end;
+  }
+
+  .hero > h1 {
+    font-size: 3rem;
+    padding: 1rem;
+  }
+
+  form {
+    width: auto;
   }
 
 }

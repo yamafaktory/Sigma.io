@@ -46,6 +46,14 @@ module.exports = function(grunt) {
           dest: 'public/img/'
         }]
       }
+    },
+    nodemon: {
+      dev: {
+        options: {
+          file: 'server.js',
+          nodeArgs: ['--debug']
+        }
+      }
     }
   });
 
@@ -53,8 +61,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-svgmin');
+  grunt.loadNpmTasks('grunt-nodemon');
 
   grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'svgmin']);
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'svgmin', 'nodemon']);
 
 };
