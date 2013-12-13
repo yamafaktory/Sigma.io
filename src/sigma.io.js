@@ -758,12 +758,22 @@
       } else {
         //  Provide a form to sign in and to sign up
         Sigma.addIdentificationButton();
-        //  And enable user connection
+        //  Add Hero SVG section
+        Sigma.addHeroSVG();
+        //  Enable user connection
         Sigma.userIsConnected();
       }
     } else {
       // !!!!!!!!!!!!!
     }
+  };
+
+  Sigma.addHeroSVG = function () {
+    var body = document.querySelector('body'),
+        main = document.querySelector('main'),
+        hero = document.createElement('section');
+    body.insertBefore(hero, main);
+    hero.setAttribute('class', 'hero');
   };
 
   Sigma.addIdentificationButton = function () {

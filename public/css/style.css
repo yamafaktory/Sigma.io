@@ -32,11 +32,16 @@ html {
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
+  background-color: rgba(0, 240, 255, 1);
 }
 
 body {
   margin: 0;
   background: rgba(255, 255, 255, 1);
+}
+
+header {
+  margin-bottom: 3rem;
 }
 
 aside {
@@ -69,7 +74,6 @@ aside {
 
 main {
   display: block;
-  padding-top: 4rem;
   position: relative;
   z-index: 0;
 }
@@ -102,7 +106,8 @@ main > .row {
 
 nav {
   position: fixed;
-  background: rgba(80, 80, 80, .95);
+  top: 0;
+  background: rgba(80, 80, 80, .5);
   box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
   width: 100%;
   z-index: 2;
@@ -233,6 +238,14 @@ var {
   -ms-transition: background-color .8s ease;
   -o-transition: background-color .8s ease;
   transition: background-color .8s ease;
+}
+
+/*  Hero */
+.hero {
+  background: url('../img/hero.svg') no-repeat bottom;
+  background-color: rgba(0, 240, 255, 1);
+  background-size: contain;
+  height: 10rem;
 }
 
 /*  Tooltips */
@@ -514,8 +527,6 @@ label::after {
   display: inline-block;
 }
 
-
-
 button {
   border: 0;
   border-radius: .2rem;
@@ -657,8 +668,8 @@ button:hover {
 /*  Media Queries for large screen*/
 @media screen and (min-width: 48em) {
 
-  main {
-    padding-top: 7rem;
+  header {
+    margin-bottom: 6rem;
   }
 
   nav {
@@ -762,6 +773,10 @@ button:hover {
 
   .alertMessage, .confirmationMessage {
     top: 6rem;
+  }
+
+  .hero {
+    height: 20rem;
   }
 
 }

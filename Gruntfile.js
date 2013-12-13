@@ -31,14 +31,30 @@ module.exports = function(grunt) {
           document: true
         }
       }
+    },
+    svgmin: {
+      options: {
+        plugins: [{
+          removeViewBox: false
+        }]
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'src/svg',
+          src: ['*.svg'],
+          dest: 'public/img/'
+        }]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-svgmin');
 
   grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'svgmin']);
 
 };
