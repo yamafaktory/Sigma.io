@@ -1,7 +1,7 @@
 Sigma.io
 ===============
 
-Real-time thing for real people!
+Create and share data in true real-time!
 
 Mainly based uppon [node.js](http://nodejs.org/), this web app rely on :
 
