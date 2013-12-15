@@ -436,7 +436,7 @@ var {
 form {
   padding: 2rem;
   width: 100%;
-  background: rgba(0, 0, 0, .5);
+  background: rgba(80, 80, 80, 1);
 }
 
 .usernameUberInput, .passwordUberInput {
@@ -525,17 +525,16 @@ label::after {
   content: url('../img/isErroneous.svg');
 }
 
-#usernameInputState.isErroneous::after, #passwordInputState.isErroneous::after {
+form.isErroneous::after, #usernameInputState.isErroneous::after, #passwordInputState.isErroneous::after {
   content: attr(data-validation);
-  background: rgba(100, 100, 100, 1);
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -moz-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  padding: .5rem;
+  background: rgba(255, 0, 76, 1);
+  padding: 1rem;
   color: rgba(255, 255, 255, 1);
   display: inline-block;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  position: absolute;
 }
 
 button {
@@ -801,6 +800,7 @@ button:hover {
   }
 
   form {
+    background: rgba(0, 0, 0, .4);
     width: auto;
   }
 

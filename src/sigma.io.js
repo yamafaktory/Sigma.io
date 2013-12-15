@@ -809,8 +809,12 @@
           usernameInput = document.createElement('input'),
           passwordInput = document.createElement('input'),
           usernameSpan = document.createElement('span'),
-          passwordSpan = document.createElement('span');
+          passwordSpan = document.createElement('span'),
+          disableMouseWheelOrTouchMove = function (event) {
+            event.preventDefault();
+          };
       form.setAttribute('class', 'signIn');
+      form.setAttribute('data-validation', 'Username and password must be 6 characters long with no white space! Password must contain at least 1 digit!');
       usernameDiv.setAttribute('class', 'usernameUberInput');
       passwordDiv.setAttribute('class', 'passwordUberInput');
       usernameInput.setAttribute('class', 'username');
@@ -821,9 +825,9 @@
       passwordInput.setAttribute('type', 'password');
       passwordInput.setAttribute('placeholder', 'Password');
       usernameSpan.setAttribute('id', 'usernameInputState');
-      usernameSpan.setAttribute('data-validation', '6 characters long and no white space!');
+      usernameSpan.setAttribute('data-validation', 'Username must be 6 characters long and no white space!');
       passwordSpan.setAttribute('id', 'passwordInputState');
-      passwordSpan.setAttribute('data-validation', '6 characters long with 1 digit and no white space!');
+      passwordSpan.setAttribute('data-validation', 'Password must be 6 characters long with 1 digit and no white space!');
       //  Remove scrolling
       body.classList.toggle('noScroll');
       //  Append it to the DOM
@@ -839,9 +843,13 @@
       passwordDiv.appendChild(passwordSpan);
       //  Append it to the main objet
       Sigma.signIn.form = form;
+      //  Temporary disable wheel and touch
+      body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
+      body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
     },
-    keyUp : function (event) {
-      var username = document.querySelector('.username').value,
+    checkForm : function (event) {
+      var form = document.querySelector('form'),
+          username = document.querySelector('.username').value,
           password = document.querySelector('.password').value,
           usernameSpan = document.querySelector('#usernameInputState'),
           passwordSpan = document.querySelector('#passwordInputState'),
@@ -876,9 +884,15 @@
         //  Add submit button
         toggleSubmitButtonVisibilityTo(true);
       } else {
-        //  Show inputs validity
+        //  Inputs validity
         usernameSpan.className = username !== '' ? (usernameIsOk ? 'isOk' : 'isErroneous') : '';
         passwordSpan.className = password !== '' ? (passwordIsOk ? 'isOk' : 'isErroneous') : '';
+        //  Override if both are wrong
+        if (!usernameIsOk && !passwordIsOk && username !== '' && password !== '') {
+          form.className = 'isErroneous';
+        } else {
+          form.className = '';
+        }
         //  Remove submit button
         toggleSubmitButtonVisibilityTo(false);
       }
@@ -890,7 +904,7 @@
     },
     init : function () {
       this.addForm();
-      this.form.addEventListener('keyup', this.keyUp, false);
+      this.form.addEventListener('input', this.checkForm, false);
       this.form.addEventListener('submit', this.submit, false);
     }
   };
