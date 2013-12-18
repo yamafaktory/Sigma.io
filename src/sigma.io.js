@@ -23,22 +23,45 @@
   Sigma.socket = io.connect(Sigma.host);
 
   //  Create new content
-  Sigma.addCreateButton = function () {
-    var header = document.querySelector('header'),
-        create = document.createElement('a'),
-        createSpan = document.createElement('span');
-    create.setAttribute('class', 'create');
-    create.setAttribute('href', '#');
-    header.firstChild.lastChild.appendChild(create);
-    create.appendChild(createSpan);
-    createSpan.appendChild(document.createTextNode('create'));
-    create.addEventListener('click', function (event) {
-      var title = 'An editable title!',
-          content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
-      Sigma.disconnectObservers();
-      Sigma.addContent(false, undefined, title, content, Sigma.username);
-      Sigma.setObservers();
-    }, false);
+  Sigma.ConnectOrCreateButton = function (type) {
+    //  Connect is true | Create is false
+    var addButton = function (type) {
+      var header = document.querySelector('header'),
+          button = document.createElement('a'),
+          buttonSpan = document.createElement('span');
+      button.setAttribute('href', '#');
+      button.setAttribute('class', type);
+      header.firstChild.lastChild.appendChild(button);
+      button.appendChild(buttonSpan);
+      buttonSpan.appendChild(document.createTextNode(type));
+      button.addEventListener('click', function (event) {
+        if (type === 'connect') {
+          //  Add aside element with form into the DOM
+          Sigma.signIn.init();
+          Sigma.signUp.init();
+        } else {
+          var title = 'An editable title!',
+              content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
+          Sigma.disconnectObservers();
+          Sigma.addContent(false, undefined, title, content, Sigma.username);
+          Sigma.setObservers();
+        }
+      }, false);
+    },
+      removeButton = function (type) {
+        var selector = '.'+type,
+            button = document.querySelector(selector);
+        if (button !== null) {
+          button.parentNode.removeChild(button);
+        }
+      };
+    if (type) {
+      removeButton('create');
+      addButton('connect');
+    } else {
+      removeButton('connect');
+      addButton('create');
+    }
   };
 
   //  Date generator
@@ -752,12 +775,12 @@
         //  Save username into the app
         Sigma.username = username;
         //  Add create button
-        Sigma.addCreateButton();
+        Sigma.ConnectOrCreateButton(false);
         //  Welcome user
         Sigma.manageMessage(true, 'Hi '+Sigma.username+'! Nice to see you there!', true);
       } else {
         //  Provide a form to sign in and to sign up
-        Sigma.addIdentificationButton();
+        Sigma.ConnectOrCreateButton(true);
         //  Add Hero SVG section
         Sigma.addHeroSVG();
         //  Enable user connection
@@ -779,21 +802,6 @@
     title.appendChild(document.createTextNode('Create and share data in true real-time.'));
   };
 
-  Sigma.addIdentificationButton = function () {
-    var header = document.querySelector('header'),
-        identification = document.createElement('a'),
-        identificationSpan = document.createElement('span');
-    identification.setAttribute('href', '#');
-    identification.setAttribute('class', 'identification');
-    header.firstChild.lastChild.appendChild(identification);
-    identification.appendChild(identificationSpan);
-    identificationSpan.appendChild(document.createTextNode('connect'));
-    identification.addEventListener('click', function (event) {
-      //  Add aside element with form into the DOM
-      Sigma.signIn.init();
-    }, false);
-  };
-
   //  Manage a form to handle user sign-in process
   Sigma.signIn = {
     addForm : function () {
@@ -810,8 +818,18 @@
           passwordInput = document.createElement('input'),
           usernameSpan = document.createElement('span'),
           passwordSpan = document.createElement('span'),
+          cancelButton = document.createElement('button'),
           disableMouseWheelOrTouchMove = function (event) {
             event.preventDefault();
+          },
+          returnHome = function (event) {
+            //  Remove aside
+            aside.parentNode.removeChild(aside);
+            //  Make body scrollable
+            body.classList.remove('noScroll');
+            //  Remove listeners
+            body.removeEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
+            body.removeEventListener('touchmove', disableMouseWheelOrTouchMove, false);
           };
       form.setAttribute('class', 'signIn');
       form.setAttribute('data-validation', 'Username and password must be 6 characters long with no white space! Password must contain at least 1 digit!');
@@ -825,9 +843,10 @@
       passwordInput.setAttribute('type', 'password');
       passwordInput.setAttribute('placeholder', 'Password');
       usernameSpan.setAttribute('id', 'usernameInputState');
-      usernameSpan.setAttribute('data-validation', 'Username must be 6 characters long and no white space!');
       passwordSpan.setAttribute('id', 'passwordInputState');
-      passwordSpan.setAttribute('data-validation', 'Password must be 6 characters long with 1 digit and no white space!');
+      cancelButton.setAttribute('type', 'button');
+      cancelButton.setAttribute('class', 'cancel');
+      cancelButton.appendChild(document.createTextNode('cancel'));
       //  Remove scrolling
       body.classList.toggle('noScroll');
       //  Append it to the DOM
@@ -841,11 +860,13 @@
       passwordDiv.appendChild(passwordLabel);
       passwordDiv.appendChild(passwordInput);
       passwordDiv.appendChild(passwordSpan);
+      form.appendChild(cancelButton);
       //  Append it to the main objet
       Sigma.signIn.form = form;
       //  Temporary disable wheel and touch
       body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
       body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
+      cancelButton.addEventListener('click', returnHome, false);
     },
     checkForm : function (event) {
       var form = document.querySelector('form'),
@@ -860,6 +881,7 @@
           passwordRegex = new RegExp('^(?=.*\\d)\\S{6,}$'),
           passwordIsOk = passwordRegex.test(password),
           credentialsAreOk = usernameIsOk && passwordIsOk,
+          validationMessage = '',
           toggleSubmitButtonVisibilityTo = function (state) {
             var buttonToRemove = document.querySelector('button[type=submit]');
             if (state) {
@@ -881,17 +903,46 @@
         Sigma.signIn.password = password;
         //  Show that inputs are valid
         usernameSpan.className = passwordSpan.className = 'isOk';
+        //  Remove previous validation message
+        Sigma.manageMessage(false);
         //  Add submit button
         toggleSubmitButtonVisibilityTo(true);
       } else {
-        //  Inputs validity
-        usernameSpan.className = username !== '' ? (usernameIsOk ? 'isOk' : 'isErroneous') : '';
-        passwordSpan.className = password !== '' ? (passwordIsOk ? 'isOk' : 'isErroneous') : '';
-        //  Override if both are wrong
-        if (!usernameIsOk && !passwordIsOk && username !== '' && password !== '') {
-          form.className = 'isErroneous';
+        //  Show inputs validity
+        if (usernameIsOk) {
+          if (username !== '') {
+            usernameSpan.className = 'isOk';
+          } else {
+
+          }
         } else {
-          form.className = '';
+          if (username !== '') {
+            validationMessage += 'Username must be at least 6 characters long!';
+            usernameSpan.className = 'isErroneous';
+          } else {
+            usernameSpan.className = '';
+          }
+        }
+        if (passwordIsOk) {
+          if (password !== '') {
+            passwordSpan.className = 'isOk';
+          }
+        } else {
+          if (password !== '') {
+            if (validationMessage !== '') {
+              validationMessage += ' ';
+            }
+            validationMessage += 'Password must be at least 6 characters long with one digit!';
+            passwordSpan.className = 'isErroneous';
+          } else {
+            passwordSpan.className = '';
+          }
+        }
+        //  Show message
+        if (validationMessage !== '') {
+          Sigma.manageMessage(true, validationMessage, false);
+        } else {
+          Sigma.manageMessage(false);
         }
         //  Remove submit button
         toggleSubmitButtonVisibilityTo(false);
@@ -899,7 +950,6 @@
     },
     submit : function (event) {
       event.preventDefault();
-      console.log('submit');
       Sigma.socket.emit('signIn', { username: Sigma.signIn.username, password: Sigma.signIn.password });
     },
     init : function () {
@@ -918,7 +968,7 @@
       Sigma.socket.on('signUp', function (data) {
         Sigma.manageMessage(true, 'Unknown username! Want to sign up as '+data.username+'?', true);
         //  Update submit button
-        var button = document.querySelector('button');
+        var button = document.querySelector('button[type=submit]');
         button.innerText = 'sign up';
         button.classList.add('signUp');
         Sigma.signIn.form.removeEventListener('submit', Sigma.signIn.submit, false);
@@ -930,18 +980,17 @@
   //  Manage user connection
   Sigma.userIsConnected = function () {
     Sigma.socket.on('isConnected', function (data) {
-      //  Remove form
-      var form = document.querySelector('.signIn');
-      //  Change nav layout
-      form.parentNode.removeChild(form);
+      //  Remove aside
+      var aside = document.querySelector('aside');
+      aside.parentNode.removeChild(aside);
       //  Save username into the app
       Sigma.username = data.username;
       //  Try to use localStorage
       if (window.localStorage) {
         localStorage.setItem('username', Sigma.username);
       }
-      //  Add create button
-      Sigma.addCreateButton();
+      //  Change nav layout
+      Sigma.ConnectOrCreateButton(false);
       //  Highlight user's articles
       Sigma.highlightUserArticles();
       //  Then welcome user
@@ -980,8 +1029,8 @@
             newMessage.setAttribute('class', messageClass);
             newMessage.innerHTML = message;
             //  Push changes to the DOM
-            var header = document.querySelector('header');
-            header.appendChild(newMessage);
+            var body = document.querySelector('body');
+            body.appendChild(newMessage);
             //  Add click event to remove it
             newMessage.addEventListener('click', function(event) {
               var _this = this,

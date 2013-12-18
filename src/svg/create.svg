@@ -254,7 +254,7 @@
    id="namedview24"
    showgrid="false"
    inkscape:zoom="5"
-   inkscape:cx="24.397368"
+   inkscape:cx="-2.102632"
    inkscape:cy="35.253465"
    inkscape:window-x="96"
    inkscape:window-y="238"
@@ -326,7 +326,7 @@
    id="rect4412"
    inkscape:connector-curvature="0"
    sodipodi:nodetypes="ssscccssssss" /><path
-   id="path3053-1"
-   style="fill:none;stroke:#e6e6e6;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-   d="m 208,114.84211 0,-13.68422 M 201.15789,108 l 13.68422,0"
-   inkscape:connector-curvature="0" /></svg>
+   style="fill:#e6e6e6;fill-opacity:1;stroke:none"
+   d="M 30.6875 22.59375 L 30.6875 30.6875 L 22.59375 30.6875 L 22.59375 33.3125 L 30.6875 33.3125 L 30.6875 41.40625 L 33.3125 41.40625 L 33.3125 33.3125 L 41.40625 33.3125 L 41.40625 30.6875 L 33.3125 30.6875 L 33.3125 22.59375 L 30.6875 22.59375 z "
+   transform="translate(176,76)"
+   id="rect3827" /></svg>
