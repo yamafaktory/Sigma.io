@@ -3,17 +3,8 @@
 //  Routes module
 exports.init = function (Sigma) {
 
-  //  Channels API
-
-  //  Only name
-  Sigma.app.get('/:channel', function (req, res) {
-    Sigma.channel.name = req.params.channel;
-    Sigma.channel.results = 10;
-    res.render('index', { id: Sigma.channel.name });
-  });
-
-  //  Name & number of results to render
-  Sigma.app.get('/:channel/results/:results?', function (req, res) {
+  //  Channel and image rendering
+  var renderChannel = function (req, res) {
     Sigma.channel.name = req.params.channel;
     var processResults = function (results) {
       //  Create a regular expression that fits only integers
@@ -31,29 +22,34 @@ exports.init = function (Sigma) {
     };
     Sigma.channel.results = processResults(req.params.results);
     res.render('index', { id: Sigma.channel.name });
-  });
-
-  //  Images API
-  Sigma.app.get('/data/:id/:size?', function (req, res) {
-    //  Find image source
-    Sigma.database.collection('images').findOne(
-      { '_id': new Sigma.objectId(req.params.id)},
-      function (error, document) {
-        var imageSource;
-        if (error || document == null) {
-          res.sendfile('./public/img/404.svg');
-        } else {
-          if (req.params.size === 'large') {
-            imageSource = document.large;
-            res.set('Content-Type', 'image/jpeg');
-            res.send(new Buffer(imageSource, 'base64'));
+  },
+    renderImage = function (req, res) {
+      //  Find image source
+      Sigma.database.collection('images').findOne(
+        { '_id': new Sigma.objectId(req.params.id)},
+        function (error, document) {
+          var imageSource;
+          if (error || document == null) {
+            res.sendfile('./public/img/404.svg');
           } else {
-            imageSource = document.small;
-            res.set('Content-Type', 'image/png');
-            res.send(new Buffer(imageSource, 'base64'));
+            if (req.params.size === 'large') {
+              imageSource = document.large;
+              res.set('Content-Type', 'image/jpeg');
+              res.send(new Buffer(imageSource, 'base64'));
+            } else {
+              imageSource = document.small;
+              res.set('Content-Type', 'image/png');
+              res.send(new Buffer(imageSource, 'base64'));
+            }
           }
-        }
-    });
-  });
+      });
+    };
 
+  //  Channel routes
+  Sigma.app.get('/:channel', renderChannel);
+  Sigma.app.get('/:channel/results/:results?', renderChannel);
+
+  //  Image routes
+  Sigma.app.get('/data/:id/:size?', renderImage);
+  
 };
