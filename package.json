@@ -4,11 +4,16 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "grunt": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-svgmin": "*",
-    "grunt-nodemon": "*"
+    "express": "*",
+    "gulp": "*",
+    "gulp-concat": "*",
+    "gulp-jshint": "*",
+    "gulp-myth": "*",
+    "gulp-svgmin": "*",
+    "gulp-uglify": "*",
+    "jade": "*",
+    "mongodb": "*",
+    "myth": "*",
+    "socket.io": "*"
   }
 }

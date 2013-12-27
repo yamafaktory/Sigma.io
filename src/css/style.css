@@ -1,0 +1,694 @@
+/*  Sigma.io
+
+    CSS
+    (c) 2013 Davy Duperron
+*/
+
+/*  Global rules - mobile first */
+
+:root {
+  var-blue: rgba(0, 240, 255, 1);
+}
+
+*, *::after, *::before {
+  box-sizing: border-box;
+  font-family: 'Roboto Slab', serif;
+}
+
+::selection {
+  background: rgba(0, 208, 255, 1);
+  color: rgba(255, 255, 255, 1);
+  text-shadow: none;
+}
+
+/*  Font */
+
+@import url('http://fonts.googleapis.com/css?family=Roboto:100|Roboto+Slab');
+
+/*  Main elements */
+
+html {
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: rgba(240, 240, 240, 1);
+}
+
+header {
+  height: 3rem;
+}
+
+aside {
+  position: fixed;
+  z-index: 3;
+  background: rgba(0, 0, 0, .8);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  animation-duration: .3s;
+  animation-name: slideRight;
+}
+
+.removeAside {
+  animation-duration: .3s;
+  animation-name: slideLeft;
+}
+
+main {
+  display: block;
+  position: relative;
+  z-index: 0;
+}
+
+.row {
+  margin: 0;
+  display: block;
+}
+
+main > .row {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+main > .row:first-child {
+  margin-top: 1rem;
+}
+
+.cell {
+  flex: 0 0 100%;
+}
+
+.fixedCell {
+  flex: 1;
+}
+
+nav {
+  position: fixed;
+  background: rgba(80, 80, 80, 1);
+  box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+h1 {
+  font-family: 'Roboto Thin', 'Roboto', sans-serif;
+  font-weight: 100;
+  color: rgba(0, 0, 0, .6);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+h2 {
+  color: rgba(0, 0, 0, .4);
+  font-style: italic;
+}
+
+h2::before {
+  content: 'written by ';
+  font-style: italic;
+  color: rgba(0, 0, 0, .3);
+}
+
+time {
+  color: rgba(0, 0, 0, .5);
+  font-style: italic;
+}
+
+time::before {
+  content: 'published ';
+  color: rgba(0, 0, 0, .3);
+}
+
+h2, time {
+  font-size: 1rem;
+}
+
+article {
+  color: rgba(0, 0, 0, .7);
+}
+
+article, footer {
+  font-size: 1rem;
+}
+
+h1, h2, article {
+  word-wrap: break-word;
+  font-style: normal;
+  margin: 0;
+}
+
+a {
+  color: rgba(0, 0, 0, .5);
+  text-decoration: none;
+}
+
+footer {
+  margin: 0 1rem 0 1rem;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, .05);
+}
+
+footer p {
+  display: block;
+  margin: 0;
+}
+
+var {
+  visibility: hidden;
+}
+
+[data-sigma='title'], [data-sigma='content'] {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+[data-owner], time {
+  margin-left: 1rem;
+}
+
+[data-structure='article'] {
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, .05);
+  animation-duration: 1s;
+  animation-name: fadeIn;
+}
+
+[data-structure='article'].isYours > h2 {
+  color: rgba(234, 121, 255, 1);
+}
+
+/*  Contenteditable */
+[contenteditable='true'] {
+  outline: none;
+}
+
+[data-sigma='title']:focus, [data-sigma='content']:focus {
+  background: rgba(0, 240, 255, .1);
+  transition: background-color .8s ease;
+}
+
+/*  Hero */
+
+.hero {
+  background: url('../img/hero.svg') no-repeat bottom;
+  background-color: var(blue);
+  background-size: contain;
+  height: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.hero > h1 {
+  color: rgba(255, 255, 255, 1);
+  background: rgba(0, 0, 0, .2);
+  padding: .3333rem;
+  font-size: 1.3333rem;
+}
+
+/*  Tooltips */
+
+[data-tooltip]:hover::before {
+  content: attr(data-tooltip);
+  background: rgba(100, 100, 100, 1);
+  position: absolute;
+  padding: .5rem;
+  margin: 0 auto 0 auto;
+  color: rgba(255, 255, 255, 1);
+  font-size: .75rem;
+  height: 2rem;
+  border-radius: .3333rem;
+}
+
+/*  Images */
+
+[data-image] {
+  display: block;
+  margin: 1rem auto 1rem auto;
+}
+
+/*  App width trick */
+
+[data-app-width] {
+  animation-duration: .1s;
+  animation-name: fakeIn;
+}
+
+[data-app-width]::after {
+  content: 'small';
+}
+
+/*  Tools panel & editing */
+
+.editMode {
+  transition: all .1s ease-out;
+}
+
+.editMode::after {
+  content: url('../img/edit.svg');
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  margin-top: -4rem;
+  margin-left: 9.25rem;
+  background: rgba(255, 255, 255, .3);
+  z-index: 1;
+}
+
+.tools {
+  background: var(blue);
+  height: 4rem;
+  animation-duration: .3s;
+  transform-origin: 50% 0%;
+  animation-name: pullDown;
+}
+
+.erase, .close {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  background-size: 100%;
+  margin: 1rem;
+  transition: all .1s ease;
+}
+
+.erase:hover, .close:hover {
+  transform: scale(1.33);
+}
+
+.erase {
+  background: url('../img/erase.svg');
+}
+
+.close {
+  background: url('../img/close.svg');
+}
+
+/*  Icons */
+
+.create, .channel, .connect {
+  display: inline-block;
+  background-size: 100%;
+  width: 2rem;
+  height: 2rem;
+  padding-top: .25rem;
+  padding-left: 1.25rem;
+  margin-top: .5rem;
+  text-align: left;
+  color: rgba(255, 255, 255, 1);
+  transition: all .2s ease-out;
+}
+
+.create:hover, .channel:hover, .connect:hover {
+  animation-duration: .3s;
+  animation-name: bounceUp;
+}
+
+.create {
+  background: url('../img/create.svg');
+}
+
+.channel {
+  background: url('../img/channel.svg');
+}
+
+.connect {
+  background: url('../img/connect.svg');
+}
+
+.logo {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  background: url('../img/logo.svg');
+}
+
+.create > span, .channel > span, .connect > span {
+  border-bottom: 1px solid var(blue);
+  margin-left: 1rem;
+}
+
+.github {
+  display: inline-block;
+  background-size: 100%;
+  width: 2rem;
+  height: 2rem;
+  padding-top: .25rem;
+  padding-left: 1.25rem;
+  margin-top: .5rem;
+  text-align: left;
+  background: url('../img/github.svg');
+}
+
+.github > span {
+  border-bottom: 1px solid var(blue);
+  margin-left: 1rem;
+  margin-top: -1rem;
+}
+
+/*  Form */
+
+form {
+  padding: 2rem;
+  width: 100%;
+  background: rgba(80, 80, 80, 1);
+}
+
+.usernameUberInput, .passwordUberInput {
+  display: flex;
+}
+
+.usernameUberInput {
+  margin-bottom: 1rem;
+}
+
+input, label {
+  border: 0;
+  margin: 0;
+}
+
+input {
+  border-radius: 0;
+  outline: none;
+  font-size: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: rgba(255, 255, 255, 1);
+  color: rgba(0, 0, 0, .5);
+  flex: 1;
+  transition: all .5s ease;
+}
+
+input:focus {
+  background: rgba(255, 255, 255, .9);
+  transition: all .5s ease;
+}
+
+label {
+  width: 3rem;
+  height: 3rem;
+  background: var(blue);
+  border-radius: .2rem 0 0 .2rem;
+}
+
+label::after {
+  width: 2rem;
+  height: 2rem;
+  background-size: 100%;
+  display: inline-block;
+  margin: .5rem 0 0 .5rem;
+}
+
+.usernameUberInput > label::after {
+  content: url('../img/username.svg');
+}
+
+.passwordUberInput > label::after {
+  content: url('../img/password.svg');
+}
+
+.usernameUberInput > span, .passwordUberInput > span {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(130, 130, 130, 1);
+  border-radius: 0 .2rem .2rem 0;
+  background-size: 100%;
+}
+
+#usernameInputState.isOk::before, #passwordInputState.isOk::before {
+  content: url('../img/isOk.svg');
+}
+
+#usernameInputState.isErroneous::before, #passwordInputState.isErroneous::before {
+  content: url('../img/isErroneous.svg');
+}
+
+button {
+  border: 0;
+  border-radius: .2rem;
+  outline: none;
+  margin: 1rem 0 0 0;
+  padding: 0 1rem 0 1rem;
+  font-size: 1rem;
+  height: 3rem;
+  color: rgba(255, 255, 255, 1);
+  background: rgba(190, 241, 0, .8);
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+button:hover {
+  background: rgba(190, 241, 0, 1);
+  transition: all .3s ease;
+}
+
+button[type='submit'] {
+  margin-left: 1rem;
+}
+
+.cancel {
+  background: rgba(0, 240, 255, .8);
+}
+
+.cancel:hover {
+  background: var(blue);
+}
+
+.signUp {
+  background: rgba(255, 128, 192, .8);
+}
+
+.signUp:hover {
+  background: rgba(255, 128, 192, 1);
+}
+
+/*  Messages */
+
+.alertMessage, .confirmationMessage {
+  padding: 1rem 1rem 1rem 3rem;
+  display: block;
+  width: 100%;
+  bottom: 0;
+  position: fixed;
+  line-height: 1rem;
+  color: rgba(255, 255, 255, 1);
+  box-shadow: 0 .1rem .1rem rgba(0, 0, 0, .1);
+  cursor: pointer;
+  z-index: 4;
+  animation-duration: .3s;
+  animation-name: slideUp;
+}
+
+.alertMessage::before, .confirmationMessage::before {
+  content: url('../img/close.svg');
+  width: 1rem;
+  height: 1rem;
+  margin-left: -2rem;
+  line-height: 0;
+  position: absolute;
+  background-size: 100%;
+}
+
+.alertMessage {
+  background: rgba(245, 74, 117, 1);
+}
+
+.confirmationMessage {
+  background: rgba(190, 241, 0, 1);
+}
+
+.removeMessage {
+  animation-duration: .3s;
+  animation-name: slideDown;
+}
+
+/*  No scroll */
+
+.noScroll {
+  overflow: hidden;
+}
+
+/*  Media Queries for large screen*/
+
+@media screen and (min-width: 48em) {
+
+  aside {
+    align-items: center;
+  }
+
+  header {
+    height: 6rem;
+  }
+
+  nav {
+    align-items: stretch;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2, time {
+    font-size: 1rem;
+  }
+
+  article, footer {
+    font-size: 1rem;
+  }
+
+  [data-structure='article'] {
+    transition: background-color .3s ease;
+  }
+
+  [data-structure='article']:hover {
+    background: rgba(255, 255, 255, .8);
+    transition: background-color .3s ease;
+  }
+
+  [data-app-width] {
+    animation-duration: .1s;
+    animation-name: fakeOut;
+  }
+
+  [data-app-width]::after {
+    content: 'large';
+  }
+
+  [data-image] {
+    display: block;
+    margin: 1rem 0 1rem 0;
+    width: 100%;
+  }
+
+  footer p {
+    padding: 2rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cell {
+    flex: 1;
+  }
+
+  .formContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo, .create, .channel, .connect {
+    margin: 1rem 0 1rem 1rem;
+  }
+
+  .create, .channel, .connect, .github {
+    width: 4rem;
+    height: 4rem;
+    padding-top: 1rem;
+    margin: 1rem 0 1rem 1rem;
+    padding-left: 4rem;
+    text-align: left;
+  }
+
+  .logo {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .hero {
+    height: 20rem;
+  }
+
+  .hero > h1 {
+    font-size: 3rem;
+    padding: 1rem;
+  }
+
+  form {
+    background: rgba(0, 0, 0, .5);
+    width: auto;
+  }
+
+}
+
+/*  Animations */
+
+/*  fadeIn */
+
+@keyframes fadeIn {
+  0% { opacity: 0; animation-timing-function: ease-out; }
+  100% { opacity: 1; animation-timing-function: ease-out; }
+}
+
+/*  slideRight */
+
+@keyframes slideRight {
+  0% { transform: translateX(-100%); opacity: 0; animation-timing-function: ease-out; }
+  100% { transform: translateX(0); opacity: 1; animation-timing-function: ease-out; }
+}
+
+/*  slideLeft */
+
+@keyframes slideLeft {
+  0% { transform: translateX(0); opacity: 1; animation-timing-function: ease-out; }
+  100% { transform: translateX(-100%); opacity: 0; animation-timing-function: ease-out; }
+}
+
+/*  slideUp */
+
+@keyframes slideUp {
+  0% { transform: translateY(3rem); opacity: 0; animation-timing-function: ease-out; }
+  100% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
+}
+
+/*  slideDown */
+
+@keyframes slideDown {
+  0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
+  100% { transform: translateY(3rem); opacity: 0; animation-timing-function: ease-out; }
+}
+
+/*  pullDown */
+
+@keyframes pullDown {
+  0% { transform: scaleY(0.1); animation-timing-function: ease-out; }
+  40% { transform: scaleY(1.02); animation-timing-function: ease-out; }
+  60% { transform: scaleY(0.98); animation-timing-function: ease-out; }
+  80% { transform: scaleY(1.01); animation-timing-function: ease-out; }
+  100% { transform: scaleY(0.98); animation-timing-function: ease-out; }
+  80% { transform: scaleY(1.01); animation-timing-function: ease-out; }
+  100% { transform: scaleY(1); animation-timing-function: ease-out; }
+}
+
+/*  bounceUp */
+
+@keyframes bounceUp {
+  0% { transform: translateY(0) scale(1); animation-timing-function: ease-out; }
+  33% { transform: translateY(-.3rem) scale(1.05); animation-timing-function: ease-out; }
+  66% { transform: translateY(.03rem) scale(0.95); animation-timing-function: ease-out; }
+  100% { transform: translateY(0) scale(1); animation-timing-function: ease-out; }
+}
+
+/*  fakeIn */
+
+@keyframes fakeIn {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/*  fakeOut */
+
+@keyframes fakeOut {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
