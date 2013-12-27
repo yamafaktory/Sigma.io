@@ -20,10 +20,14 @@ html(lang='en')
             span #{id}
         .fixedCell
     main
-    footer.row
-      .fixedCell
-        span &copy; Sigma.io
-      .fixedCell
-        span about
+    footer
+      .row
+        .cell
+          p &copy; Sigma.io
+        .cell
+          p I'm available for hire!
+        .cell
+          a.github(href='https://github.com/yamafaktory/Sigma.io')
+            span Github
     var(data-app-width)
     script(src='/public/js/sigma.io.min.js')

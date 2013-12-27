@@ -36,7 +36,7 @@ html {
 
 body {
   margin: 0;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(240, 240, 240, 1);
 }
 
 header {
@@ -64,11 +64,24 @@ aside {
   -ms-animation-duration: .3s;
   -o-animation-duration: .3s;
   animation-duration: .3s;
-  -webkit-animation-name: slideRightFromLeft;
-  -moz-animation-name: slideRightFromLeft;
-  -ms-animation-name: slideRightFromLeft;
-  -o-animation-name: slideRightFromLeft;
-  animation-name: slideRightFromLeft;
+  -webkit-animation-name: slideRight;
+  -moz-animation-name: slideRight;
+  -ms-animation-name: slideRight;
+  -o-animation-name: slideRight;
+  animation-name: slideRight;
+}
+
+.removeAside {
+  -webkit-animation-duration: .3s;
+  -moz-animation-duration: .3s;
+  -ms-animation-duration: .3s;
+  -o-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-name: slideLeft;
+  -moz-animation-name: slideLeft;
+  -ms-animation-name: slideLeft;
+  -o-animation-name: slideLeft;
+  animation-name: slideLeft;
 }
 
 main {
@@ -85,6 +98,10 @@ main {
 main > .row {
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+main > .row:first-child {
+  margin-top: 1rem;
 }
 
 .cell {
@@ -176,11 +193,14 @@ a {
 }
 
 footer {
-  margin-top: 1rem;
+  margin: 0 1rem 0 1rem;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, .05);
 }
 
-footer span {
-  padding: 1rem;
+footer p {
+  display: block;
+  margin: 0;
 }
 
 var {
@@ -197,9 +217,8 @@ var {
 }
 
 [data-structure='article'] {
-  margin: 0 0 1rem 0;
   background: rgba(255, 255, 255, 1);
-  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  border: 1px solid rgba(0, 0, 0, .05);
   -webkit-animation-duration: 1s;
   -moz-animation-duration: 1s;
   -ms-animation-duration: 1s;
@@ -219,14 +238,6 @@ var {
 /*  Contenteditable */
 [contenteditable='true'] {
   outline: none;
-}
-
-[data-sigma='title'], [data-sigma='content'] {
-  -webkit-transition: background-color .8s ease;
-  -moz-transition: background-color .8s ease;
-  -ms-transition: background-color .8s ease;
-  -o-transition: background-color .8s ease;
-  transition: background-color .8s ease;
 }
 
 [data-sigma='title']:focus, [data-sigma='content']:focus {
@@ -253,12 +264,12 @@ var {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 
 .hero > h1 {
-  color: rgba(232, 124, 122, 1);
-  background: rgba(255, 255, 255, .8);
+  color: rgba(255, 255, 255, 1);
+  background: rgba(0, 0, 0, .2);
   padding: .3333rem;
   font-size: 1.3333rem;
 }
@@ -314,7 +325,7 @@ var {
   width: 4rem;
   height: 4rem;
   position: absolute;
-  margin-top: -5rem;
+  margin-top: -4rem;
   margin-left: 9.25rem;
   background: rgba(255, 255, 255, .3);
   z-index: 1;
@@ -322,9 +333,7 @@ var {
 
 .tools {
   background: rgba(0, 240, 255, 1);
-  margin-bottom: 1rem;
   height: 4rem;
-  border-radius: .3333rem;
   -webkit-animation-duration: .3s;
   -moz-animation-duration: .3s;
   -ms-animation-duration: .3s;
@@ -418,13 +427,31 @@ var {
 .logo {
   display: block;
   width: 3rem;
-  height: 3rem;display: block;
+  height: 3rem;
   background: url('../img/logo.svg');
 }
 
 .create > span, .channel > span, .connect > span {
   border-bottom: 1px solid rgba(0, 240, 255, 1);
   margin-left: 1rem;
+}
+
+.github {
+  display: inline-block;
+  background-size: 100%;
+  width: 2rem;
+  height: 2rem;
+  padding-top: .25rem;
+  padding-left: 1.25rem;
+  margin-top: .5rem;
+  text-align: left;
+  background: url('../img/github.svg');
+}
+
+.github > span {
+  border-bottom: 1px solid rgba(0, 240, 255, 1);
+  margin-left: 1rem;
+  margin-top: -1rem;
 }
 
 /*  Form */
@@ -547,6 +574,10 @@ button:hover {
   transition: all .5s ease;
 }
 
+button[type='submit'] {
+  margin-left: 1rem;
+}
+
 .cancel {
   background: rgba(0, 240, 255, .8);
 }
@@ -580,11 +611,11 @@ button:hover {
   -ms-animation-duration: .3s;
   -o-animation-duration: .3s;
   animation-duration: .3s;
-  -webkit-animation-name: slideUpFromBottom;
-  -moz-animation-name: slideUpFromBottom;
-  -ms-animation-name: slideUpFromBottom;
-  -o-animation-name: slideUpFromBottom;
-  animation-name: slideUpFromBottom;
+  -webkit-animation-name: slideUp;
+  -moz-animation-name: slideUp;
+  -ms-animation-name: slideUp;
+  -o-animation-name: slideUp;
+  animation-name: slideUp;
 }
 
 .alertMessage::before, .confirmationMessage::before {
@@ -611,11 +642,11 @@ button:hover {
   -ms-animation-duration: .3s;
   -o-animation-duration: .3s;
   animation-duration: .3s;
-  -webkit-animation-name: slideDownToBottom;
-  -moz-animation-name: slideDownToBottom;
-  -ms-animation-name: slideDownToBottom;
-  -o-animation-name: slideDownToBottom;
-  animation-name: slideDownToBottom;
+  -webkit-animation-name: slideDown;
+  -moz-animation-name: slideDown;
+  -ms-animation-name: slideDown;
+  -o-animation-name: slideDown;
+  animation-name: slideDown;
 }
 
 /*  No scroll */
@@ -650,6 +681,23 @@ button:hover {
     font-size: 1rem;
   }
 
+  [data-structure='article'] {
+    -webkit-transition: background-color .3s ease;
+    -moz-transition: background-color .3s ease;
+    -ms-transition: background-color .3s ease;
+    -o-transition: background-color .3s ease;
+    transition: background-color .3s ease;
+  }
+
+  [data-structure='article']:hover {
+    background: rgba(255, 255, 255, .8);
+    -webkit-transition: background-color .3s ease;
+    -moz-transition: background-color .3s ease;
+    -ms-transition: background-color .3s ease;
+    -o-transition: background-color .3s ease;
+    transition: background-color .3s ease;
+  }
+
   [data-app-width] {
     -webkit-animation-duration: .1s;
     -moz-animation-duration: .1s;
@@ -673,6 +721,10 @@ button:hover {
     width: 100%;
   }
 
+  footer p {
+    padding: 2rem;
+  }
+
   .row {
     display: -webkit-box;
     display: -webkit-flex;
@@ -686,11 +738,6 @@ button:hover {
     -webkit-justify-content: center;
     -moz-justify-content: center;
     justify-content: center;
-    align-items: flex-start;
-  }
-
-  main > .row {
-    border-bottom: 1px solid rgba(0, 0, 0, .2);
   }
 
   .cell {
@@ -711,15 +758,11 @@ button:hover {
     align-items: center;
   }
 
-  [data-structure='article'] {
-    border: 0;
-  }
-
   .logo, .create, .channel, .connect {
     margin: 1rem 0 1rem 1rem;
   }
 
-  .create, .channel, .connect {
+  .create, .channel, .connect, .github {
     width: 4rem;
     height: 4rem;
     padding-top: 1rem;
@@ -735,7 +778,6 @@ button:hover {
 
   .hero {
     height: 20rem;
-    align-items: flex-end;
   }
 
   .hero > h1 {
@@ -744,7 +786,7 @@ button:hover {
   }
 
   form {
-    background: rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .5);
     width: auto;
   }
 
@@ -777,80 +819,106 @@ button:hover {
   100% { opacity: 1; animation-timing-function: ease-out; }
 }
 
-/*  slideRightFromLeft */
-@-webkit-keyframes slideRightFromLeft {
+/*  slideRight */
+@-webkit-keyframes slideRight {
   0% { -webkit-transform: translateX(-100%); opacity: 0; -webkit-animation-timing-function: ease-out; }
   100% { -webkit-transform: translateX(0); opacity: 1; -webkit-animation-timing-function: ease-out; }
 }
 
-@-moz-keyframes slideRightFromLeft {
+@-moz-keyframes slideRight {
   0% { -moz-transform: translateX(-100%); opacity: 0; -moz-animation-timing-function: ease-out; }
   100% { -moz-transform: translateX(0); opacity: 1; -moz-animation-timing-function: ease-out; }
 }
 
-@-ms-keyframes slideRightFromLeft {
+@-ms-keyframes slideRight {
   0% { -ms-transform: translateX(-100%); opacity: 0; -ms-animation-timing-function: ease-out; }
   100% { -ms-transform: translateX(0); opacity: 1; -ms-animation-timing-function: ease-out; }
 }
 
-@-o-keyframes slideRightFromLeft {
+@-o-keyframes slideRight {
   0% { -o-transform: translateX(-100%); opacity: 0; -o-animation-timing-function: ease-out; }
   100% { -o-transform: translateX(0); opacity: 1; -o-animation-timing-function: ease-out; }
 }
 
-@keyframes slideRightFromLeft {
+@keyframes slideRight {
   0% { transform: translateX(-100%); opacity: 0; animation-timing-function: ease-out; }
   100% { transform: translateX(0); opacity: 1; animation-timing-function: ease-out; }
 }
 
-/*  slideDownFromTop */
-@-webkit-keyframes slideUpFromBottom {
+/*  slideLeft */
+@-webkit-keyframes slideLeft {
+  0% { -webkit-transform: translateX(0); opacity: 1; -webkit-animation-timing-function: ease-out; }
+  100% { -webkit-transform: translateX(-100%); opacity: 0; -webkit-animation-timing-function: ease-out; }
+}
+
+@-moz-keyframes slideLeft {
+  0% { -moz-transform: translateX(0); opacity: 1; -moz-animation-timing-function: ease-out; }
+  100% { -moz-transform: translateX(-100%); opacity: 0; -moz-animation-timing-function: ease-out; }
+}
+
+@-ms-keyframes slideLeft {
+  0% { -ms-transform: translateX(0); opacity: 1; -ms-animation-timing-function: ease-out; }
+  100% { -ms-transform: translateX(-100%); opacity: 0; -ms-animation-timing-function: ease-out; }
+}
+
+@-o-keyframes slideLeft {
+  0% { -o-transform: translateX(0); opacity: 1; -o-animation-timing-function: ease-out; }
+  100% { -o-transform: translateX(-100%); opacity: 0; -o-animation-timing-function: ease-out; }
+}
+
+@keyframes slideLeft {
+  0% { transform: translateX(0); opacity: 1; animation-timing-function: ease-out; }
+  100% { transform: translateX(-100%); opacity: 0; animation-timing-function: ease-out; }
+}
+
+/*  slideUp */
+@-webkit-keyframes slideUp {
   0% { -webkit-transform: translateY(3rem); opacity: 0; -webkit-animation-timing-function: ease-out; }
   100% { -webkit-transform: translateY(0); opacity: 1; -webkit-animation-timing-function: ease-out; }
 }
 
-@-moz-keyframes slideUpFromBottom {
+@-moz-keyframes slideUp {
   0% { -moz-transform: translateY(3rem); opacity: 0; -moz-animation-timing-function: ease-out; }
   100% { -moz-transform: translateY(0); opacity: 1; -moz-animation-timing-function: ease-out; }
 }
 
-@-ms-keyframes slideUpFromBottom {
+@-ms-keyframes slideUp {
   0% { -ms-transform: translateY(3rem); opacity: 0; -ms-animation-timing-function: ease-out; }
   100% { -ms-transform: translateY(0); opacity: 1; -ms-animation-timing-function: ease-out; }
 }
 
-@-o-keyframes slideUpFromBottom {
+@-o-keyframes slideUp {
   0% { -o-transform: translateY(3rem); opacity: 0; -o-animation-timing-function: ease-out; }
   100% { -o-transform: translateY(0); opacity: 1; -o-animation-timing-function: ease-out; }
 }
 
-@keyframes slideUpFromBottom {
+@keyframes slideUp {
   0% { transform: translateY(3rem); opacity: 0; animation-timing-function: ease-out; }
   100% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
 }
 
-/*  slideUpToTop */
-@-webkit-keyframes slideDownToBottom {
+/*  slideDown */
+@-webkit-keyframes slideDown {
   0% { -webkit-transform: translateY(0); opacity: 1; -webkit-animation-timing-function: ease-out; }
   100% { -webkit-transform: translateY(3rem); opacity: 0; -webkit-animation-timing-function: ease-out; }
 }
 
-@-moz-keyframes slideDownToBottom {
+@-moz-keyframes slideDown {
   0% { -moz-transform: translateY(0); opacity: 1; -moz-animation-timing-function: ease-out; }
   100% { -moz-transform: translateY(3rem); opacity: 0; -moz-animation-timing-function: ease-out; }
 }
 
-@-ms-keyframes slideDownToBottom {
+@-ms-keyframes slideDown {
   0% { -ms-transform: translateY(0); opacity: 1; -ms-animation-timing-function: ease-out; }
   100% { -ms-transform: translateY(3rem); opacity: 0; -ms-animation-timing-function: ease-out; }
 }
 
-@-o-keyframes slideDownToBottom {
+@-o-keyframes slideDown {
   0% { -o-transform: translateY(0); opacity: 1; -o-animation-timing-function: ease-out; }
   100% { -o-transform: translateY(3rem); opacity: 0; -o-animation-timing-function: ease-out; }
 }
 
-@keyframes slideDownToBottom {
+@keyframes slideDown {
   0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
   100% { transform: translateY(3rem); opacity: 0; animation-timing-function: ease-out; }
 }

@@ -823,8 +823,20 @@
             event.preventDefault();
           },
           returnHome = function (event) {
-            //  Remove aside
-            aside.parentNode.removeChild(aside);
+
+            var animationsEnd = ['animationend', 'webkitAnimationEnd', 'MSAnimationEnd', 'oAnimationEnd'],
+                removeAside = function () {
+                  aside.parentNode.removeChild(aside);
+                  animationsEnd.forEach(function (animationEnd) {
+                    aside.removeEventListener(animationEnd, removeAside, false);
+                  });
+                };
+            aside.classList.add('removeAside');
+            // Cross-browser event listeners
+            animationsEnd.forEach(function (animationEnd) {
+              aside.addEventListener(animationEnd, removeAside, false);
+            });
+        
             //  Make body scrollable
             body.classList.remove('noScroll');
             //  Remove listeners
