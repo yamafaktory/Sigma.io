@@ -11,14 +11,6 @@ html(lang='en')
     link(rel='apple-touch-icon', href='/public/apple-touch-icon.png')
     script(src='/socket.io/socket.io.js')
   body
-    header
-      nav
-        .fixedCell
-          a.logo(href='#')
-        .fixedCell
-          a.channel(href='/#{id}')
-            span #{id}
-        .fixedCell
     main
     footer
       .row
@@ -29,5 +21,12 @@ html(lang='en')
         .cell
           a.github(href='https://github.com/yamafaktory/Sigma.io')
             span Github
+    nav
+      .fixedCell
+        a.logo(href='#')
+      .fixedCell
+        a.channel(href='/#{id}')
+          span #{id}
+      .fixedCell
     var(data-app-width)
     script(src='/public/js/sigma.io.min.js')

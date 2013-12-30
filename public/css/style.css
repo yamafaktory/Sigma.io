@@ -41,11 +41,7 @@ html {
 
 body {
   margin: 0;
-  background: rgba(240, 240, 240, 1);
-}
-
-header {
-  height: 3rem;
+  background: rgba(230, 230, 230, 1);
 }
 
 aside {
@@ -115,11 +111,12 @@ main > .row:first-child {
 
 nav {
   position: fixed;
+  bottom: 0;
   background: rgba(80, 80, 80, 1);
   -webkit-box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
   box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
   width: 100%;
-  z-index: 2;
+  z-index: 4;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -190,7 +187,7 @@ a {
 }
 
 footer {
-  margin: 0 1rem 0 1rem;
+  margin: 0 1rem 3rem 1rem;
   background: rgba(255, 255, 255, 1);
   border: 1px solid rgba(0, 0, 0, .05);
 }
@@ -265,7 +262,7 @@ time {
 
 .hero > h1 {
   color: rgba(255, 255, 255, 1);
-  background: rgba(0, 0, 0, .2);
+  background: rgba(0, 0, 0, .1);
   padding: .3333rem;
   font-size: 1.3333rem;
 }
@@ -375,7 +372,6 @@ time {
   padding-top: .25rem;
   padding-left: 1.25rem;
   margin-top: .5rem;
-  text-align: left;
   color: rgba(255, 255, 255, 1);
   -webkit-transition: all .2s ease-out;
   transition: all .2s ease-out;
@@ -575,16 +571,16 @@ button[type='submit'] {
   padding: 1rem 1rem 1rem 3rem;
   display: block;
   width: 100%;
-  bottom: 0;
+  bottom: 3rem;
   position: fixed;
   line-height: 1rem;
   color: rgba(255, 255, 255, 1);
   -webkit-box-shadow: 0 .1rem .1rem rgba(0, 0, 0, .1);
   box-shadow: 0 .1rem .1rem rgba(0, 0, 0, .1);
   cursor: pointer;
-  z-index: 4;
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  z-index: 3;
+  -webkit-animation-duration: .1s;
+  animation-duration: .1s;
   -webkit-animation-name: slideUp;
   animation-name: slideUp;
 }
@@ -606,7 +602,7 @@ button[type='submit'] {
 }
 
 .confirmationMessage {
-  background: rgba(190, 241, 0, 1);
+  background: rgba(0, 240, 255, 1);
 }
 
 .removeMessage {
@@ -630,10 +626,6 @@ button[type='submit'] {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-  }
-
-  header {
-    height: 6rem;
   }
 
   nav {
@@ -683,6 +675,10 @@ button[type='submit'] {
     display: block;
     margin: 1rem 0 1rem 0;
     width: 100%;
+  }
+
+  footer {
+    margin-bottom: 6rem;
   }
 
   footer p {
@@ -737,7 +733,6 @@ button[type='submit'] {
     padding-top: 1rem;
     margin: 1rem 0 1rem 1rem;
     padding-left: 4rem;
-    text-align: left;
   }
 
   .logo {
@@ -757,6 +752,11 @@ button[type='submit'] {
   form {
     background: rgba(0, 0, 0, .5);
     width: auto;
+  }
+
+  .alertMessage,
+  .confirmationMessage {
+    min-height: 6rem;
   }
 }
 

@@ -56,8 +56,3 @@ Sigma.routes.init(Sigma);
 
 //  Set listening port
 Sigma.server.listen(1337);
-
-//  Socket.io
-Sigma.io.sockets.on('connection', function (socket) {
-  Sigma.websockets.init(Sigma, socket);
-});

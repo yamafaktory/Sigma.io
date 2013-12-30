@@ -3,17 +3,13 @@
 //  (c) 2013 Davy Duperron
 //  Client side
 
-//  Main app
 (function () {
 
   'use strict';
 
-  //  Reference to global object
-  var root = this;
-
-  //  Main app
-  var Sigma;
-  Sigma = root.Sigma = {};
+  //  Reference to global object and main app
+  var root = this,
+      Sigma = root.Sigma = {};
 
   //  App host:port
   Sigma.host = 'http://192.168.0.1';
@@ -26,19 +22,21 @@
   Sigma.ConnectOrCreateButton = function (type) {
     //  Connect is true | Create is false
     var addButton = function (type) {
-      var header = document.querySelector('header'),
+      var nav = document.querySelector('nav'),
           button = document.createElement('a'),
           buttonSpan = document.createElement('span');
       button.setAttribute('href', '#');
       button.setAttribute('class', type);
-      header.firstChild.lastChild.appendChild(button);
+      nav.lastChild.appendChild(button);
       button.appendChild(buttonSpan);
       buttonSpan.appendChild(document.createTextNode(type));
       button.addEventListener('click', function (event) {
         if (type === 'connect') {
-          //  Add aside element with form into the DOM
-          Sigma.signIn.init();
-          Sigma.signUp.init();
+          if (!Sigma.signIn.isVisible) {
+            //  Add aside element with form into the DOM
+            Sigma.signIn.init();
+            Sigma.signUp.init();
+          }
         } else {
           var title = 'An editable title!',
               content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
@@ -351,7 +349,6 @@
   //  Simulate width observer with animationStart event for responsive image
   Sigma.observeWidth = function () {
     var appWidth = document.querySelector('[data-app-width]'),
-        animationsStart = ['animationstart', 'webkitAnimationStart', 'MSAnimationStart', 'oAnimationStart'],
         responsiveImages,
         changeWidth = function (i) {
           //  Change data attribute
@@ -372,10 +369,8 @@
           }
         };
     //  Cross-browser event listeners
-    animationsStart.forEach(function (animationStart) {
-      appWidth.addEventListener(animationStart, getWidth, false);
-    });
-    //  First init
+    Sigma.animationListener(false, appWidth, getWidth, false);
+    //  First init on DOM content loaded
     getWidth();
   };
     
@@ -767,6 +762,15 @@
     });
   };
 
+  //  As we can't detect if the device use click or touch events, we use both!
+  Sigma.clickAndTouch = function () {
+    var main = document.querySelector('main'),
+        test = function (event) {
+          console.log(event);
+        };
+    main.addEventListener('touchstart', test, true);
+  };
+
   //  Try if localStorage is supported by the browser
   Sigma.tryLocalStorage = function () {
     if ('localStorage' in window) {
@@ -782,7 +786,7 @@
         //  Provide a form to sign in and to sign up
         Sigma.ConnectOrCreateButton(true);
         //  Add Hero SVG section
-        Sigma.addHeroSVG();
+        Sigma.addHeroHeader();
         //  Enable user connection
         Sigma.userIsConnected();
       }
@@ -791,10 +795,11 @@
     }
   };
 
-  Sigma.addHeroSVG = function () {
+  //  Add header for newcomers
+  Sigma.addHeroHeader = function () {
     var body = document.querySelector('body'),
         main = document.querySelector('main'),
-        hero = document.createElement('section'),
+        hero = document.createElement('header'),
         title = document.createElement('h1');
     body.insertBefore(hero, main);
     hero.setAttribute('class', 'hero');
@@ -802,11 +807,36 @@
     title.appendChild(document.createTextNode('Create and share data in true real-time.'));
   };
 
+  //  Cross-browser animation listener
+  Sigma.animationListener = function (state, target, action, removeWhenDone) {
+    //  State is false = animationstart | true = animationend
+    var vendorPrefixes = ['animation', 'webkitAnimation', 'MSAnimation', 'oAnimation'],
+        addState = function (prefix) {
+          return prefix + (prefix === 'animation' ? (state ? 'end' : 'start') : (state ? 'End' : 'Start'));
+        },
+        animationListeners = vendorPrefixes.map(addState),
+        actionAndRemoveListeners = function () {
+          //  Launch requested action
+          var _this = this;
+          action();
+          //  Remove animation listeners if wanted
+          if (removeWhenDone) {
+            animationListeners.forEach(function (animation) {
+              _this.removeEventListener(animation, actionAndRemoveListeners, false);
+            });
+          }
+        };
+    //  Add cross-browser animation listeners based on state
+    animationListeners.forEach(function (animation) {
+      target.addEventListener(animation, actionAndRemoveListeners, false);
+    });
+  };
+
   //  Manage a form to handle user sign-in process
   Sigma.signIn = {
     addForm : function () {
       //  Create the form
-      var header = document.querySelector('header'),
+      var _this = this,
           body = document.querySelector('body'),
           aside = document.createElement('aside'),
           form = document.createElement('form'),
@@ -823,25 +853,21 @@
             event.preventDefault();
           },
           returnHome = function (event) {
-
-            var animationsEnd = ['animationend', 'webkitAnimationEnd', 'MSAnimationEnd', 'oAnimationEnd'],
-                removeAside = function () {
+            var removeAside = function () {
+                  //  Remove from DOM at animation's end
                   aside.parentNode.removeChild(aside);
-                  animationsEnd.forEach(function (animationEnd) {
-                    aside.removeEventListener(animationEnd, removeAside, false);
-                  });
                 };
-            aside.classList.add('removeAside');
             // Cross-browser event listeners
-            animationsEnd.forEach(function (animationEnd) {
-              aside.addEventListener(animationEnd, removeAside, false);
-            });
-        
-            //  Make body scrollable
+            Sigma.animationListener(true, aside, removeAside, true);
+            //  Launch aside slide animation
+            aside.classList.add('removeAside');
+            //  Make body scrollable again
             body.classList.remove('noScroll');
             //  Remove listeners
             body.removeEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
             body.removeEventListener('touchmove', disableMouseWheelOrTouchMove, false);
+            //  Set visibility
+            _this.isVisible = false;
           };
       form.setAttribute('class', 'signIn');
       form.setAttribute('data-validation', 'Username and password must be 6 characters long with no white space! Password must contain at least 1 digit!');
@@ -924,8 +950,6 @@
         if (usernameIsOk) {
           if (username !== '') {
             usernameSpan.className = 'isOk';
-          } else {
-
           }
         } else {
           if (username !== '') {
@@ -965,6 +989,7 @@
       Sigma.socket.emit('signIn', { username: Sigma.signIn.username, password: Sigma.signIn.password });
     },
     init : function () {
+      this.isVisible = true;
       this.addForm();
       this.form.addEventListener('input', this.checkForm, false);
       this.form.addEventListener('submit', this.submit, false);
@@ -998,7 +1023,7 @@
       //  Save username into the app
       Sigma.username = data.username;
       //  Try to use localStorage
-      if (window.localStorage) {
+      if ('localStorage' in window) {
         localStorage.setItem('username', Sigma.username);
       }
       //  Change nav layout
@@ -1021,7 +1046,7 @@
     }
   };
 
-  //  Hide or show a message on top header
+  //  Hide or show a message
   Sigma.manageMessage = function (action, message, type) {
     var currentMessage = document.querySelector('span[class$=Message]'),
         messageClass = type ? 'confirmationMessage' : 'alertMessage',
@@ -1046,18 +1071,12 @@
             //  Add click event to remove it
             newMessage.addEventListener('click', function(event) {
               var _this = this,
-                  animationsEnd = ['animationend', 'webkitAnimationEnd', 'MSAnimationEnd', 'oAnimationEnd'],
                   removeMessage = function () {
                     _this.parentNode.removeChild(_this);
-                    animationsEnd.forEach(function (animationEnd) {
-                      _this.removeEventListener(animationEnd, removeMessage, false);
-                    });
                   };
               this.classList.add('removeMessage');
               // Cross-browser event listeners
-              animationsEnd.forEach(function (animationEnd) {
-                _this.addEventListener(animationEnd, removeMessage, false);
-              });
+              Sigma.animationListener(true, _this, removeMessage, true);
             }, false);
           }
         };
@@ -1133,6 +1152,7 @@
       Sigma.getHistory();
       Sigma.getSocketMessage();
       Sigma.saveManager.init();
+      Sigma.clickAndTouch();
       Sigma.tryLocalStorage();
       Sigma.preventPasting();
       Sigma.dragAndDrop();

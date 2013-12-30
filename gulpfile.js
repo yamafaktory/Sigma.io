@@ -67,7 +67,7 @@ gulp.task('server', function () {
 
 gulp.task('default', function () {
   gulp.run('test', 'js', 'css', 'svg', 'server');
-  gulp.watch(['./src/js/*.js', './src/css/*.css', './src/svg/*.svg'], function () {
+  gulp.watch(['./server.js', './modules/*.js', './src/js/*.js', './src/css/*.css', './src/svg/*.svg'], function () {
     gulp.run('test', 'js', 'css', 'svg', 'server');
   });
 });
