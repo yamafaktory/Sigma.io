@@ -18,48 +18,76 @@
   //  Socket.io connection on node server
   Sigma.socket = io.connect(Sigma.host);
 
+  //  Device-agnostic click and touch add or remove listeners
+  Sigma.clickAndTouchListener = {
+    actionDeviceAgnostic : function (event) {
+      //  If event is touchstart we prevent the click event from firing
+      if (event.type === 'touchstart') {
+        event.preventDefault();
+      }
+      //  Then launch requested action
+      Sigma.clickAndTouchListener.action();
+    },
+    add : function (target, action) {
+      var _this = this;
+      this.action = action;
+      //  As we can't detect if the device use click or touch events, we use both!
+      target.addEventListener('click', _this.actionDeviceAgnostic, false);
+      target.addEventListener('touchstart', _this.actionDeviceAgnostic, false);
+    },
+    remove : function (target) {
+      var _this = this;
+      target.removeEventListener('click', _this.actionDeviceAgnostic, false);
+      target.removeEventListener('touchstart', _this.actionDeviceAgnostic, false);
+    }
+  };
+
   //  Create new content
   Sigma.ConnectOrCreateButton = function (type) {
     //  Connect is true | Create is false
-    var addButton = function (type) {
-      var nav = document.querySelector('nav'),
-          button = document.createElement('a'),
-          buttonSpan = document.createElement('span');
-      button.setAttribute('href', '#');
-      button.setAttribute('class', type);
-      nav.lastChild.appendChild(button);
-      button.appendChild(buttonSpan);
-      buttonSpan.appendChild(document.createTextNode(type));
-      button.addEventListener('click', function (event) {
-        if (type === 'connect') {
-          if (!Sigma.signIn.isVisible) {
-            //  Add aside element with form into the DOM
-            Sigma.signIn.init();
-            Sigma.signUp.init();
+    var _this = this,
+        addButton = function (type) {
+          var nav = document.querySelector('nav'),
+              button = document.createElement('a'),
+              buttonSpan = document.createElement('span'),
+              addFormOrCreate = function () {
+                if (type === 'connect') {
+                  //  Check if form is not visible by now
+                  if (!Sigma.signIn.isVisible) {
+                    //  Add aside element with form into the DOM
+                    Sigma.signIn.init();
+                    Sigma.signUp.init();
+                  }
+                } else {
+                  var title = 'An editable title!',
+                      content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
+                  Sigma.disconnectObservers();
+                  Sigma.addContent(false, undefined, title, content, Sigma.username);
+                  Sigma.setObservers();
+                }
+              };
+          button.setAttribute('href', '#');
+          button.setAttribute('class', type);
+          nav.lastChild.appendChild(button);
+          button.appendChild(buttonSpan);
+          buttonSpan.appendChild(document.createTextNode(type));
+          Sigma.clickAndTouchListener.add(button, addFormOrCreate);
+        },
+        removeButton = function (type) {
+          var selector = '.'+type,
+              button = document.querySelector(selector);
+          if (button !== null) {
+            Sigma.clickAndTouchListener.remove(button, _this.addFormOrCreate);
+            button.parentNode.removeChild(button);
           }
+        };
+        if (type) {
+          removeButton('create');
+          addButton('connect');
         } else {
-          var title = 'An editable title!',
-              content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
-          Sigma.disconnectObservers();
-          Sigma.addContent(false, undefined, title, content, Sigma.username);
-          Sigma.setObservers();
+          removeButton('connect');
+          addButton('create');
         }
-      }, false);
-    },
-      removeButton = function (type) {
-        var selector = '.'+type,
-            button = document.querySelector(selector);
-        if (button !== null) {
-          button.parentNode.removeChild(button);
-        }
-      };
-    if (type) {
-      removeButton('create');
-      addButton('connect');
-    } else {
-      removeButton('connect');
-      addButton('create');
-    }
   };
 
   //  Date generator
@@ -358,8 +386,8 @@
           responsiveImages[i].setAttribute('src', source);
         },
         getWidth = function () {
-          //  Retrieve content from var::after and set it as [data-app-width]
-          var content = window.getComputedStyle(appWidth, ':after').getPropertyValue('content');
+          //  Retrieve content from ::after and set it as [data-app-width]
+          var content = window.getComputedStyle(appWidth, '::after').getPropertyValue('content');
           //  Little hack for Firefox which adds double quotes
           appWidth.dataset.appWidth = content.replace(/\"/g, "");
           //  Adapt responsive images to screen
@@ -762,15 +790,6 @@
     });
   };
 
-  //  As we can't detect if the device use click or touch events, we use both!
-  Sigma.clickAndTouch = function () {
-    var main = document.querySelector('main'),
-        test = function (event) {
-          console.log(event);
-        };
-    main.addEventListener('touchstart', test, true);
-  };
-
   //  Try if localStorage is supported by the browser
   Sigma.tryLocalStorage = function () {
     if ('localStorage' in window) {
@@ -785,7 +804,7 @@
       } else {
         //  Provide a form to sign in and to sign up
         Sigma.ConnectOrCreateButton(true);
-        //  Add Hero SVG section
+        //  Add Hero header
         Sigma.addHeroHeader();
         //  Enable user connection
         Sigma.userIsConnected();
@@ -1152,7 +1171,6 @@
       Sigma.getHistory();
       Sigma.getSocketMessage();
       Sigma.saveManager.init();
-      Sigma.clickAndTouch();
       Sigma.tryLocalStorage();
       Sigma.preventPasting();
       Sigma.dragAndDrop();
