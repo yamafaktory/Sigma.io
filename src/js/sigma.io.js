@@ -793,7 +793,10 @@
   //  Try if localStorage is supported by the browser
   Sigma.tryLocalStorage = function () {
     if ('localStorage' in window) {
-      var username = localStorage.getItem('username');
+      var username = localStorage.getItem('username'),
+          test = function () {
+            console.log(event);
+          };
       if (username !== null) {
         //  Save username into the app
         Sigma.username = username;
@@ -809,6 +812,7 @@
         //  Enable user connection
         Sigma.userIsConnected();
       }
+      window.addEventListener('storage', test, false);
     } else {
       // !!!!!!!!!!!!!
     }

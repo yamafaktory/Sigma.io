@@ -14,7 +14,7 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 ::-moz-selection {
@@ -31,7 +31,19 @@
 
 /*  Font */
 
-@import url('http://fonts.googleapis.com/css?family=Roboto:100|Roboto+Slab');
+@font-face {
+  font-family: 'Roboto Thin';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Thin'), local('Roboto-Thin'), url(http://themes.googleusercontent.com/static/fonts/roboto/v9/vzIUHo9z-oJ4WgkpPOtg1_esZW2xOQ-xsNqO47m55DA.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(http://themes.googleusercontent.com/static/fonts/sourcesanspro/v6/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+}
 
 /*  Main elements */
 
@@ -77,6 +89,7 @@ aside {
 
 main {
   z-index: 0;
+  display: block;
 }
 
 .row {
@@ -106,8 +119,8 @@ nav {
   position: fixed;
   bottom: 0;
   background: rgba(80, 80, 80, 1);
-  -webkit-box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
-  box-shadow: 0 .1rem .33rem rgba(0, 0, 0, .1);
+  -webkit-box-shadow: 0 -.1rem .33rem rgba(0, 0, 0, .1);
+  box-shadow: 0 -.1rem .33rem rgba(0, 0, 0, .1);
   width: 100%;
   z-index: 4;
   display: -webkit-box;
@@ -124,32 +137,15 @@ nav {
 }
 
 h1 {
-  font-family: 'Roboto Thin', 'Roboto', sans-serif;
+  font-family: 'Roboto Thin', sans-serif;
   font-weight: 100;
   color: rgba(0, 0, 0, .6);
   font-size: 2rem;
   line-height: 1;
 }
 
-h2 {
-  color: rgba(0, 0, 0, .4);
-  font-style: italic;
-}
-
-h2::before {
-  content: 'written by ';
-  font-style: italic;
-  color: rgba(0, 0, 0, .3);
-}
-
-time {
-  color: rgba(0, 0, 0, .5);
-  font-style: italic;
-}
-
-time::before {
-  content: 'published ';
-  color: rgba(0, 0, 0, .3);
+h1 > * {
+  font-family: 'Roboto Thin', sans-serif;
 }
 
 h2,
@@ -187,7 +183,7 @@ footer {
 
 footer p {
   display: block;
-  margin: 0;
+  margin: 1rem;
 }
 
 [data-sigma='title'],
@@ -197,7 +193,32 @@ footer p {
 
 [data-owner],
 time {
-  margin-left: 1rem;
+  display: block;
+  color: rgba(0, 0, 0, .5);
+  margin-left: 2.5rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  font-style: italic;
+  line-height: 1rem;
+  font-weight: normal;
+}
+
+[data-owner]::before,
+time::before {
+  width: 1rem;
+  height: 1rem;
+  margin-left: -1.5rem;
+  position: absolute;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+}
+
+time::before {
+  content: url('../img/time.svg');
+}
+
+[data-owner]::before {
+  content: url('../img/owner.svg');
 }
 
 [data-structure='article'] {
@@ -211,7 +232,7 @@ time {
 }
 
 [data-structure='article'].isYours > h2 {
-  color: rgba(234, 121, 255, 1);
+  color: rgba(0, 240, 255, 1);
 }
 
 /*  Contenteditable */
@@ -260,7 +281,7 @@ time {
 
 [data-tooltip]:hover::before {
   content: attr(data-tooltip);
-  background: rgba(100, 100, 100, 1);
+  background: rgba(180, 180, 180, 1);
   position: absolute;
   padding: .5rem;
   margin: 0 auto 0 auto;
@@ -371,7 +392,10 @@ time {
 
 .create:hover,
 .channel:hover,
-.connect:hover {
+.connect:hover,
+.create:focus,
+.channel:focus,
+.connect:focus {
   -webkit-animation-duration: .3s;
   animation-duration: .3s;
   -webkit-animation-name: bounceUp;
@@ -405,14 +429,14 @@ time {
 }
 
 .github {
-  display: inline-block;
+  display: block;
   -webkit-background-size: 100%;
   background-size: 100%;
   width: 2rem;
   height: 2rem;
   padding-top: .25rem;
   padding-left: 1.25rem;
-  margin-top: .5rem;
+  margin: 1rem;
   text-align: left;
   background: url('../img/github.svg');
 }
@@ -652,6 +676,19 @@ button[type='submit'] {
     transition: background-color .3s ease;
   }
 
+  [data-owner],
+  time {
+    line-height: 1.5rem;
+    margin-left: 3rem;
+  }
+
+  [data-owner]::before,
+  time::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: -2rem;
+  }
+
   [data-app-width] {
     -webkit-animation-duration: .1s;
     animation-duration: .1s;
@@ -671,10 +708,6 @@ button[type='submit'] {
 
   footer {
     margin: .5rem 1rem 7rem 1rem;
-  }
-
-  footer p {
-    padding: 2rem;
   }
 
   .row {
@@ -724,13 +757,16 @@ button[type='submit'] {
 
   .create,
   .channel,
-  .connect,
-  .github {
+  .connect {
     width: 4rem;
     height: 4rem;
     padding-top: 1rem;
     margin: 1rem 0 1rem 1rem;
     padding-left: 4rem;
+  }
+
+  .github {
+    margin: .75rem 1rem 0 0;
   }
 
   .logo {
@@ -749,12 +785,18 @@ button[type='submit'] {
 
   form {
     background: rgba(0, 0, 0, .5);
-    width: auto;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 33.3333%;
+    -ms-flex: 0 0 33.3333%;
+    flex: 0 0 33.3333%;
   }
 
   .alertMessage,
   .confirmationMessage {
-    min-height: 6rem;
+    padding: 1rem 1rem 1rem 4.5rem;
+    display: block;
+    width: 100%;
+    bottom: 6rem;
   }
 }
 
