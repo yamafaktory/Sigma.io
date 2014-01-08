@@ -100,7 +100,7 @@
    id="namedview24"
    showgrid="false"
    inkscape:zoom="2"
-   inkscape:cx="-183.1604"
+   inkscape:cx="-261.1604"
    inkscape:cy="67.243421"
    inkscape:window-x="-8"
    inkscape:window-y="-8"
@@ -165,8 +165,9 @@
 
 
 
+
 <path
-   style="fill:none;stroke:#4c4c4c;stroke-width:4.99967670000000020;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+   style="fill:none;stroke:#ff687c;stroke-width:4.99967670000000020;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
    d="m 240,78.49984 c -16.4344,0 -29.75712,16.697666 -29.75712,37.29529 0,13.64962 5.8652,25.57758 14.59485,32.07763 -25.16411,6.23051 -44.18869,27.58866 -46.33789,53.6274 l 123.00032,0 c -2.1492,-26.03874 -21.17378,-47.39689 -46.33789,-53.6274 8.72966,-6.50005 14.59485,-18.42801 14.59485,-32.07763 0,-20.597624 -13.32271,-37.29529 -29.75712,-37.29529 z"
    id="path3786"
    inkscape:connector-curvature="0" /></svg>

@@ -16,17 +16,19 @@ Sigma.io = require('socket.io').listen(Sigma.server);
 Sigma.mongo = require('mongodb').MongoClient;
 Sigma.crypto = require('crypto');
 
-//  Set teplate engine to jade and set public folder
+//  Set template engine to jade
 Sigma.app.set('view engine', 'jade');
+//  Enable cache for template engine
+Sigma.app.enable('view cache');
+//  Set public folder
 Sigma.app.use('/public', express.static('public'));
+//  Use Gzip in express
+Sigma.app.use(express.compress());
 
 //  Internal dependencies
 Sigma.routes = require('./modules/routes.js');
 Sigma.database = require('./modules/database.js');
 Sigma.websockets = require('./modules/websockets.js');
-
-//  Use Gzip in express
-Sigma.app.use(express.compress());
 
 //  Socket.io settings
 Sigma.io.enable('browser client minification');
@@ -42,7 +44,7 @@ Sigma.getHash = function(data) {
 //  Basic error message
 Sigma.errorMessage = 'Something went wrong server-side!';
 
-//  Create an empty channel during app init
+//  Create an empty channel during app init and set number of results to display
 Sigma.channel = {
   name : '',
   results : 10

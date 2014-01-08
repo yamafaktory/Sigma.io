@@ -6,6 +6,7 @@
   "devDependencies": {
     "express": "*",
     "gulp": "*",
+    "gulp-browserify": "*",
     "gulp-concat": "*",
     "gulp-jshint": "*",
     "gulp-myth": "*",

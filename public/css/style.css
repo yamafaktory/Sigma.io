@@ -134,6 +134,19 @@ nav {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-name: slideRight;
+  animation-name: slideRight;
+}
+
+.removeNav {
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-name: slideLeft;
+  animation-name: slideLeft;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
 }
 
 h1 {
@@ -144,7 +157,7 @@ h1 {
   line-height: 1;
 }
 
-h1 > * {
+h1 * {
   font-family: 'Roboto Thin', sans-serif;
 }
 
@@ -281,11 +294,11 @@ time::before {
 
 [data-tooltip]:hover::before {
   content: attr(data-tooltip);
-  background: rgba(180, 180, 180, 1);
+  background: rgba(255, 255, 255, 1);
   position: absolute;
   padding: .5rem;
   margin: 0 auto 0 auto;
-  color: rgba(255, 255, 255, 1);
+  color: rgba(0, 240, 255, 1);
   font-size: .75rem;
   height: 2rem;
   border-radius: .3333rem;
@@ -662,7 +675,7 @@ button[type='submit'] {
 
   article,
   footer {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
   [data-structure='article'] {

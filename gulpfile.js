@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    browserify = require('gulp-browserify'),
     concat = require('gulp-concat'),
     jshint = require('gulp-jshint'),
     myth = require('gulp-myth'),
@@ -37,13 +38,14 @@ nodeServer = {
 };
 
 gulp.task('test', function () {
-  gulp.src('./src/js/*.js')
+  gulp.src(['./src/js/*.js', './src/js/modules/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
 gulp.task('js', function () {
-  gulp.src('./src/js/*.js')
+  gulp.src(['./src/js/*.js', './src/js/modules/*.js'])
+    .pipe(browserify({insertGlobals : false, debug : true}))
     .pipe(concat('sigma.io.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./public/js'));
@@ -67,7 +69,7 @@ gulp.task('server', function () {
 
 gulp.task('default', function () {
   gulp.run('test', 'js', 'css', 'svg', 'server');
-  gulp.watch(['./server.js', './modules/*.js', './src/js/*.js', './src/css/*.css', './src/svg/*.svg'], function () {
+  gulp.watch(['./server.js', './modules/*.js', './src/js/**', './src/css/*.css', './src/svg/*.svg'], function () {
     gulp.run('test', 'js', 'css', 'svg', 'server');
   });
 });
