@@ -12,6 +12,7 @@ Mainly based uppon [node.js](http://nodejs.org/), this web app rely on :
 * [Express](http://expressjs.com/) web application framework
 * [Jade](http://jade-lang.com/) template engine
 * [Myth](http://www.myth.io/) CSS preprocessor
+* [Browserify](http://browserify.org/) to use require('module') in the browser
 * [Gulp](http://gulpjs.com/) streaming build system for tasks automation
 
 Don't forget : cutting edge technology there! Works with IE 11 / Opera Next / Firefox Nightly / Chrome dev channel / Firefox Beta Android / Chrome Beta Android
