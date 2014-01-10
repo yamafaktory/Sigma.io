@@ -31,6 +31,8 @@ module.exports = {
           aside.classList.add('removeAside');
           //  Make body scrollable again
           body.classList.remove('noScroll');
+          //  Show nav again
+          Sigma.hideOrShowNav();
           //  Remove listeners
           body.removeEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
           body.removeEventListener('touchmove', disableMouseWheelOrTouchMove, false);

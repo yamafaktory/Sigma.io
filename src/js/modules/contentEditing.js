@@ -87,7 +87,7 @@ module.exports = {
     target.addEventListener('focus', this.editMode, true);
     target.addEventListener('blur', this.viewMode, true);
     //  Add event listener
-    Sigma.clickAndTouchListener.add(target, 'manageTools', _this.manageTools);
+    Sigma.clickAndTouchListener.add(target, 'manageTools', _this.manageTools, true);
   },
   target : {
     //  Targets are managed as an array, with current and former values

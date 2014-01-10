@@ -15,6 +15,8 @@ module.exports = function (type) {
                   //  Add aside element with form into the DOM
                   Sigma.signIn.init();
                   Sigma.signUp.init();
+                  //  Hide nav
+                  Sigma.hideOrShowNav();
                 }
               } else {
                 var title = 'An editable title!',

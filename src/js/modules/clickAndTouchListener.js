@@ -8,13 +8,17 @@ module.exports = {
       event.preventDefault();
     }
   },
-  add : function (target, functionName, functionCode) {
+  add : function (target, functionName, functionCode, disablePreventClickIfTouch) {
     var _this = this,
         code = functionCode;
+    //  DisablePreventClickIfTouch is optional and set to false by default - trick for contenteditable
+    disablePreventClickIfTouch = disablePreventClickIfTouch || false;
     //  Store code to execute in functions object
     _this.functions[functionName] = function (event) {
       //  If event is touchstart we prevent the click event from firing
-      _this.preventClickIfTouch(event);
+      if(!disablePreventClickIfTouch) {
+        _this.preventClickIfTouch(event);
+      }
       //  Then we execute function code
       code(event);
     };
