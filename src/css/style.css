@@ -104,7 +104,7 @@ nav {
   animation-name: slideRight;
 }
 
-.removeNav {
+.removeNavigation {
   animation-duration: .3s;
   animation-name: slideLeft;
   animation-fill-mode: forwards;
@@ -490,7 +490,7 @@ button[type='submit'] {
 
 /*  Messages */
 
-.alertMessage, .confirmationMessage {
+[data-message] {
   padding: 1rem 1rem 1rem 3rem;
   display: block;
   width: 100%;
@@ -500,12 +500,12 @@ button[type='submit'] {
   color: var(white);
   box-shadow: 0 .1rem .1rem rgba(0, 0, 0, .1);
   cursor: pointer;
-  z-index: 3;
-  animation-duration: .1s;
-  animation-name: slideUp;
+  z-index: 3; 
+  animation-duration: .2s;
+  animation-name: slideUpSmall;
 }
 
-.alertMessage::before, .confirmationMessage::before {
+[data-message]::before {
   content: url('../img/close.svg');
   width: 1rem;
   height: 1rem;
@@ -515,17 +515,21 @@ button[type='submit'] {
   background-size: 100%;
 }
 
-.alertMessage {
+[data-message='alert'] {
   background: rgba(245, 74, 117, 1);
 }
 
-.confirmationMessage {
+[data-message='confirmation'] {
   background: var(blue);
 }
 
 .removeMessage {
-  animation-duration: .3s;
-  animation-name: slideDown;
+  animation-duration: .2s;
+  animation-name: slideDownSmall;
+}
+
+.withNoNavigation {
+  bottom: 0;
 }
 
 /*  No scroll */
@@ -534,7 +538,7 @@ button[type='submit'] {
   overflow: hidden;
 }
 
-/*  Media Queries for large screen*/
+/*  Media Queries for large screen */
 
 @media screen and (min-width: 48em) {
 
@@ -650,11 +654,20 @@ button[type='submit'] {
     flex: 0 0 33.3333%;
   }
 
-  .alertMessage, .confirmationMessage {
+  [data-message] {
     padding: 1rem 1rem 1rem 4.5rem;
     display: block;
     width: 100%;
     bottom: 6rem;
+    animation-name: slideUpLarge;
+  }
+
+  .removeMessage {
+    animation-name: slideDownLarge;
+  }
+
+  .withNoNavigation {
+    bottom: 0;
   }
 
 }
@@ -684,16 +697,26 @@ button[type='submit'] {
 
 /*  slideUp */
 
-@keyframes slideUp {
+@keyframes slideUpSmall {
   0% { transform: translateY(3rem); opacity: 0; animation-timing-function: ease-out; }
+  100% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
+}
+
+@keyframes slideUpLarge {
+  0% { transform: translateY(6rem); opacity: 0; animation-timing-function: ease-out; }
   100% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
 }
 
 /*  slideDown */
 
-@keyframes slideDown {
+@keyframes slideDownSmall {
   0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
   100% { transform: translateY(3rem); opacity: 0; animation-timing-function: ease-out; }
+}
+
+@keyframes slideDownLarge {
+  0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
+  100% { transform: translateY(6rem); opacity: 0; animation-timing-function: ease-out; }
 }
 
 /*  pullDown */

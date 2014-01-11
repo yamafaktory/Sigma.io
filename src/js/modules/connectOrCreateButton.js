@@ -16,7 +16,7 @@ module.exports = function (type) {
                   Sigma.signIn.init();
                   Sigma.signUp.init();
                   //  Hide nav
-                  Sigma.hideOrShowNav();
+                  Sigma.navigation.hide();
                 }
               } else {
                 var title = 'An editable title!',

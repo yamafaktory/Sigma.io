@@ -13,9 +13,11 @@ module.exports = function () {
       },
       getWidth = function () {
         //  Retrieve content from ::after and set it as [data-app-width]
-        var content = window.getComputedStyle(appWidth, '::after').getPropertyValue('content');
-        //  Little hack for Firefox which adds double quotes
-        appWidth.dataset.appWidth = content.replace(/\"/g, "");
+        var content = window.getComputedStyle(appWidth, '::after').getPropertyValue('content'),
+            //  Little hack for Firefox which adds double quotes
+            deviceWidth = content.replace(/\"/g, "");
+        //  Sigma.deviceWith is define for further use
+        appWidth.dataset.appWidth = Sigma.deviceWidth = deviceWidth;
         //  Adapt responsive images to screen
         responsiveImages = document.querySelectorAll('[data-image-width]');
         for (var i = 0; i < responsiveImages.length; ++i) {
@@ -24,6 +26,4 @@ module.exports = function () {
       };
   //  Cross-browser event listeners
   Sigma.animationListener(false, appWidth, getWidth, false);
-  //  First init on DOM content loaded
-  getWidth();
 };

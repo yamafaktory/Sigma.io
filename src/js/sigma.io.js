@@ -44,7 +44,7 @@
   Sigma.getHistory = require('./modules/getHistory.js');
   Sigma.tryLocalStorage = require('./modules/tryLocalStorage.js');
   Sigma.addHeroHeader = require('./modules/addHeroHeader.js');
-  Sigma.hideOrShowNav = require('./modules/hideOrShowNav.js');
+  Sigma.navigation = require('./modules/navigation.js');
   Sigma.animationListener = require('./modules/animationListener.js');
   Sigma.signIn = require('./modules/signIn.js');
   Sigma.signUp = require('./modules/signUp.js');
@@ -57,6 +57,7 @@
   //  Load components of the app when the DOM is ready
   Sigma.ready = (function () {
     var componentsToLoad = function () {
+      Sigma.observeWidth();
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();

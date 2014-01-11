@@ -140,7 +140,7 @@ nav {
   animation-name: slideRight;
 }
 
-.removeNav {
+.removeNavigation {
   -webkit-animation-duration: .3s;
   animation-duration: .3s;
   -webkit-animation-name: slideLeft;
@@ -595,8 +595,7 @@ button[type='submit'] {
 
 /*  Messages */
 
-.alertMessage,
-.confirmationMessage {
+[data-message] {
   padding: 1rem 1rem 1rem 3rem;
   display: block;
   width: 100%;
@@ -608,14 +607,13 @@ button[type='submit'] {
   box-shadow: 0 .1rem .1rem rgba(0, 0, 0, .1);
   cursor: pointer;
   z-index: 3;
-  -webkit-animation-duration: .1s;
-  animation-duration: .1s;
-  -webkit-animation-name: slideUp;
-  animation-name: slideUp;
+  -webkit-animation-duration: .2s;
+  animation-duration: .2s;
+  -webkit-animation-name: slideUpSmall;
+  animation-name: slideUpSmall;
 }
 
-.alertMessage::before,
-.confirmationMessage::before {
+[data-message]::before {
   content: url('../img/close.svg');
   width: 1rem;
   height: 1rem;
@@ -626,19 +624,23 @@ button[type='submit'] {
   background-size: 100%;
 }
 
-.alertMessage {
+[data-message='alert'] {
   background: rgba(245, 74, 117, 1);
 }
 
-.confirmationMessage {
+[data-message='confirmation'] {
   background: rgba(0, 240, 255, 1);
 }
 
 .removeMessage {
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
-  -webkit-animation-name: slideDown;
-  animation-name: slideDown;
+  -webkit-animation-duration: .2s;
+  animation-duration: .2s;
+  -webkit-animation-name: slideDownSmall;
+  animation-name: slideDownSmall;
+}
+
+.withNoNavigation {
+  bottom: 0;
 }
 
 /*  No scroll */
@@ -647,7 +649,7 @@ button[type='submit'] {
   overflow: hidden;
 }
 
-/*  Media Queries for large screen*/
+/*  Media Queries for large screen */
 
 @media screen and (min-width: 48em) {
   aside {
@@ -804,12 +806,22 @@ button[type='submit'] {
     flex: 0 0 33.3333%;
   }
 
-  .alertMessage,
-  .confirmationMessage {
+  [data-message] {
     padding: 1rem 1rem 1rem 4.5rem;
     display: block;
     width: 100%;
     bottom: 6rem;
+    -webkit-animation-name: slideUpLarge;
+    animation-name: slideUpLarge;
+  }
+
+  .removeMessage {
+    -webkit-animation-name: slideDownLarge;
+    animation-name: slideDownLarge;
+  }
+
+  .withNoNavigation {
+    bottom: 0;
   }
 }
 
@@ -927,7 +939,7 @@ button[type='submit'] {
 
 /*  slideUp */
 
-@-webkit-keyframes slideUp {
+@-webkit-keyframes slideUpSmall {
   0% {
     -webkit-transform: translateY(3rem);
     transform: translateY(3rem);
@@ -945,11 +957,49 @@ button[type='submit'] {
   }
 }
 
-@keyframes slideUp {
+@keyframes slideUpSmall {
   0% {
     -webkit-transform: translateY(3rem);
     -ms-transform: translateY(3rem);
     transform: translateY(3rem);
+    opacity: 0;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+
+@-webkit-keyframes slideUpLarge {
+  0% {
+    -webkit-transform: translateY(6rem);
+    transform: translateY(6rem);
+    opacity: 0;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes slideUpLarge {
+  0% {
+    -webkit-transform: translateY(6rem);
+    -ms-transform: translateY(6rem);
+    transform: translateY(6rem);
     opacity: 0;
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
@@ -967,7 +1017,7 @@ button[type='submit'] {
 
 /*  slideDown */
 
-@-webkit-keyframes slideDown {
+@-webkit-keyframes slideDownSmall {
   0% {
     -webkit-transform: translateY(0);
     transform: translateY(0);
@@ -985,7 +1035,7 @@ button[type='submit'] {
   }
 }
 
-@keyframes slideDown {
+@keyframes slideDownSmall {
   0% {
     -webkit-transform: translateY(0);
     -ms-transform: translateY(0);
@@ -999,6 +1049,44 @@ button[type='submit'] {
     -webkit-transform: translateY(3rem);
     -ms-transform: translateY(3rem);
     transform: translateY(3rem);
+    opacity: 0;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+
+@-webkit-keyframes slideDownLarge {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    -webkit-transform: translateY(6rem);
+    transform: translateY(6rem);
+    opacity: 0;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes slideDownLarge {
+  0% {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    -webkit-transform: translateY(6rem);
+    -ms-transform: translateY(6rem);
+    transform: translateY(6rem);
     opacity: 0;
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;

@@ -2,8 +2,8 @@
 
 //  Hide or show a message
 module.exports = function (action, message, type) {
-  var currentMessage = document.querySelector('span[class$=Message]'),
-      messageClass = type ? 'confirmationMessage' : 'alertMessage',
+  var currentMessage = document.querySelector('[data-message]'),
+      messageType = type ? 'confirmation' : 'alert',
       deleteMessage = function () {
         if (currentMessage) {
           currentMessage.parentNode.removeChild(currentMessage);
@@ -12,26 +12,27 @@ module.exports = function (action, message, type) {
       updateOrCreateMessage = function () {
         if (currentMessage) {
           //  Update message
-          currentMessage.setAttribute('class', messageClass);
+          currentMessage.dataset.message = messageType;
           currentMessage.innerHTML = message;
         } else {
           //  Create new message
-          var newMessage = document.createElement('span');
-          newMessage.setAttribute('class', messageClass);
+          var newMessage = document.createElement('span'),
+              eraseMessage = function (event) {
+                var target = event.target,
+                    removeMessage = function () {
+                      target.parentNode.removeChild(target);
+                    };
+                target.classList.add('removeMessage');
+                // Cross-browser event listeners
+                Sigma.animationListener(true, target, removeMessage, true);
+              };
+          newMessage.dataset.message = messageType;
           newMessage.innerHTML = message;
           //  Push changes to the DOM
           var body = document.querySelector('body');
           body.appendChild(newMessage);
-          //  Add click event to remove it
-          newMessage.addEventListener('click', function(event) {
-            var _this = this,
-                removeMessage = function () {
-                  _this.parentNode.removeChild(_this);
-                };
-            this.classList.add('removeMessage');
-            // Cross-browser event listeners
-            Sigma.animationListener(true, _this, removeMessage, true);
-          }, false);
+          //  Add click event
+          Sigma.clickAndTouchListener.add(newMessage, 'eraseMessage', eraseMessage);
         }
       };
   if (action) {

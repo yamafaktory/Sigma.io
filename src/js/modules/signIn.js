@@ -32,7 +32,7 @@ module.exports = {
           //  Make body scrollable again
           body.classList.remove('noScroll');
           //  Show nav again
-          Sigma.hideOrShowNav();
+          Sigma.navigation.show();
           //  Remove listeners
           body.removeEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
           body.removeEventListener('touchmove', disableMouseWheelOrTouchMove, false);
@@ -74,7 +74,7 @@ module.exports = {
     //  Temporary disable wheel and touch
     body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
     body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
-    cancelButton.addEventListener('click', returnHome, false);
+    Sigma.clickAndTouchListener.add(cancelButton, 'returnHome', returnHome);
   },
   checkForm : function (event) {
     var form = document.querySelector('form'),

@@ -2,7 +2,7 @@
 
 //  Device-agnostic click and touch add or remove listeners
 module.exports = {
-  functions: {},
+  functions : {},
   preventClickIfTouch : function (event) {
     if (event.type === 'touchstart') {
       event.preventDefault();
