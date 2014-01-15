@@ -28,6 +28,10 @@ module.exports = function (action, message, type) {
               };
           newMessage.dataset.message = messageType;
           newMessage.innerHTML = message;
+          //  If message is added when there's no navigation
+          if (!Sigma.navigation.visibility) {
+            newMessage.classList.add('withNoNavigation');
+          }
           //  Push changes to the DOM
           var body = document.querySelector('body');
           body.appendChild(newMessage);

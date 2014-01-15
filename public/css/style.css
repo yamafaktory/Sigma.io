@@ -74,15 +74,15 @@ aside {
   -webkit-align-items: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  -webkit-animation-duration: .6s;
+  animation-duration: .6s;
   -webkit-animation-name: slideRight;
   animation-name: slideRight;
 }
 
 .removeAside {
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  -webkit-animation-duration: .6s;
+  animation-duration: .6s;
   -webkit-animation-name: slideLeft;
   animation-name: slideLeft;
 }
@@ -657,6 +657,13 @@ button[type='submit'] {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+  }
+
+  .removeAside {
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
   }
 
   nav {

@@ -18,9 +18,8 @@ module.exports = function () {
         Sigma.addContent(document.html, document._id);
       });
     }
-    Sigma.makeReadonly();
-    Sigma.highlightUserArticles();
     Sigma.setObservers();
-    Sigma.observeWidth();
+    //  Check if localStorage module was loaded too
+    Sigma.asyncUserAndHistoryState.check();
   });
 };

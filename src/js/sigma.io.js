@@ -20,6 +20,7 @@
 
   //  Load modules
   Sigma.clickAndTouchListener = require('./modules/clickAndTouchListener.js');
+  Sigma.disableMouseWheelAndTouchMove = require('./modules/disableMouseWheelAndTouchMove.js');
   Sigma.connectOrCreateButton = require('./modules/connectOrCreateButton.js');
   Sigma.date = require('./modules/date.js');
   Sigma.addContent = require('./modules/addContent.js');
@@ -28,8 +29,11 @@
   Sigma.preventPasting = require('./modules/preventPasting.js');
   Sigma.dragAndDrop = require('./modules/dragAndDrop.js');
   Sigma.storeImage = require('./modules/storeImage.js');
-  Sigma.makeReadonly = require('./modules/makeReadonly.js');
+  Sigma.loadResponsiveImages = require('./modules/loadResponsiveImages.js');
+  Sigma.asyncUserAndHistoryState = require('./modules/asyncUserAndHistoryState.js');
+  Sigma.makeOwnerArticlesEditable = require('./modules/makeOwnerArticlesEditable.js');
   Sigma.observeWidth = require('./modules/observeWidth.js');
+  Sigma.attachTools = require('./modules/attachTools.js');
   Sigma.setObservers = require('./modules/setObservers.js');
   Sigma.droppedImages = require('./modules/droppedImages.js');
   Sigma.simpleCounter = require('./modules/simpleCounter.js');
@@ -43,7 +47,7 @@
   Sigma.disconnectObservers = require('./modules/disconnectObservers.js');
   Sigma.getHistory = require('./modules/getHistory.js');
   Sigma.tryLocalStorage = require('./modules/tryLocalStorage.js');
-  Sigma.addHeroHeader = require('./modules/addHeroHeader.js');
+  Sigma.heroHeader = require('./modules/heroHeader.js');
   Sigma.navigation = require('./modules/navigation.js');
   Sigma.animationListener = require('./modules/animationListener.js');
   Sigma.signIn = require('./modules/signIn.js');
@@ -61,9 +65,9 @@
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();
+      Sigma.tryLocalStorage.init();
       Sigma.getSocketMessage();
       Sigma.saveManager.init();
-      Sigma.tryLocalStorage();
       Sigma.preventPasting();
       Sigma.dragAndDrop();
     };

@@ -23,6 +23,8 @@ module.exports = function (type) {
                     content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
                 Sigma.disconnectObservers();
                 Sigma.addContent(false, undefined, title, content, Sigma.username);
+                Sigma.attachTools();
+                Sigma.highlightUserArticles();
                 Sigma.setObservers();
               }
             };

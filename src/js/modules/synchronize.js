@@ -10,11 +10,15 @@ module.exports = function () {
       tools,
       articleHTML,
       images,
-      makeNeutral = function (i) {
+      makeImagesNeutral = function (i) {
         //  Reset image's source
         images[i].removeAttribute('src');
         //  Remove responsive data
-        images[i].removeAttribute('[data-image-width]');
+        images[i].removeAttribute('data-image-width');
+      },
+      makeReadOnly = function (j) {
+        //  Make all Sigma attributes with contenteditable set to false
+        editableElements[j].contentEditable = 'false';
       };
   //  Inject article into empty clone
   articleFragment.appendChild(articleClone);
@@ -24,13 +28,19 @@ module.exports = function () {
   if ( tools !== null) {
     tools.parentNode.removeChild(tools);
   }
-  //  Convert it
-  articleHTML = articleFragment.querySelector('[data-structure="article"]').innerHTML;
   //  Make responsives images neutral
   images = articleFragment.querySelectorAll('[data-image-width]');
   for (var i = 0; i < images.length; ++i) {
-    makeNeutral(i);
+    makeImagesNeutral(i);
   }
+  //  Make contenteditable set to false
+  editableElements = articleFragment.querySelectorAll('[data-sigma]');
+  for (var j = 0; j < editableElements.length; ++j) {
+    makeReadOnly(j);
+  }
+  //  Convert it
+  articleHTML = articleFragment.querySelector('[data-structure="article"]').innerHTML;
+  //  Process it
   if (document.hasFocus() && preventWholeHtmlInjection) {
     //  Check if div has a mongo id attribute => update content
     if (article.hasAttribute('data-mongo-id')) {

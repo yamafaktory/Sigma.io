@@ -15,6 +15,7 @@ module.exports = function () {
             //  Synchronize only if mutation is not related to an image node
             if (mutation.target.nodeName !== 'IMG') {
               Sigma.synchronize();
+              Sigma.loadResponsiveImages();
             }
             Sigma.droppedImages.lookAtMutations(mutation);
           });
@@ -27,17 +28,9 @@ module.exports = function () {
           subtree: true,
           characterDataOldValue: true
         });
-      },
-      //  Attach edit icon if user logged in
-      attachTools = function (i) {
-        var owner = data[i].parentNode.querySelector('[data-owner]').dataset.owner;
-        if (Sigma.username === owner) {
-          Sigma.contentEditing.status(data[i]);
-        }
       };
   for (var i = 0; i < data.length; ++i) {
     attachObserver(i);
-    attachTools(i);
   }
   //  Save a list of observers
   Sigma.observers = observers;

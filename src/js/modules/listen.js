@@ -18,7 +18,7 @@ module.exports = function () {
         Sigma.deleteContent(data.id);
         break;
     }
-    Sigma.makeReadonly();
     Sigma.setObservers();
+    Sigma.loadResponsiveImages();
   });
 };

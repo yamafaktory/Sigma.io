@@ -92,7 +92,7 @@ exports.init = function (Sigma) {
 	        socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
 	      } else {
 	        if (document) {
-	          if (document.password === data.password) {
+	          if (document.password === Sigma.getHash(data.password)) {
 	            //  If username & password are ok
 	            socket.emit('isConnected', { username: data.username });
 	          } else {
@@ -108,18 +108,51 @@ exports.init = function (Sigma) {
 
 	  //  If a user is trying to sign up
 	  socket.on('signUp', function (data) {
-	    //  Save user
-	    Sigma.database.collection('users').insert(
-	      { 'username': data.username, 'password': data.password},
-	      { safe: true},
-	      function (error) {
-	        if (error) {
-	          socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
+	  	var username = data.username,
+	  			password = data.password;
+	  			//  Username regex with length > 6 and no white space
+        	usernameRegex = new RegExp('^\\S{6,}$'),
+        	usernameIsOk = usernameRegex.test(username),
+        	//  Password regex with length > 6, no white space and at least one digit
+        	passwordRegex = new RegExp('^(?=.*\\d)\\S{6,}$'),
+        	passwordIsOk = passwordRegex.test(password),
+        	credentialsAreOk = usernameIsOk && passwordIsOk;
+       if (credentialsAreOk) {
+       	//	Encrypt password
+       	var encryptedPassword = Sigma.getHash(data.password);
+				//  Save user
+			  Sigma.database.collection('users').insert(
+			    { 'username': username, 'password': encryptedPassword},
+			    { safe: true},
+			    function (error) {
+			      if (error) {
+			        socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
+			      } else {
+			        //  Then connect user
+			        socket.emit('isConnected', { username: data.username, password: encryptedPassword });
+			      }
+			    });
+			  } else {
+			  	socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
+			  }
+	  });
+
+		//  If a client is trying to check user's credentials from localStorage
+	  socket.on('checkLocalStorage', function (data) {
+	    Sigma.database.collection('users').findOne(
+	      { 'username': data.username, 'password': data.password },
+	      function (error, document) {
+	      if (error) {
+	        socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
+	      } else {
+          //  Confirm if credentials are valid or not
+	        if (document) {
+	          socket.emit('localStorageState', { secure: true });
 	        } else {
-	          //  Then connect user
-	          socket.emit('isConnected', { username: data.username });
+	          socket.emit('localStorageState', { secure: false });
 	        }
-	      });
+	      } 
+	    });
 	  });
 
 	  //  If a client want to store an image

@@ -17,9 +17,6 @@ module.exports = {
         usernameSpan = document.createElement('span'),
         passwordSpan = document.createElement('span'),
         cancelButton = document.createElement('button'),
-        disableMouseWheelOrTouchMove = function (event) {
-          event.preventDefault();
-        },
         returnHome = function (event) {
           var removeAside = function () {
             //  Remove from DOM at animation's end
@@ -33,11 +30,12 @@ module.exports = {
           body.classList.remove('noScroll');
           //  Show nav again
           Sigma.navigation.show();
-          //  Remove listeners
-          body.removeEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
-          body.removeEventListener('touchmove', disableMouseWheelOrTouchMove, false);
+          //  Remove mousewheel and touchmove listeners
+          Sigma.disableMouseWheelAndTouchMove(body, false);
           //  Set visibility
           _this.isVisible = false;
+          //  Remove unclosed message if present
+          Sigma.manageMessage(false);
         };
     form.setAttribute('class', 'signIn');
     form.setAttribute('data-validation', 'Username and password must be 6 characters long with no white space! Password must contain at least 1 digit!');
@@ -72,8 +70,9 @@ module.exports = {
     //  Append it to the main objet
     Sigma.signIn.form = form;
     //  Temporary disable wheel and touch
-    body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
-    body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
+    Sigma.disableMouseWheelAndTouchMove(body, true);
+    //body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
+    //body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
     Sigma.clickAndTouchListener.add(cancelButton, 'returnHome', returnHome);
   },
   checkForm : function (event) {

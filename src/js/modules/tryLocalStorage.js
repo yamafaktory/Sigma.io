@@ -1,29 +1,50 @@
 //  Sigma.tryLocalStorage module
 
 //  Try if localStorage is supported by the browser
-module.exports = function () {
-  if ('localStorage' in window) {
-    var username = localStorage.getItem('username'),
-        test = function () {
-          console.log(event);
-        };
-    if (username !== null) {
-      //  Save username into the app
-      Sigma.username = username;
-      //  Add create button
-      Sigma.connectOrCreateButton(false);
-      //  Welcome user
-      Sigma.manageMessage(true, 'Hi '+Sigma.username+'! Nice to see you there!', true);
+module.exports = {
+  changeUserInterface : function () {
+    //  Provide a form to sign in and to sign up
+    Sigma.connectOrCreateButton(true);
+    //  Add Hero header
+    Sigma.heroHeader.add();
+    //  Enable user connection
+    Sigma.userIsConnected();
+  },
+  checkStorageState : function (event) {
+    //  Check storage state in realtime
+    console.log(event);
+  },
+  clearStorage : function () {
+    //  Clear app local storage
+    localStorage.clear();
+  },
+  init : function () {
+    if ('localStorage' in window) {
+      var _this = this,
+          localData = localStorage.sigma === undefined ? { username: undefined, password: undefined } : JSON.parse(localStorage.sigma);
+      //  Add listener on storage
+      window.addEventListener('storage', _this.checkStorageState, false);
+      //  Server response for localStorage's credentials
+      Sigma.socket.on('localStorageState', function (data) {
+        if (data.secure) {
+          //  Save username into the app
+          Sigma.username = localData.username;
+          //  Check if history module was loaded too
+          Sigma.asyncUserAndHistoryState.check();
+        } else {
+          _this.clearStorage();
+          Sigma.manageMessage(true, 'Wrong credentials were stored in local browser. Please sign in or sign up!', false);
+        }
+      });
+      //  Send collected credentials
+      if (localData.username !== undefined && localData.password !== undefined) {
+        Sigma.socket.emit('checkLocalStorage', { username: localData.username, password: localData.password });
+      } else {
+        _this.clearStorage();
+        _this.changeUserInterface();
+      }
     } else {
-      //  Provide a form to sign in and to sign up
-      Sigma.connectOrCreateButton(true);
-      //  Add Hero header
-      Sigma.addHeroHeader();
-      //  Enable user connection
-      Sigma.userIsConnected();
+      Sigma.manageMessage(true, 'LocalStorage is not supported!', false);
     }
-    window.addEventListener('storage', test, false);
-  } else {
-    // !!!!!!!!!!!!!
   }
 };
