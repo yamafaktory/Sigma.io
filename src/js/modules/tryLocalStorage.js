@@ -2,7 +2,7 @@
 
 //  Try if localStorage is supported by the browser
 module.exports = {
-  changeUserInterface : function () {
+  changeUserInterfaceToSign : function () {
     //  Provide a form to sign in and to sign up
     Sigma.connectOrCreateButton(true);
     //  Add Hero header
@@ -12,7 +12,9 @@ module.exports = {
   },
   checkStorageState : function (event) {
     //  Check storage state in realtime
-    console.log(event);
+    Sigma.tryLocalStorage.clearStorage();
+    Sigma.manageMessage(true, 'Unwanted LocalStorage change occured. LocalStorage has been cleared.', false);
+    Sigma.tryLocalStorage.changeUserInterfaceToSign();
   },
   clearStorage : function () {
     //  Clear app local storage
@@ -34,6 +36,7 @@ module.exports = {
         } else {
           _this.clearStorage();
           Sigma.manageMessage(true, 'Wrong credentials were stored in local browser. Please sign in or sign up!', false);
+          _this.changeUserInterfaceToSign();
         }
       });
       //  Send collected credentials
@@ -41,7 +44,7 @@ module.exports = {
         Sigma.socket.emit('checkLocalStorage', { username: localData.username, password: localData.password });
       } else {
         _this.clearStorage();
-        _this.changeUserInterface();
+        _this.changeUserInterfaceToSign();
       }
     } else {
       Sigma.manageMessage(true, 'LocalStorage is not supported!', false);

@@ -44,10 +44,18 @@ module.exports = function (type) {
         }
       };
       if (type) {
-        removeButton('create');
-        addButton('connect');
+        //  Connect
+        if (Sigma.connectOrCreateStatus === undefined || Sigma.connectOrCreateStatus !== true) {
+          Sigma.connectOrCreateStatus = true;
+          removeButton('create');
+          addButton('connect');
+        }
       } else {
-        removeButton('connect');
-        addButton('create');
+        //  Create
+        if (Sigma.connectOrCreateStatus === undefined || Sigma.connectOrCreateStatus !== false) {
+          Sigma.connectOrCreateStatus = false;
+          removeButton('connect');
+          addButton('create');
+        }
       }
 };

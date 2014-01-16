@@ -57,6 +57,7 @@
   Sigma.manageMessage = require('./modules/manageMessage.js');
   Sigma.getSocketMessage = require('./modules/getSocketMessage.js');
   Sigma.saveManager = require('./modules/saveManager.js');
+  Sigma.isOnLine = require('./modules/isOnLine.js');
 
   //  Load components of the app when the DOM is ready
   Sigma.ready = (function () {

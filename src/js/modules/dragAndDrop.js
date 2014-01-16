@@ -54,8 +54,8 @@ module.exports = function () {
       data = renderedCanvas.toDataURL('image/png');
     } else {
       //  Large image
-      var maxHeight = 400,
-          maxWidth = 800;
+      var maxHeight = 600,
+          maxWidth = 1000;
       if (image.width > maxWidth) {
         image.height *= (maxWidth / image.width);
         image.width = maxWidth;
