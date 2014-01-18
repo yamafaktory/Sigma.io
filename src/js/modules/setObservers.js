@@ -12,11 +12,8 @@ module.exports = function () {
         observers[i] = new MutationObserver(function (mutations) {
           //  For each mutation into the DOM, sync content server-side
           mutations.forEach(function (mutation) {
-            //  Synchronize only if mutation is not related to an image node
-            if (mutation.target.nodeName !== 'IMG') {
-              Sigma.synchronize();
-              Sigma.loadResponsiveImages();
-            }
+            //  Synchronize
+            Sigma.synchronize();
             Sigma.droppedImages.lookAtMutations(mutation);
           });
         });

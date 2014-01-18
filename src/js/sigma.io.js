@@ -33,7 +33,7 @@
   Sigma.asyncUserAndHistoryState = require('./modules/asyncUserAndHistoryState.js');
   Sigma.makeOwnerArticlesEditable = require('./modules/makeOwnerArticlesEditable.js');
   Sigma.observeWidth = require('./modules/observeWidth.js');
-  Sigma.attachTools = require('./modules/attachTools.js');
+  Sigma.tools = require('./modules/tools.js');
   Sigma.setObservers = require('./modules/setObservers.js');
   Sigma.droppedImages = require('./modules/droppedImages.js');
   Sigma.simpleCounter = require('./modules/simpleCounter.js');
@@ -53,7 +53,7 @@
   Sigma.signIn = require('./modules/signIn.js');
   Sigma.signUp = require('./modules/signUp.js');
   Sigma.userIsConnected = require('./modules/userIsConnected.js');
-  Sigma.highlightUserArticles = require('./modules/highlightUserArticles.js');
+  Sigma.resetAndHighlightUserArticles = require('./modules/resetAndHighlightUserArticles.js');
   Sigma.manageMessage = require('./modules/manageMessage.js');
   Sigma.getSocketMessage = require('./modules/getSocketMessage.js');
   Sigma.saveManager = require('./modules/saveManager.js');

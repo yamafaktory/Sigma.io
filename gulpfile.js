@@ -46,8 +46,8 @@ gulp.task('test', function () {
 gulp.task('js', function () {
   gulp.src(['./src/js/*.js', './src/js/modules/*.js'])
     .pipe(browserify({insertGlobals : false, debug : true}))
+    //.pipe(uglify())
     .pipe(concat('sigma.io.min.js'))
-    .pipe(uglify())
     .pipe(gulp.dest('./public/js'));
 });
 

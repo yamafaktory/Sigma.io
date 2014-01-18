@@ -1,7 +1,7 @@
 //  Sigma.addContent module
 
 //  New content generator
-module.exports = function (html, id, title, content, owner) {
+module.exports = function (html, id, title, content, owner, editable) {
   var main = document.querySelector('main'),
       firstRow = main.querySelector('.row:first-child'),
       cellsInFirstRow = firstRow !== null ? firstRow.children.length : 0,
@@ -13,7 +13,7 @@ module.exports = function (html, id, title, content, owner) {
     //  Create new h1 for title
     var newTitle = document.createElement('h1');
     newTitle.setAttribute('data-sigma', 'title');
-    newTitle.setAttribute('contenteditable', 'true');
+    newTitle.setAttribute('contenteditable', editable);
     newTitle.appendChild(document.createTextNode(title));
     //  Create new h2 for user
     var newOwner = document.createElement('h2');
@@ -26,7 +26,7 @@ module.exports = function (html, id, title, content, owner) {
     //  Create new p for content
     var newContent = document.createElement('article');
     newContent.setAttribute('data-sigma', 'content');
-    newContent.setAttribute('contenteditable', 'true');
+    newContent.setAttribute('contenteditable', editable);
     newContent.appendChild(document.createTextNode(content));
     //  Append childs in article
     newArticle.appendChild(newTitle);

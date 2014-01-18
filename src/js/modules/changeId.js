@@ -3,11 +3,12 @@
 // Change tempId to mongoId
 module.exports = function (tempId, id, type) {
   var selector = '[data-mongo-id="'+tempId+'"]',
+      appWidth = document.querySelector('[data-app-width]'),
       node = document.querySelector(selector),
       html = node.innerHTML;
   node.dataset.idType = 'const';
   node.dataset.mongoId = id;
-  //  Then update other clients as changes may have occured meanwhile
+  //  Then update for other clients as changes may have occured meanwhile
   switch (type) {
     //  Articles
     case 'article':
@@ -15,7 +16,7 @@ module.exports = function (tempId, id, type) {
       break;
     //  Images
     case 'image':
-      node.src = Sigma.host+':'+Sigma.port+'/data/'+id;
+      node.src = Sigma.host+':'+Sigma.port+'/data/'+id+'/'+appWidth.dataset.appWidth;
       break;
   }
 };

@@ -18,7 +18,7 @@ module.exports = {
   },
   remove : function () {
     //  Remove only if visible
-    if (this.isVisible === undefined || !this.isVisible) {
+    if (this.isVisible === undefined || this.isVisible) {
       var hero = document.querySelector('header');
       hero.parentNode.removeChild(hero);
       this.isVisible = false;

@@ -2,9 +2,11 @@
 
 //  Disconnecting observers on demand
 module.exports = function () {
-  Sigma.observers.forEach(function (observer) {
-    observer.disconnect();
-  });
+  if (Sigma.observers !== undefined) {
+    Sigma.observers.forEach(function (observer) {
+      observer.disconnect();
+    });
+  }
   //  Remove eventListeners too for memory leaks!
   var data = document.querySelectorAll('[data-sigma]');
   for (var i = 0; i < data.length; ++i) {

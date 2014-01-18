@@ -28,7 +28,6 @@ module.exports = {
     toolsPanel.appendChild(erase);
     //  Attach eventListeners
     Sigma.clickAndTouchListener.add(close, 'removeTools', _this.removeTools);
-    //erase.addEventListener('click', Sigma.contentEditing.eraseIt, false);
     Sigma.clickAndTouchListener.add(erase, 'eraseIt', _this.eraseIt);
     //  Store target as former target for further use
     _this.formerTarget = event.target.parentNode;
@@ -81,13 +80,27 @@ module.exports = {
     //  Finally delete removed images by user
     Sigma.droppedImages.delete();
   },
-  status : function (target) {
+  status : function (target, add) {
     var _this = this;
-    //  Highlight articles with an edit icon - with firefox hack -
-    target.addEventListener('focus', this.editMode, true);
-    target.addEventListener('blur', this.viewMode, true);
-    //  Add event listener
-    Sigma.clickAndTouchListener.add(target, 'manageTools', _this.manageTools, true);
+    //  Set add argument to be true by default
+    add = add === undefined ? true : add;
+    console.log(add);
+    if (add) {
+      console.log('add');
+      console.log(target);
+      //  Highlight articles with an edit icon - with firefox hack -
+      target.addEventListener('focus', this.editMode, true);
+      target.addEventListener('blur', this.viewMode, true);
+      //  Add event listener
+      Sigma.clickAndTouchListener.add(target, 'manageTools', _this.manageTools, true);
+    } else {
+      console.log('remove');
+      console.log(target);
+      //  Remove listeners
+      target.removeEventListener('focus', this.editMode, true);
+      target.removeEventListener('blur', this.viewMode, true);
+      Sigma.clickAndTouchListener.remove(target, 'manageTools');
+    }
   },
   target : {
     //  Targets are managed as an array, with current and former values

@@ -91,17 +91,14 @@ module.exports = function () {
           //  Create new image into the DOM
           var mongoId = Sigma.getTempId(),
               appWidth = document.querySelector('[data-app-width]').dataset.appWidth,
-              source,
               smallImage = resize(image, true),
               largeImage = resize(image, false);
           newImage.dataset.image = 'dropped';
           newImage.dataset.idType = 'tmp';
           newImage.dataset.mongoId = mongoId;
           if (appWidth === 'small') {
-            //source = smallImage;
             newImage.dataset.imageWidth = 'small';
           } else {
-            //source = largeImage;
             newImage.dataset.imageWidth = 'large';
           }
           //  Save new image source

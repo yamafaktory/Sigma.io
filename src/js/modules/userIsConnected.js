@@ -9,7 +9,10 @@ module.exports = function () {
         returnHome = function () {
           var removeAside = function () {
             //  Remove from DOM at animation's end
-            aside.parentNode.removeChild(aside);
+            console.log(aside);
+            if (aside !== null) {
+              aside.parentNode.removeChild(aside);
+            }
           };
           // Cross-browser event listeners
           Sigma.animationListener(true, aside, removeAside, true);
@@ -20,7 +23,7 @@ module.exports = function () {
           //  Show nav again
           Sigma.navigation.show();
           //  Remove listeners
-          Sigma.disableMouseWheelAndTouchMove(body, true);
+          Sigma.disableMouseWheelAndTouchMove(body, false);
           //  Set form visibility
           Sigma.signIn.isVisible = false;
           //  Remove unclosed message if present
@@ -39,6 +42,7 @@ module.exports = function () {
     }
     //  Check if history module was loaded too
     Sigma.asyncUserAndHistoryState.check();
+    console.log('userIsConnected');
     //  Remove Hero header
     Sigma.heroHeader.remove();
   });

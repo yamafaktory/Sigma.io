@@ -3,12 +3,16 @@
 //  Try if localStorage is supported by the browser
 module.exports = {
   changeUserInterfaceToSign : function () {
+    //  Reset and highlight user's articles
+    Sigma.resetAndHighlightUserArticles();
     //  Provide a form to sign in and to sign up
     Sigma.connectOrCreateButton(true);
     //  Add Hero header
     Sigma.heroHeader.add();
     //  Enable user connection
     Sigma.userIsConnected();
+    //  Set observers
+    Sigma.setObservers();
   },
   checkStorageState : function (event) {
     //  Check storage state in realtime
@@ -18,7 +22,13 @@ module.exports = {
   },
   clearStorage : function () {
     //  Clear app local storage
+    var _this = this;
+    window.removeEventListener('storage', _this.checkStorageState, false);
     localStorage.clear();
+    window.addEventListener('storage', _this.checkStorageState, false);
+    Sigma.username = undefined;
+    Sigma.tools.remove();
+    Sigma.makeOwnerArticlesEditable();
   },
   init : function () {
     if ('localStorage' in window) {
@@ -29,8 +39,10 @@ module.exports = {
       //  Server response for localStorage's credentials
       Sigma.socket.on('localStorageState', function (data) {
         if (data.secure) {
+          window.removeEventListener('storage', _this.checkStorageState, false);
           //  Save username into the app
           Sigma.username = localData.username;
+          window.addEventListener('storage', _this.checkStorageState, false);
           //  Check if history module was loaded too
           Sigma.asyncUserAndHistoryState.check();
         } else {
