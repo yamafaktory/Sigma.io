@@ -21,8 +21,8 @@ module.exports = function (html, id, title, content, owner, editable) {
     newOwner.appendChild(document.createTextNode(owner));
     //  Create new date
     var newDate = document.createElement('time');
-    newDate.appendChild(document.createTextNode(Sigma.date.now()));
-    newDate.setAttribute('datetime', Sigma.date.html());
+    newDate.appendChild(document.createTextNode(Sigma.date.forHuman()));
+    newDate.setAttribute('datetime', Sigma.date.forDOM());
     //  Create new p for content
     var newContent = document.createElement('article');
     newContent.setAttribute('data-sigma', 'content');
@@ -39,6 +39,10 @@ module.exports = function (html, id, title, content, owner, editable) {
     newArticle.dataset.mongoId = id;
     //  Inject content
     newArticle.innerHTML = html;
+    //  Get date node and datetime attribute
+    var date = newArticle.querySelector('time'),
+        datetime = date.getAttribute('datetime');
+    date.innerHTML = Sigma.date.forHuman(datetime);
   }
   //  Add article to a new row or to the first one
   if (cellsInFirstRow === 0 || cellsInFirstRow === 3) {

@@ -136,8 +136,10 @@ module.exports = function () {
   window.addEventListener('drop', function (event) {
     event.preventDefault();
     var fileData = event.dataTransfer.files,
-        isTargetable = event.target.hasAttribute('data-sigma') ? true : false;
-    if (isTargetable) {
+        isTargetable = event.target.hasAttribute('data-sigma') ? true : false,
+        owner = event.target.parentNode.querySelector('[data-owner]').dataset.owner,
+        belongsToUser = owner === Sigma.username;
+    if (isTargetable && belongsToUser) {
       if (fileData.length !== 0) {
         //  Add files
         for (var i = 0; i < fileData.length; ++i) {

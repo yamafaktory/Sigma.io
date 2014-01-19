@@ -8,7 +8,8 @@
 
 :root {
   var-blue: rgba(0, 240, 255, 1);
-  var-grey: rgba(0, 0, 0, .07);
+  var-green: rgba(124, 223, 133, 1);
+  var-grey: rgba(0, 0, 0, .05);
   var-white: rgba(255, 255, 255, 1);
 }
 
@@ -47,7 +48,7 @@ html {
 
 body {
   margin: 0;
-  background: rgba(240, 240, 240, 1);
+  background: rgba(245, 245, 245, 1);
 }
 
 aside {
@@ -59,12 +60,12 @@ aside {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  animation-duration: .6s;
+  animation-duration: .5s;
   animation-name: slideRight;
 }
 
 .removeAside {
-  animation-duration: .6s;
+  animation-duration: .5s;
   animation-name: slideLeft;
 }
 
@@ -101,12 +102,12 @@ nav {
   flex-wrap: wrap;
   justify-content: center;
   animation-duration: .3s;
-  animation-name: slideRight;
+  animation-name: slideUpSmall;
 }
 
 .removeNavigation {
   animation-duration: .3s;
-  animation-name: slideLeft;
+  animation-name: slideDownSmall;
   animation-fill-mode: forwards;
 }
 
@@ -396,9 +397,10 @@ input, label {
 input {
   border-radius: 0;
   outline: none;
-  font-size: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  font-size: 1rem;
+  height: 3rem;
   background: var(white);
   color: rgba(0, 0, 0, .5);
   flex: 1;
@@ -406,7 +408,8 @@ input {
 }
 
 input:focus {
-  background: rgba(255, 255, 255, .9);
+  background: rgba(255, 255, 218, 1);
+  color: rgba(0, 0, 0, .8);
   transition: all .5s ease;
 }
 
@@ -520,7 +523,7 @@ button[type='submit'] {
 }
 
 [data-message='confirmation'] {
-  background: var(blue);
+  background: var(green);
 }
 
 .removeMessage {
@@ -544,15 +547,15 @@ button[type='submit'] {
 
   aside {
     align-items: center;
-    animation-duration: .3s;
-  }
-
-  .removeAside {
-    animation-duration: .3s;
   }
 
   nav {
     align-items: stretch;
+    animation-name: slideUpLarge;
+  }
+
+  .removeNavigation {
+    animation-name: slideDownLarge;
   }
 
   h1 {

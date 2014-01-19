@@ -23,7 +23,7 @@ module.exports = function () {
           //  Show nav again
           Sigma.navigation.show();
           //  Remove listeners
-          Sigma.disableMouseWheelAndTouchMove(body, false);
+          Sigma.mouseWheelAndTouchMove.enable(body);
           //  Set form visibility
           Sigma.signIn.isVisible = false;
           //  Remove unclosed message if present
@@ -33,16 +33,14 @@ module.exports = function () {
     returnHome();
     //  Save username into the app
     Sigma.username = data.username;
-    //  Try to use localStorage
-    if ('localStorage' in window) {
-      //  Store data as JSON
-      localStorage.sigma = JSON.stringify({username : Sigma.username, password : data.password});
-    } else {
-      Sigma.manageMessage(true, 'LocalStorage is not supported!', false);
-    }
+    //  Remove listener on storage
+    Sigma.tryLocalStorage.storageListener(false);
+    //  Store data as JSON
+    localStorage.sigma = JSON.stringify({username : Sigma.username, password : data.password});
+    //  Add listener on storage
+    Sigma.tryLocalStorage.storageListener(true);
     //  Check if history module was loaded too
     Sigma.asyncUserAndHistoryState.check();
-    console.log('userIsConnected');
     //  Remove Hero header
     Sigma.heroHeader.remove();
   });

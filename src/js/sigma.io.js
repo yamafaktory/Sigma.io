@@ -20,7 +20,7 @@
 
   //  Load modules
   Sigma.clickAndTouchListener = require('./modules/clickAndTouchListener.js');
-  Sigma.disableMouseWheelAndTouchMove = require('./modules/disableMouseWheelAndTouchMove.js');
+  Sigma.mouseWheelAndTouchMove = require('./modules/mouseWheelAndTouchMove.js');
   Sigma.connectOrCreateButton = require('./modules/connectOrCreateButton.js');
   Sigma.date = require('./modules/date.js');
   Sigma.addContent = require('./modules/addContent.js');

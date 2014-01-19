@@ -68,15 +68,23 @@ module.exports = {
   editMode : function (event) {
     var target = event.target.parentNode;
     target.classList.toggle('editMode');
+    //  Remove navigation for mobile
+    if (Sigma.deviceWidth === 'small') {
+      Sigma.navigation.hide();
+    }
     //  Store target
     Sigma.contentEditing.target.add = target;
   },
   viewMode : function (event) {
     var target = event.target.parentNode;
     target.classList.remove('editMode');
+    //  Show navigation for mobile
+    if (Sigma.deviceWidth === 'small') {
+      Sigma.navigation.show();
+    }
     //  Update time
-    target.querySelector('time').setAttribute('datetime', Sigma.date.html());
-    target.querySelector('time').innerText = Sigma.date.now();
+    target.querySelector('time').setAttribute('datetime', Sigma.date.forDOM());
+    target.querySelector('time').innerText = Sigma.date.forHuman();
     //  Finally delete removed images by user
     Sigma.droppedImages.delete();
   },
@@ -84,18 +92,13 @@ module.exports = {
     var _this = this;
     //  Set add argument to be true by default
     add = add === undefined ? true : add;
-    console.log(add);
     if (add) {
-      console.log('add');
-      console.log(target);
       //  Highlight articles with an edit icon - with firefox hack -
       target.addEventListener('focus', this.editMode, true);
       target.addEventListener('blur', this.viewMode, true);
       //  Add event listener
       Sigma.clickAndTouchListener.add(target, 'manageTools', _this.manageTools, true);
     } else {
-      console.log('remove');
-      console.log(target);
       //  Remove listeners
       target.removeEventListener('focus', this.editMode, true);
       target.removeEventListener('blur', this.viewMode, true);

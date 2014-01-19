@@ -8,7 +8,6 @@ module.exports = function () {
       isArticleInDataset = article.dataset.structure === 'article';
   //  Only synchronize with valid articles
   if (isArticleNode && isArticleInDataset) {
-    console.log(article);
     var articleClone = article.cloneNode(true),
         articleFragment = document.createDocumentFragment(),
         mongoId,

@@ -2,27 +2,18 @@
 
 //  Date generator
 module.exports = {
-  //  Formated date
-  now : function () {
-    var currentDate = new Date(),
-        hours = currentDate.getHours(),
-        minutes = currentDate.getMinutes(),
-        meridiem;
-    //  Set meridiem and hours format
-    if (hours < 12) {
-      meridiem = 'am';
-    } else {
-      meridiem = 'pm';
-      hours -= 12;
-    }
-    //  Fix minutes format
-    if (minutes < 10) {
-        minutes = '0' + minutes;
-    }
-    var displayDate = 'today ' + hours + ':' + minutes + ' ' + meridiem;
-    return displayDate;
-  },
-  html : function () {
+  forDOM : function () {
     return new Date().toISOString();
+  },
+  forHuman : function (datetime) {
+    var dateAndTime = datetime === undefined ? new Date() : new Date(datetime),
+        dateAndTimeForHuman = dateAndTime.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric"
+        });
+    return dateAndTimeForHuman;
   }
 };

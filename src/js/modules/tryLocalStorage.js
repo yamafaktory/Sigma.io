@@ -14,18 +14,27 @@ module.exports = {
     //  Set observers
     Sigma.setObservers();
   },
-  checkStorageState : function (event) {
+  storageStateHasChanged : function (event) {
     //  Check storage state in realtime
     Sigma.tryLocalStorage.clearStorage();
     Sigma.manageMessage(true, 'Unwanted LocalStorage change occured. LocalStorage has been cleared.', false);
     Sigma.tryLocalStorage.changeUserInterfaceToSign();
   },
+  storageListener : function (add) {
+    //  Add or remove listener on storage
+    var _this = this;
+    if (add) {
+      window.addEventListener('storage', _this.storageStateHasChanged, false);
+    } else {
+      window.removeEventListener('storage', _this.storageStateHasChanged, false);
+    }
+  },
   clearStorage : function () {
     //  Clear app local storage
     var _this = this;
-    window.removeEventListener('storage', _this.checkStorageState, false);
+    _this.storageListener(false);
     localStorage.clear();
-    window.addEventListener('storage', _this.checkStorageState, false);
+    _this.storageListener(true);
     Sigma.username = undefined;
     Sigma.tools.remove();
     Sigma.makeOwnerArticlesEditable();
@@ -35,14 +44,16 @@ module.exports = {
       var _this = this,
           localData = localStorage.sigma === undefined ? { username: undefined, password: undefined } : JSON.parse(localStorage.sigma);
       //  Add listener on storage
-      window.addEventListener('storage', _this.checkStorageState, false);
+      _this.storageListener(true);
       //  Server response for localStorage's credentials
       Sigma.socket.on('localStorageState', function (data) {
         if (data.secure) {
-          window.removeEventListener('storage', _this.checkStorageState, false);
+          //  Remove storage's listener
+          _this.storageListener(false);
           //  Save username into the app
           Sigma.username = localData.username;
-          window.addEventListener('storage', _this.checkStorageState, false);
+          //  Add listener on storage
+          _this.storageListener(true);
           //  Check if history module was loaded too
           Sigma.asyncUserAndHistoryState.check();
         } else {

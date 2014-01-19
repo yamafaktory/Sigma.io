@@ -31,7 +31,7 @@ module.exports = {
           //  Show nav again
           Sigma.navigation.show();
           //  Remove mousewheel and touchmove listeners
-          Sigma.disableMouseWheelAndTouchMove(body, false);
+          Sigma.mouseWheelAndTouchMove.enable(body);
           //  Set visibility
           _this.isVisible = false;
           //  Remove unclosed message if present
@@ -70,7 +70,7 @@ module.exports = {
     //  Append it to the main objet
     Sigma.signIn.form = form;
     //  Temporary disable wheel and touch
-    Sigma.disableMouseWheelAndTouchMove(body, true);
+    Sigma.mouseWheelAndTouchMove.disable(body);
     //body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
     //body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
     Sigma.clickAndTouchListener.add(cancelButton, 'returnHome', returnHome);
