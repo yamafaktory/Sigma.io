@@ -3,7 +3,7 @@ html(lang='en')
   head
     title Sigma.io - Create and share data in true real-time
     meta(charset='utf8')
-    meta(name='viewport', content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     meta(name='description', content='Releasing and receiving data on the internet could be more than a sluggish experience. Enjoy the true real-time nature of the web.')
     meta(name='author', content='Davy Duperron')
     link(href='/public/css/style.css', rel='stylesheet')
@@ -17,7 +17,7 @@ html(lang='en')
         .cell
           p &copy; Davy Duperron
         .cell
-          p I'm available for hire!
+          p You are on #{id} channel
         .cell
           a.github(href='https://github.com/yamafaktory/Sigma.io')
             span Github
@@ -25,7 +25,7 @@ html(lang='en')
       .fixedCell
         a.logo(href='#')
       .fixedCell
-        a.channel(href='/#{id}')
-          span #{id}
+        a.channel
+          span more
       .fixedCell
     script(src='/public/js/sigma.io.min.js')

@@ -1,7 +1,9 @@
 //  Sigma.io
 
 //  Database module
-exports.init = function (Sigma) {
+module.exports = function () {
+
+  var Sigma = this;
 
   //  Mongo connection
   Sigma.mongo.connect('mongodb://sigma:demo@dharma.mongohq.com:10008/Sigma', function(error, database) {
@@ -11,7 +13,7 @@ exports.init = function (Sigma) {
       Sigma.database = database;
       Sigma.objectId = require('mongodb').ObjectID;
       //  Fire websockets only when database connection is ok
-      Sigma.websockets.init(Sigma);
+      Sigma.websockets.call(Sigma);
     }
   });
   

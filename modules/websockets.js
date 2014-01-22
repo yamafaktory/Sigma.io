@@ -1,7 +1,9 @@
 //  Sigma.io
 
 //  Websockets module
-exports.init = function (Sigma) {
+module.exports = function () {
+
+	var Sigma = this;
 
 	Sigma.io.sockets.on('connection', function (socket) {
 
@@ -11,7 +13,7 @@ exports.init = function (Sigma) {
 	  //  Find articles for that channel
 	  Sigma.database.collection('articles')
 	    .find({ 'channel': Sigma.channel.name })
-	    .sort({'date': -1})
+	    .sort({ 'date': -1 })
 	    .limit(Sigma.channel.results)
 	    .toArray(function (error, documents) {
 	      if (error) {
@@ -34,8 +36,8 @@ exports.init = function (Sigma) {
 	      //  Create new content
 	      case 'create':
 	        Sigma.database.collection('articles').insert(
-	          { 'html': data.html, 'owner': data.owner, 'channel': Sigma.channel.name, 'date': new Date()},
-	          { safe: true},
+	          { 'html': data.html, 'owner': data.owner, 'channel': Sigma.channel.name, 'date': new Date(data.date) },
+	          { safe: true },
 	          function (error, document) {
 	            if (error) {
 	              socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
@@ -55,9 +57,9 @@ exports.init = function (Sigma) {
 	        socket.broadcast.to(Sigma.channel.name).emit('broadcast', { action: 'update', html: data.html, id: data.mongoId });
 	        //  Update content
 	        Sigma.database.collection('articles').update(
-	          { '_id': new Sigma.objectId(data.mongoId)},
-	          { $set: { 'html': data.html, 'date': new Date()}},
-	          { safe: true},
+	          { '_id': new Sigma.objectId(data.mongoId) },
+	          { $set: { 'html': data.html, 'date': new Date(data.date) }},
+	          { safe: true },
 	          function (error) {
 	            if (error) {
 	              socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
@@ -155,7 +157,7 @@ exports.init = function (Sigma) {
 	    });
 	  });
 
-	  //  If a client want to store an image
+	  //  If a client wants to store an image
 	  socket.on('storeImage', function (data) {
 	    //  Slice and decode dataURL
 	    var getSource = function (source) {
@@ -176,7 +178,7 @@ exports.init = function (Sigma) {
 	      });
 	  });
 
-	  //  If a client want to delete an image
+	  //  If a client wants to delete an image
 	  socket.on('deleteImage', function (data) {
 	    var ids = data.ids,
 	        returnIds = ids,
@@ -197,6 +199,25 @@ exports.init = function (Sigma) {
 	    ids.forEach(function (id) {
 	      removeImage(id);
 	    });
+	  });
+
+	  //  If a client requests more articles
+	  socket.on('loadMoreHistory', function (data) {
+		  Sigma.database.collection('articles')
+		    .find({ 'channel': Sigma.channel.name, date: { $lt: new Date(data.date) } })
+		    .sort({'date': -1})
+		    .limit(Sigma.channel.results)
+		    .toArray(function (error, documents) {
+		      if (error) {
+		        socket.emit('socketMessage', { message: Sigma.errorMessage, type: false });
+		      } else {
+		        if (documents.length === 0) {
+		          socket.emit('moreHistory', { empty: true });
+		        } else {
+		          socket.emit('moreHistory', { empty: false, documents: documents });
+		        }
+		      }
+		    });
 	  });
 
   });

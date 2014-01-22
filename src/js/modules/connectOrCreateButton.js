@@ -22,7 +22,7 @@ module.exports = function (type) {
                 var title = 'An editable title!',
                     content = 'Here goes the content of your lovely article. You can directly drag & drop images here!';
                 Sigma.disconnectObservers();
-                Sigma.addContent(false, undefined, title, content, Sigma.username, true);
+                Sigma.addContent(false, false, undefined, title, content, Sigma.username, true);
                 Sigma.tools.attach();
                 Sigma.resetAndHighlightUserArticles();
                 Sigma.setObservers();

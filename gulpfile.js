@@ -44,10 +44,10 @@ gulp.task('test', function () {
 });
 
 gulp.task('js', function () {
-  gulp.src(['./src/js/*.js', './src/js/modules/*.js'])
-    .pipe(browserify({insertGlobals : false, debug : true}))
-    //.pipe(uglify())
+  gulp.src(['./src/js/sigma.io.js'])
+    .pipe(browserify({insertGlobals: false, debug: true}))
     .pipe(concat('sigma.io.min.js'))
+    .pipe(uglify({sourceMap: 'sigma.io.min.js.map'}))
     .pipe(gulp.dest('./public/js'));
 });
 
@@ -69,7 +69,7 @@ gulp.task('server', function () {
 
 gulp.task('default', function () {
   gulp.run('test', 'js', 'css', 'svg', 'server');
-  gulp.watch(['./server.js', './modules/*.js', './src/js/**', './src/css/*.css', './src/svg/*.svg'], function () {
+  gulp.watch(['./server.js', './modules/*.js', './src/js/**', './src/css/*.css', './src/svg/*.svg', './views/*.jade'], function () {
     gulp.run('test', 'js', 'css', 'svg', 'server');
   });
 });

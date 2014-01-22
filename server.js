@@ -51,10 +51,10 @@ Sigma.channel = {
 };
 
 //  Init database connection
-Sigma.database.init(Sigma);
+Sigma.database.call(Sigma);
 
 //  Init routes
-Sigma.routes.init(Sigma);
+Sigma.routes.call(Sigma);
 
 //  Set listening port
 Sigma.server.listen(1337);

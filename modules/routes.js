@@ -1,7 +1,9 @@
 //  Sigma.io
 
 //  Routes module
-exports.init = function (Sigma) {
+module.exports = function () {
+
+  var Sigma = this;
 
   //  Channel and image rendering
   var renderChannel = function (req, res) {
@@ -25,13 +27,21 @@ exports.init = function (Sigma) {
   },
     renderImage = function (req, res) {
       //  First try to use URL as an id
+      var idIsNotValid;
       try {
+        new Sigma.objectId(req.params.id);
+      } catch (error) {
+        idIsNotValid = true;
+      }
+      if (idIsNotValid) {
+        //  Send 404
+        res.sendfile('./public/img/404.svg');
+      } else {
         //  Find image source
         Sigma.database.collection('images').findOne(
           { '_id': new Sigma.objectId(req.params.id)},
           function (error, document) {
             var imageSource;
-            console.log(error);
             if (error || document == null) {
               //  Send 404
               res.sendfile('./public/img/404.svg');
@@ -49,9 +59,6 @@ exports.init = function (Sigma) {
               }
             }
         });
-      } catch (error) {
-        //  Argument is not a valid id so send 404
-        res.sendfile('./public/img/404.svg');
       }
     };
 

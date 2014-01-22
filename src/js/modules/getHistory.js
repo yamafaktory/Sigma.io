@@ -11,8 +11,10 @@ module.exports = function () {
     } else {
       //  Populate main div with the DOM content sent by the server
       data.documents.forEach(function (document) {
-        Sigma.addContent(document.html, document._id);
+        Sigma.addContent(false, document.html, document._id);
       });
+      //  And keep track of last date if user want to load more articles
+      Sigma.currentDate = data.documents[0].date;
     }
     //  Keep track of channel emptiness
     Sigma.asyncUserAndHistoryState.channelIsEmpty = data.empty;

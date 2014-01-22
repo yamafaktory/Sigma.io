@@ -46,6 +46,7 @@
   Sigma.listen = require('./modules/listen.js');
   Sigma.disconnectObservers = require('./modules/disconnectObservers.js');
   Sigma.getHistory = require('./modules/getHistory.js');
+  Sigma.getMoreHistory = require('./modules/getMoreHistory.js');
   Sigma.tryLocalStorage = require('./modules/tryLocalStorage.js');
   Sigma.heroHeader = require('./modules/heroHeader.js');
   Sigma.navigation = require('./modules/navigation.js');
@@ -66,6 +67,7 @@
       Sigma.getChannelId();
       Sigma.getMongoId();
       Sigma.getHistory();
+      Sigma.getMoreHistory.init();
       Sigma.tryLocalStorage.init();
       Sigma.getSocketMessage();
       Sigma.saveManager.init();
