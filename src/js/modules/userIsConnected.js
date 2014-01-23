@@ -9,7 +9,6 @@ module.exports = function () {
         returnHome = function () {
           var removeAside = function () {
             //  Remove from DOM at animation's end
-            console.log(aside);
             if (aside !== null) {
               aside.parentNode.removeChild(aside);
             }

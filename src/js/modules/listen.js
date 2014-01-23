@@ -7,7 +7,7 @@ module.exports = function () {
     switch (data.action) {
       //  Add new content
       case 'create':
-        Sigma.addContent(data.html, data.id);
+        Sigma.addContent(false, data.html, data.id);
         break;
       //  Update content
       case 'update':

@@ -3,8 +3,7 @@
 //  Add connect or create button in nav
 module.exports = function (type) {
   //  Connect is true | Create is false
-  var _this = this,
-      addButton = function (type) {
+  var addButton = function (type) {
         var nav = document.querySelector('nav'),
             button = document.createElement('a'),
             buttonSpan = document.createElement('span'),

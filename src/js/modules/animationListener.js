@@ -10,13 +10,12 @@ module.exports = function (state, target, action, removeWhenDone) {
       animationListeners = vendorPrefixes.map(addState),
       actionAndRemoveListeners = function () {
         //  Launch requested action
-        var _this = this;
         action();
         //  Remove animation listeners if wanted
         if (removeWhenDone) {
           animationListeners.forEach(function (animation) {
-            _this.removeEventListener(animation, actionAndRemoveListeners, false);
-          });
+            this.removeEventListener(animation, actionAndRemoveListeners, false);
+          }.bind(this));
         }
       };
   //  Add cross-browser animation listeners based on state

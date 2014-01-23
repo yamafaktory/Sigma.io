@@ -9,15 +9,14 @@ module.exports = {
     var addedNodes = mutation.addedNodes,
         removedNodes = mutation.removedNodes,
         type = mutation.type,
-        _this = this,
         checkIfModified = function (add, nodes) {
           var updateImageIds = function () {
             if (add) {
-              _this.removedImageIds.splice(_this.removedImageIds.indexOf(nodes[i].dataset.mongoId), 1);
+              this.removedImageIds.splice(_this.removedImageIds.indexOf(nodes[i].dataset.mongoId), 1);
             } else {
-              _this.removedImageIds.push(nodes[i].dataset.mongoId);
+              this.removedImageIds.push(nodes[i].dataset.mongoId);
             }
-          },
+          }.bind(this),
               countImages = function (i) {
                 //  Check if the node is not pure text
                 if (nodes[i].nodeName !== '#text') {
@@ -41,7 +40,7 @@ module.exports = {
               countImages(i);
             }
           }
-        };
+        }.bind(this);
     //  Check for both added and removed nodes
     checkIfModified(false, removedNodes);
     checkIfModified(true, addedNodes);
@@ -56,9 +55,8 @@ module.exports = {
     }
   },
   updateImageArray : function () {
-    var _this = this;
     Sigma.socket.on('updateImageArray', function (data) {
-      _this.removedImageIds = data.array;
+      this.removedImageIds = data.array;
     });
   }
 };

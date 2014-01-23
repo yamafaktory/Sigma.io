@@ -6,13 +6,11 @@ module.exports = {
     event.preventDefault();
   },
   disable : function (target) {
-    var _this = this;
-    target.addEventListener('mousewheel', _this.preventDefault, false);
-    target.addEventListener('touchmove', _this.preventDefault, false);
+    target.addEventListener('mousewheel', this.preventDefault, false);
+    target.addEventListener('touchmove', this.preventDefault, false);
   },
   enable : function (target) {
-    var _this = this;
-    target.removeEventListener('mousewheel', _this.preventDefault, false);
-    target.removeEventListener('touchmove', _this.preventDefault, false);
+    target.removeEventListener('mousewheel', this.preventDefault, false);
+    target.removeEventListener('touchmove', this.preventDefault, false);
   }
 };

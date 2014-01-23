@@ -89,7 +89,6 @@ module.exports = {
     Sigma.droppedImages.delete();
   },
   status : function (target, add) {
-    var _this = this;
     //  Set add argument to be true by default
     add = add === undefined ? true : add;
     if (add) {
@@ -97,7 +96,7 @@ module.exports = {
       target.addEventListener('focus', this.editMode, true);
       target.addEventListener('blur', this.viewMode, true);
       //  Add event listener
-      Sigma.clickAndTouchListener.add(target, 'manageTools', _this.manageTools, true);
+      Sigma.clickAndTouchListener.add(target, 'manageTools', this.manageTools, true);
     } else {
       //  Remove listeners
       target.removeEventListener('focus', this.editMode, true);
