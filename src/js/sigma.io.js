@@ -12,7 +12,7 @@
       Sigma = root.Sigma = {};
 
   //  App host:port
-  Sigma.host = 'http://192.168.0.1';
+  Sigma.host = 'http://127.0.0.1';
   Sigma.port = 1337;
 
   //  Socket.io connection on node server
