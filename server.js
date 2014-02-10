@@ -1,6 +1,6 @@
 //  Sigma.io
 
-//  (c) 2013 Davy Duperron
+//  (c) 2014 Davy Duperron
 //  Server side
 
 "use strict";
