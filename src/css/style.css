@@ -351,7 +351,6 @@ time::before {
 }
 
 .create > span, .channel > span, .connect > span {
-  border-bottom: 1px solid var(blue);
   margin-left: 1rem;
 }
 
@@ -368,7 +367,6 @@ time::before {
 }
 
 .github > span {
-  border-bottom: 1px solid var(blue);
   margin-left: 1rem;
   margin-top: -1rem;
 }
