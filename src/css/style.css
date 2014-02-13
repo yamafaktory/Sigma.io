@@ -1,7 +1,7 @@
 /*  Sigma.io
 
     CSS
-    (c) 2013 Davy Duperron
+    (c) 2014 Davy Duperron
 */
 
 /*  Global rules - mobile first */
@@ -634,7 +634,7 @@ button[type='submit'] {
   .create, .channel, .connect {
     width: 4rem;
     height: 4rem;
-    padding-top: 1rem;
+    padding-top: 1.25rem;
     margin: 1rem 0 1rem 1rem;
     padding-left: 4rem;
   }
