@@ -8,11 +8,17 @@ module.exports = {
       var body = document.querySelector('body'),
         main = document.querySelector('main'),
         hero = document.createElement('header'),
+        svg = document.createElement('div'),
         title = document.createElement('h1');
+        subtitle = document.createElement('h2');
       body.insertBefore(hero, main);
       hero.setAttribute('class', 'hero');
+      svg.setAttribute('class', 'svg');
       hero.appendChild(title);
-      title.appendChild(document.createTextNode('Create and share data in true real-time.'));
+      hero.appendChild(subtitle);
+      hero.appendChild(svg);
+      title.appendChild(document.createTextNode('Sigma.io'));
+      subtitle.appendChild(document.createTextNode('Create and share data in true real-time.'));
       this.isVisible = true;
     }
   },

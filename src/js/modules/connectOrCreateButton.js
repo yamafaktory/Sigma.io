@@ -27,7 +27,6 @@ module.exports = function (type) {
                 Sigma.setObservers();
               }
             };
-        button.setAttribute('href', '#');
         button.setAttribute('class', type);
         nav.lastChild.appendChild(button);
         button.appendChild(buttonSpan);

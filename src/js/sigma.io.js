@@ -59,6 +59,7 @@
   Sigma.getSocketMessage = require('./modules/getSocketMessage.js');
   Sigma.saveManager = require('./modules/saveManager.js');
   Sigma.isOnLine = require('./modules/isOnLine.js');
+  Sigma.search = require('./modules/search.js');
 
   //  Load components of the app when the DOM is ready
   Sigma.ready = (function () {
@@ -73,6 +74,7 @@
       Sigma.saveManager.init();
       Sigma.preventPasting();
       Sigma.dragAndDrop();
+      Sigma.search();
     };
     document.addEventListener('DOMContentLoaded', componentsToLoad, false );
   }());

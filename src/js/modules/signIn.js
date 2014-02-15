@@ -71,8 +71,6 @@ module.exports = {
     Sigma.signIn.form = form;
     //  Temporary disable wheel and touch
     Sigma.mouseWheelAndTouchMove.disable(body);
-    //body.addEventListener('mousewheel', disableMouseWheelOrTouchMove, false);
-    //body.addEventListener('touchmove', disableMouseWheelOrTouchMove, false);
     Sigma.clickAndTouchListener.add(cancelButton, 'returnHome', returnHome);
   },
   checkForm : function (event) {

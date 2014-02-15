@@ -9,7 +9,8 @@
 :root {
   var-blue: rgba(0, 240, 255, 1);
   var-green: rgba(124, 223, 133, 1);
-  var-grey: rgba(0, 0, 0, .05);
+  var-grey: rgba(120, 120, 120, 1);
+  var-greyBorder: rgba(0, 0, 0, .05);
   var-white: rgba(255, 255, 255, 1);
 }
 
@@ -87,8 +88,16 @@ main > .row:first-child {
   flex: 0 0 100%;
 }
 
-.fixedCell {
-  flex: 1;
+.cell-large {
+  flex: 0 0 60%;
+}
+
+.cell-small {
+  flex: 0 0 20%;
+}
+
+.logoAndSearch {
+  display: flex;
 }
 
 nav {
@@ -103,6 +112,10 @@ nav {
   justify-content: center;
   animation-duration: .3s;
   animation-name: slideUpSmall;
+}
+
+nav a > span {
+  display: none;
 }
 
 .removeNavigation {
@@ -127,8 +140,8 @@ h2, time {
   font-size: 1rem;
 }
 
-article {
-  color: rgba(0, 0, 0, .7);
+article, p {
+  color: var(grey);
 }
 
 article, footer {
@@ -149,7 +162,7 @@ a {
 footer {
   margin: 0 .5rem 3.5rem .5rem;
   background: var(white);
-  border: 1px solid var(grey);
+  border: 1px solid var(greyBorder);
 }
 
 footer p {
@@ -191,7 +204,7 @@ time::before {
 [data-structure='article'] {
   margin: .5rem;
   background: var(white);
-  border: 1px solid var(grey);
+  border: 1px solid var(greyBorder);
   animation-duration: 1s;
   animation-name: fadeIn;
 }
@@ -213,20 +226,32 @@ time::before {
 /*  Hero */
 
 .hero {
+  background-color: var(blue);
+}
+
+.svg {
   background: url('../img/hero.svg') no-repeat bottom;
   background-color: var(blue);
   background-size: contain;
   height: 10rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
 }
 
 .hero > h1 {
+  font-family: 'Source Sans Pro';
+  font-weight: 900;
+  font-size: 3rem;
   color: var(white);
-  background: rgba(0, 0, 0, .1);
-  padding: .3333rem;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.hero > h2 {
+  font-family: 'Roboto Thin', sans-serif;
+  font-weight: 100;
+  color: var(grey);
+  padding-top: 1rem;
   font-size: 1.3333rem;
+  text-align: center;
 }
 
 /*  Tooltips */
@@ -321,8 +346,10 @@ time::before {
   padding-top: .25rem;
   padding-left: 1.25rem;
   margin-top: .5rem;
+  margin-left: 1rem;
   color: var(white);
   transition: all .2s ease-out;
+  cursor: pointer;
 }
 
 .create:hover, .channel:hover, .connect:hover,
@@ -345,13 +372,9 @@ time::before {
 
 .logo {
   display: block;
-  width: 3rem;
-  height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
   background: url('../img/logo.svg');
-}
-
-.create > span, .channel > span, .connect > span {
-  margin-left: 1rem;
 }
 
 .github {
@@ -379,7 +402,7 @@ form {
   background: rgba(80, 80, 80, 1);
 }
 
-.usernameUberInput, .passwordUberInput {
+.usernameUberInput, .passwordUberInput, .searchUberInput {
   display: flex;
 }
 
@@ -399,14 +422,14 @@ input {
   padding-right: 1rem;
   font-size: 1rem;
   height: 3rem;
-  background: var(white);
+  background: rgba(255, 255, 255, .9);
   color: rgba(0, 0, 0, .5);
   flex: 1;
   transition: all .5s ease;
 }
 
 input:focus {
-  background: rgba(255, 255, 218, 1);
+  background: var(white);
   color: rgba(0, 0, 0, .8);
   transition: all .5s ease;
 }
@@ -442,6 +465,23 @@ label::after {
   background-size: 100%;
 }
 
+.searchUberInput > input {
+  min-width: 5rem;
+}
+
+.searchUberInput > button {
+  border-radius: 0;
+  margin: 0;
+  width: 2rem;
+  background: var(green) url('../img/search.svg') no-repeat center;
+  transition: background-color .5s ease;
+}
+
+.searchUberInput > button:hover {
+  background: color(var(blue) tint(20%)) url('../img/search.svg') no-repeat center;
+  transition: background-color .3s ease;
+}
+
 #usernameInputState.isOk::before, #passwordInputState.isOk::before {
   content: url('../img/isOk.svg');
 }
@@ -459,13 +499,13 @@ button {
   font-size: 1rem;
   height: 3rem;
   color: var(white);
-  background: rgba(190, 241, 0, .8);
+  background: var(green);
   cursor: pointer;
   transition: all .3s ease;
 }
 
 button:hover {
-  background: rgba(190, 241, 0, 1);
+  background: color(var(green) tint(20%));
   transition: all .3s ease;
 }
 
@@ -474,11 +514,11 @@ button[type='submit'] {
 }
 
 .cancel {
-  background: rgba(0, 240, 255, .8);
+  background: var(blue);
 }
 
 .cancel:hover {
-  background: var(blue);
+  background: color(var(blue) tint(20%));
 }
 
 .signUp {
@@ -552,6 +592,10 @@ button[type='submit'] {
     animation-name: slideUpLarge;
   }
 
+  nav a > span {
+    display: block;
+  }
+
   .removeNavigation {
     animation-name: slideDownLarge;
   }
@@ -564,7 +608,7 @@ button[type='submit'] {
     font-size: 1rem;
   }
 
-  article, footer {
+  article, footer, input, button, span {
     font-size: 1.2rem;
   }
 
@@ -620,6 +664,14 @@ button[type='submit'] {
     flex: 1;
   }
 
+  .cell-large {
+    flex: 0 0 50%;
+  }
+
+  .cell-small {
+    flex: 0 0 25%;
+  }
+
   .formContainer {
     display: flex;
     align-items: center;
@@ -642,22 +694,45 @@ button[type='submit'] {
   }
 
   .logo {
-    width: 4rem;
-    height: 4rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    margin-right: 1rem;
   }
 
-  .hero {
+  .create > span, .channel > span, .connect > span {
+    display: inline-block;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .svg {
     height: 20rem;
   }
 
   .hero > h1 {
-    font-size: 3rem;
-    padding: 1rem;
+    font-size: 8rem;
+  }
+
+  .hero > h2 {
+    font-size: 2.6666rem;
   }
 
   form {
     background: rgba(0, 0, 0, .5);
     flex: 0 0 33.3333%;
+  }
+
+  .searchUberInput {
+    margin-top: 1.5rem;
+  }
+
+  .searchUberInput > input {
+    border-radius: .2rem 0 0 .2rem;
+  }
+
+  .searchUberInput > button {
+    margin: 0;
+    border-radius: 0 .2rem .2rem 0;
   }
 
   [data-message] {

@@ -22,10 +22,14 @@ html(lang='en')
           a.github(href='https://github.com/yamafaktory/Sigma.io')
             span Github
     nav
-      .fixedCell
-        a.logo(href='#')
-      .fixedCell
+      .cell-large
+        .logoAndSearch
+          a.logo(href='#')
+          .searchUberInput
+            input#searchInput(type='search', placeholder='#{id}')
+            button#searchButton
+      .cell-small
         a.channel
           span more
-      .fixedCell
+      .cell-small
     script(src='/public/js/sigma.io.min.js')

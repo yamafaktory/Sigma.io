@@ -1,7 +1,7 @@
 /*  Sigma.io
 
     CSS
-    (c) 2013 Davy Duperron
+    (c) 2014 Davy Duperron
 */
 
 /*  Global rules - mobile first */
@@ -108,11 +108,25 @@ main > .row:first-child {
   flex: 0 0 100%;
 }
 
-.fixedCell {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
+.cell-large {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 60%;
+  -ms-flex: 0 0 60%;
+  flex: 0 0 60%;
+}
+
+.cell-small {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 20%;
+  -ms-flex: 0 0 20%;
+  flex: 0 0 20%;
+}
+
+.logoAndSearch {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 nav {
@@ -138,6 +152,10 @@ nav {
   animation-duration: .3s;
   -webkit-animation-name: slideUpSmall;
   animation-name: slideUpSmall;
+}
+
+nav a > span {
+  display: none;
 }
 
 .removeNavigation {
@@ -166,8 +184,9 @@ time {
   font-size: 1rem;
 }
 
-article {
-  color: rgba(0, 0, 0, .7);
+article,
+p {
+  color: rgba(120, 120, 120, 1);
 }
 
 article,
@@ -264,30 +283,33 @@ time::before {
 /*  Hero */
 
 .hero {
+  background-color: rgba(0, 240, 255, 1);
+}
+
+.svg {
   background: url('../img/hero.svg') no-repeat bottom;
   background-color: rgba(0, 240, 255, 1);
   -webkit-background-size: contain;
   background-size: contain;
   height: 10rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: end;
-  -webkit-align-items: flex-end;
-  -ms-flex-align: end;
-  align-items: flex-end;
 }
 
 .hero > h1 {
+  font-family: 'Source Sans Pro';
+  font-weight: 900;
+  font-size: 3rem;
   color: rgba(255, 255, 255, 1);
-  background: rgba(0, 0, 0, .1);
-  padding: .3333rem;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.hero > h2 {
+  font-family: 'Roboto Thin', sans-serif;
+  font-weight: 100;
+  color: rgba(120, 120, 120, 1);
+  padding-top: 1rem;
   font-size: 1.3333rem;
+  text-align: center;
 }
 
 /*  Tooltips */
@@ -398,9 +420,11 @@ time::before {
   padding-top: .25rem;
   padding-left: 1.25rem;
   margin-top: .5rem;
+  margin-left: 1rem;
   color: rgba(255, 255, 255, 1);
   -webkit-transition: all .2s ease-out;
   transition: all .2s ease-out;
+  cursor: pointer;
 }
 
 .create:hover,
@@ -429,16 +453,9 @@ time::before {
 
 .logo {
   display: block;
-  width: 3rem;
-  height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
   background: url('../img/logo.svg');
-}
-
-.create > span,
-.channel > span,
-.connect > span {
-  border-bottom: 1px solid rgba(0, 240, 255, 1);
-  margin-left: 1rem;
 }
 
 .github {
@@ -455,7 +472,6 @@ time::before {
 }
 
 .github > span {
-  border-bottom: 1px solid rgba(0, 240, 255, 1);
   margin-left: 1rem;
   margin-top: -1rem;
 }
@@ -469,7 +485,8 @@ form {
 }
 
 .usernameUberInput,
-.passwordUberInput {
+.passwordUberInput,
+.searchUberInput {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -493,7 +510,7 @@ input {
   padding-right: 1rem;
   font-size: 1rem;
   height: 3rem;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, .9);
   color: rgba(0, 0, 0, .5);
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -504,7 +521,7 @@ input {
 }
 
 input:focus {
-  background: rgba(255, 255, 218, 1);
+  background: rgba(255, 255, 255, 1);
   color: rgba(0, 0, 0, .8);
   -webkit-transition: all .5s ease;
   transition: all .5s ease;
@@ -544,6 +561,25 @@ label::after {
   background-size: 100%;
 }
 
+.searchUberInput > input {
+  min-width: 5rem;
+}
+
+.searchUberInput > button {
+  border-radius: 0;
+  margin: 0;
+  width: 2rem;
+  background: rgba(124, 223, 133, 1) url('../img/search.svg') no-repeat center;
+  -webkit-transition: background-color .5s ease;
+  transition: background-color .5s ease;
+}
+
+.searchUberInput > button:hover {
+  background: rgb(51, 243, 255) url('../img/search.svg') no-repeat center;
+  -webkit-transition: background-color .3s ease;
+  transition: background-color .3s ease;
+}
+
 #usernameInputState.isOk::before,
 #passwordInputState.isOk::before {
   content: url('../img/isOk.svg');
@@ -563,14 +599,14 @@ button {
   font-size: 1rem;
   height: 3rem;
   color: rgba(255, 255, 255, 1);
-  background: rgba(190, 241, 0, .8);
+  background: rgba(124, 223, 133, 1);
   cursor: pointer;
   -webkit-transition: all .3s ease;
   transition: all .3s ease;
 }
 
 button:hover {
-  background: rgba(190, 241, 0, 1);
+  background: rgb(150, 229, 157);
   -webkit-transition: all .3s ease;
   transition: all .3s ease;
 }
@@ -580,11 +616,11 @@ button[type='submit'] {
 }
 
 .cancel {
-  background: rgba(0, 240, 255, .8);
+  background: rgba(0, 240, 255, 1);
 }
 
 .cancel:hover {
-  background: rgba(0, 240, 255, 1);
+  background: rgb(51, 243, 255);
 }
 
 .signUp {
@@ -670,6 +706,10 @@ button[type='submit'] {
     animation-name: slideUpLarge;
   }
 
+  nav a > span {
+    display: block;
+  }
+
   .removeNavigation {
     -webkit-animation-name: slideDownLarge;
     animation-name: slideDownLarge;
@@ -685,7 +725,10 @@ button[type='submit'] {
   }
 
   article,
-  footer {
+  footer,
+  input,
+  button,
+  span {
     font-size: 1.2rem;
   }
 
@@ -761,6 +804,20 @@ button[type='submit'] {
     flex: 1;
   }
 
+  .cell-large {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 50%;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+  }
+
+  .cell-small {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 25%;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+  }
+
   .formContainer {
     display: -webkit-box;
     display: -webkit-flex;
@@ -784,7 +841,7 @@ button[type='submit'] {
   .connect {
     width: 4rem;
     height: 4rem;
-    padding-top: 1rem;
+    padding-top: 1.25rem;
     margin: 1rem 0 1rem 1rem;
     padding-left: 4rem;
   }
@@ -794,17 +851,29 @@ button[type='submit'] {
   }
 
   .logo {
-    width: 4rem;
-    height: 4rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    margin-right: 1rem;
   }
 
-  .hero {
+  .create > span,
+  .channel > span,
+  .connect > span {
+    display: inline-block;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .svg {
     height: 20rem;
   }
 
   .hero > h1 {
-    font-size: 3rem;
-    padding: 1rem;
+    font-size: 8rem;
+  }
+
+  .hero > h2 {
+    font-size: 2.6666rem;
   }
 
   form {
@@ -813,6 +882,19 @@ button[type='submit'] {
     -webkit-flex: 0 0 33.3333%;
     -ms-flex: 0 0 33.3333%;
     flex: 0 0 33.3333%;
+  }
+
+  .searchUberInput {
+    margin-top: 1.5rem;
+  }
+
+  .searchUberInput > input {
+    border-radius: .2rem 0 0 .2rem;
+  }
+
+  .searchUberInput > button {
+    margin: 0;
+    border-radius: 0 .2rem .2rem 0;
   }
 
   [data-message] {
