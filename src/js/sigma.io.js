@@ -13,7 +13,7 @@
 
   //  App host:port
   Sigma.host = 'http://127.0.0.1';
-  Sigma.port = 1337;
+  Sigma.port = 80;
 
   //  Socket.io connection on node server
   Sigma.socket = io.connect(Sigma.host);

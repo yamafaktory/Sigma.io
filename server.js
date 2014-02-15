@@ -32,7 +32,7 @@ Sigma.websockets = require('./modules/websockets.js');
 
 //  Socket.io settings
 Sigma.io.enable('browser client minification');
-//Sigma.io.enable('browser client gzip');
+Sigma.io.enable('browser client gzip');
 Sigma.io.set('log level', 1);
 
 //  Utils
@@ -57,4 +57,4 @@ Sigma.database.call(Sigma);
 Sigma.routes.call(Sigma);
 
 //  Set listening port
-Sigma.server.listen(1337);
+Sigma.server.listen(80);
