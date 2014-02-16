@@ -23,7 +23,7 @@ Don't forget : cutting edge technology there! Works with IE 11 / Opera Next / Fi
 
 ### TL;DR: http://188.226.151.97 (running on an awesome archlinux droplet thanks to https://digitalocean.com/)
 
-* Above URL get you to a channel named "welcome"
+* Above URL gets you to a channel named "welcome"
 * You can go to whatever channel you want this way: http://188.226.151.97/neuroscience
 * You can limit the number of results on a channel: http://188.226.151.97/neuroscience/results/3
 
