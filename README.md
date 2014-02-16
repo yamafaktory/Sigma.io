@@ -1,3 +1,5 @@
+![](http://yamafaktory.github.io/Sigma.io/logo.png)
+
 Sigma.io
 ===============
 
