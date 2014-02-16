@@ -1,0 +1,13 @@
+img {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 2;
+}
+
+video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
