@@ -5,6 +5,8 @@ Sigma.io
 
 Create and share data in true real-time!
 
+###Video on project page here => http://yamafaktory.github.io/Sigma.io/
+
 Mainly based uppon [node.js](http://nodejs.org/), this web app rely on :
 
 * Vanilla JavaScript for UI
